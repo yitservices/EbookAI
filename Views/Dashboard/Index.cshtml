@@ -1,0 +1,321 @@
+@{
+    ViewData["Title"] = "eBook Publisher - Dashboard";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+<header class="top-header">
+    <div class="header-left">
+        <h1>Welcome back, @ViewBag.UserName!</h1>
+        <p>Let's continue your publishing journey</p>
+    </div>
+
+    <div class="header-right">
+        <button class="btn btn-primary" id="liveChatBtn">
+            <i class="fas fa-comments"></i> <span>Live Chat</span>
+        </button>
+        <button class="btn btn-secondary" id="howToStartBtn">
+            <i class="fas fa-question-circle"></i> <span>How to Start</span>
+        </button>
+        <button class="theme-toggle" id="themeToggle">🌙</button>
+    </div>
+</header>
+<div class="dashboard-content">
+    <div class="stats-cards">
+        <div class="stat-card">
+            <h3>Total Books Published</h3>
+            <div class="stat-placeholder" style="background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; font-weight: bold;">
+                12
+            </div>
+            <p class="stat-description">Books successfully published and available for sale</p>
+        </div>
+        
+        <div class="stat-card">
+            <h3>Monthly Revenue</h3>
+            <div class="stat-placeholder" style="background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; font-weight: bold;">
+                $2,847
+            </div>
+            <p class="stat-description">Revenue generated this month</p>
+        </div>
+        
+        <div class="stat-card">
+            <h3>Total Sales</h3>
+            <div class="stat-placeholder" style="background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; font-weight: bold;">
+                1,234
+            </div>
+            <p class="stat-description">Total copies sold across all books</p>
+        </div>
+        
+        <div class="stat-card">
+            <h3>Active Projects</h3>
+            <div class="stat-placeholder" style="background: linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; font-weight: bold;">
+                3
+            </div>
+            <p class="stat-description">Books currently in development</p>
+        </div>
+    </div>
+    
+    <div class="upload-section">
+        <div class="upload-card">
+            <div class="upload-highlight">
+                📖 MANUSCRIPT UPLOAD
+            </div>
+            
+            <h3>Upload Your Manuscript</h3>
+            
+            <div class="upload-area" id="uploadArea" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+                <div class="upload-icon">📄</div>
+                <p><strong>Drag & drop your manuscript here</strong></p>
+                <p class="upload-subtitle">or click to browse files</p>
+                <p style="font-size: 0.8rem; color: #7f8c8d; margin-top: 10px;">
+                    Supported formats: PDF, DOC, DOCX, TXT (Max 10MB)
+                </p>
+                <input type="file" id="fileInput" style="display: none;" accept=".pdf,.doc,.docx,.txt" onchange="handleFileUpload(event)">
+            </div>
+            
+            <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
+                <i class="fas fa-upload"></i> Choose File
+            </button>
+        </div>
+        
+        <div class="stats-section">
+            <div class="landing-stats">
+                <h3><i class="fas fa-chart-line"></i> Your Publishing Stats</h3>
+                
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-number" data-target="1234">0</span>
+                        <span class="stat-label">Total Downloads</span>
+                        <div class="stat-trend positive">+15% from last month</div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <span class="stat-number" data-target="89">0</span>
+                        <span class="stat-label">Reviews</span>
+                        <div class="stat-trend positive">4.8 ⭐ average rating</div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <span class="stat-number" data-target="567">0</span>
+                        <span class="stat-label">Page Views</span>
+                        <div class="stat-trend neutral">This week</div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <span class="stat-number" data-target="23">0</span>
+                        <span class="stat-label">Countries</span>
+                        <div class="stat-trend positive">Global reach</div>
+                    </div>
+                </div>
+                
+                <div class="chart-section">
+                    <canvas id="statsChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="premium-section">
+        <h3><i class="fas fa-crown"></i> Unlock Premium Features</h3>
+        <p>Take your publishing to the next level with our premium tools and services</p>
+        
+        <div class="premium-features">
+            <div class="feature-item">
+                <i class="fas fa-palette"></i> AI Cover Design
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-microphone"></i> Audio Book Creation
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-chart-bar"></i> Advanced Analytics
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-rocket"></i> Priority Support
+            </div>
+        </div>
+        
+        <div class="premium-buttons">
+            <button class="btn btn-primary" onclick="showUpgradeModal()">
+                <i class="fas fa-arrow-up"></i> Upgrade Now
+            </button>
+            <button class="btn btn-secondary" onclick="scheduleCall()">
+                <i class="fas fa-phone"></i> Schedule Call
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modals -->
+<div id="upgradeModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="fas fa-crown"></i> Upgrade to Premium</h3>
+            <span class="close" onclick="closeUpgradeModal()">&times;</span>
+        </div>
+        <div class="modal-body" style="padding: 2rem; text-align: center;">
+            <div class="pricing-cards" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 2rem 0;">
+                <div class="pricing-card" style="border: 2px solid var(--border-color); border-radius: 1rem; padding: 1.5rem;">
+                    <h4 style="color: var(--primary-color); margin-bottom: 1rem;">Professional</h4>
+                    <div style="font-size: 2rem; font-weight: bold; margin-bottom: 1rem;">$29<span style="font-size: 1rem; color: var(--text-secondary);">/month</span></div>
+                    <ul style="text-align: left; color: var(--text-secondary); line-height: 1.8;">
+                        <li>✓ AI Cover Design</li>
+                        <li>✓ Advanced Analytics</li>
+                        <li>✓ Priority Support</li>
+                        <li>✓ Marketing Tools</li>
+                    </ul>
+                    <button class="btn btn-primary mt-3">Choose Plan</button>
+                </div>
+                <div class="pricing-card" style="border: 2px solid var(--success-color); border-radius: 1rem; padding: 1.5rem; position: relative;">
+                    <div style="position: absolute; top: -0.5rem; right: 1rem; background: var(--success-color); color: white; padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.8rem;">POPULAR</div>
+                    <h4 style="color: var(--success-color); margin-bottom: 1rem;">Enterprise</h4>
+                    <div style="font-size: 2rem; font-weight: bold; margin-bottom: 1rem;">$99<span style="font-size: 1rem; color: var(--text-secondary);">/month</span></div>
+                    <ul style="text-align: left; color: var(--text-secondary); line-height: 1.8;">
+                        <li>✓ Everything in Professional</li>
+                        <li>✓ Audio Book Creation</li>
+                        <li>✓ White-label Options</li>
+                        <li>✓ Custom Integrations</li>
+                    </ul>
+                    <button class="btn btn-success mt-3">Choose Plan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Dashboard specific JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize charts
+    setTimeout(initializeCharts, 500);
+    
+    // Animate counters
+    setTimeout(animateCounters, 1000);
+    
+    // File upload area click handler
+    document.getElementById('uploadArea').addEventListener('click', function() {
+        document.getElementById('fileInput').click();
+    });
+});
+
+function showUpgradeModal() {
+    document.getElementById('upgradeModal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeUpgradeModal() {
+    document.getElementById('upgradeModal').style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+
+function scheduleCall() {
+    showToast('Redirecting to calendar booking...', 'info');
+    setTimeout(() => {
+        showToast('Calendar booking system would open here', 'success');
+    }, 1000);
+}
+
+// File upload handlers
+function handleFileUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    processFile(file);
+}
+
+function handleDrop(event) {
+    event.preventDefault();
+    const uploadArea = document.getElementById('uploadArea');
+    uploadArea.classList.remove('drag-over');
+    
+    const files = event.dataTransfer.files;
+    if (files.length > 0) {
+        processFile(files[0]);
+    }
+}
+
+function handleDragOver(event) {
+    event.preventDefault();
+    const uploadArea = document.getElementById('uploadArea');
+    uploadArea.classList.add('drag-over');
+}
+
+function handleDragLeave(event) {
+    event.preventDefault();
+    const uploadArea = document.getElementById('uploadArea');
+    uploadArea.classList.remove('drag-over');
+}
+
+function processFile(file) {
+    const allowedTypes = ['.pdf', '.doc', '.docx', '.txt'];
+    const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+    
+    if (!allowedTypes.includes(fileExtension)) {
+        showToast('Please upload a valid document file (PDF, DOC, DOCX, TXT)', 'error');
+        return;
+    }
+    
+    if (file.size > 10 * 1024 * 1024) {
+        showToast('File size must be less than 10MB', 'error');
+        return;
+    }
+    
+    // Show upload progress
+    showUploadProgress(file.name);
+    
+    // Simulate upload process
+    setTimeout(() => {
+        showToast('File uploaded successfully!', 'success');
+        updateUploadArea(file.name);
+    }, 2000);
+}
+
+function showUploadProgress(fileName) {
+    const uploadArea = document.getElementById('uploadArea');
+    uploadArea.innerHTML = `
+        <div class="upload-progress">
+            <div class="upload-icon">📄</div>
+            <p><strong>Uploading ${fileName}...</strong></p>
+            <div class="progress-bar" style="width: 100%; height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden; margin-top: 1rem;">
+                <div class="progress-fill" style="height: 100%; background: var(--success-color); width: 0%; transition: width 0.3s;"></div>
+            </div>
+        </div>
+    `;
+    
+    // Animate progress bar
+    const progressFill = uploadArea.querySelector('.progress-fill');
+    let progress = 0;
+    const interval = setInterval(() => {
+        progress += Math.random() * 30;
+        if (progress >= 100) {
+            progress = 100;
+            clearInterval(interval);
+        }
+        progressFill.style.width = progress + '%';
+    }, 200);
+}
+
+function updateUploadArea(fileName) {
+    const uploadArea = document.getElementById('uploadArea');
+    uploadArea.innerHTML = `
+        <div class="upload-success">
+            <div class="upload-icon">✅</div>
+            <p><strong>${fileName}</strong></p>
+            <p class="upload-success-text" style="color: var(--success-color); margin: 1rem 0;">File uploaded successfully!</p>
+            <div class="upload-actions" style="display: flex; gap: 1rem; justify-content: center; margin-top: 1rem;">
+                <a href="/Dashboard/EBook" class="btn btn-primary">Start Editing</a>
+                <button class="btn btn-secondary" onclick="removeFile()">Remove File</button>
+            </div>
+        </div>
+    `;
+}
+
+function removeFile() {
+    const uploadArea = document.getElementById('uploadArea');
+    uploadArea.innerHTML = `
+        <div class="upload-icon">📄</div>
+        <p><strong>Drag & drop your manuscript here</strong></p>
+        <p class="upload-subtitle">or click to browse files</p>
+        <p style="font-size: 0.8rem; color: #7f8c8d; margin-top: 10px;">
+            Supported formats: PDF, DOC, DOCX, TXT (Max 10MB)
+        </p>
+    `;
+    showToast('File removed', 'info');
+}
+</script>"

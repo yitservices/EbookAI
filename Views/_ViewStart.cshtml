@@ -1,0 +1,11 @@
+﻿@{
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+    if (controller != null && controller.Equals("Dashboard", StringComparison.OrdinalIgnoreCase))
+    {
+        Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+}

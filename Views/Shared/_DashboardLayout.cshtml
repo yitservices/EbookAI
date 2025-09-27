@@ -1,0 +1,1711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - eBook Publisher</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* All your CSS styles remain exactly the same */
+        /* Prevent layout shift from scrollbar - CRITICAL FIX */
+        html {
+            overflow-y: scroll;
+        }
+
+        /* Base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7f9;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Dashboard layout */
+        .dashboard-container {
+            display: flex;
+            flex: 1;
+            min-height: 100vh;
+        }
+
+        /* NEW SIDEBAR STYLES - From marketing page */
+        .sidebar {
+            width: 250px;
+            background: #1e2a4a;
+            color: white;
+            padding: 20px 0;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+            .sidebar-header h2 {
+                font-size: 1.5rem;
+                font-weight: 600;
+                color: #fff;
+            }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 20px 0;
+            flex-grow: 1;
+        }
+
+            .sidebar-menu li {
+                margin-bottom: 5px;
+            }
+
+            .sidebar-menu a {
+                display: block;
+                padding: 12px 20px;
+                color: #b8c7ce;
+                text-decoration: none;
+                transition: all 0.3s;
+                font-size: 0.95rem;
+                display: flex;
+                align-items: center;
+                position: relative;
+                overflow: hidden;
+            }
+
+                .sidebar-menu a::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: -100%;
+                    width: 100%;
+                    height: 100%;
+                    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+                    transition: left 0.5s;
+                }
+
+                .sidebar-menu a:hover::before {
+                    left: 100%;
+                }
+
+                .sidebar-menu a i {
+                    margin-right: 10px;
+                    font-size: 18px;
+                }
+
+                .sidebar-menu a:hover, .sidebar-menu a.active {
+                    background-color: #2c3e50;
+                    color: white;
+                    border-left: 4px solid #4a6cf7;
+                    padding-left: 16px;
+                }
+
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logout-btn {
+            display: block;
+            text-align: center;
+            padding: 10px;
+            background-color: #dc3545;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+            .logout-btn:hover {
+                background-color: #c0392b;
+            }
+
+        /* Mobile menu toggle (hidden by default) */
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: #4a6cf7;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            z-index: 101;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: opacity 0.3s ease;
+        }
+        /* Hide hamburger menu when sidebar is active */
+        .sidebar.active ~ .menu-toggle {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Main content styles */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            transition: margin-left 0.3s ease, width 0.3s ease;
+            position:absolute;
+            top:20px;
+        }
+
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .header-left h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .header-left p {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 15px;
+        }
+
+        /* Button styles */
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+            color: white;
+            box-shadow: 0 4px 6px rgba(76, 175, 80, 0.2);
+        }
+
+            .btn-primary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 12px rgba(76, 175, 80, 0.3);
+            }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            box-shadow: 0 4px 6px rgba(52, 152, 219, 0.2);
+        }
+
+            .btn-secondary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 12px rgba(52, 152, 219, 0.3);
+            }
+
+        .theme-toggle {
+            background: #2c3e50;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+        }
+
+        /* Stats cards */
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+            .stat-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            }
+
+            .stat-card h3 {
+                font-size: 1.1rem;
+                margin-bottom: 15px;
+                color: #2c3e50;
+            }
+
+        .stat-placeholder {
+            height: 100px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .stat-description {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        /* Upload section */
+        .upload-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .upload-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .upload-highlight {
+            background: linear-gradient(135deg, #FF5722 0%, #E64A19 100%);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .upload-area {
+            border: 2px dashed #3498db;
+            border-radius: 10px;
+            padding: 40px 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+            background-color: rgba(52, 152, 219, 0.05);
+        }
+
+            .upload-area.drag-over {
+                background-color: rgba(52, 152, 219, 0.2);
+                border-color: #2980b9;
+            }
+
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .upload-subtitle {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin: 10px 0;
+        }
+
+        .upload-card h3 {
+            color: #2c3e50;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        /* Stats section */
+        .stats-section {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .landing-stats h3 {
+            color: #2c3e50;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .stat-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .stat-number {
+            display: block;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        .stat-trend {
+            font-size: 0.85rem;
+            margin-top: 5px;
+            font-weight: 600;
+        }
+
+        .positive {
+            color: #2E7D32;
+        }
+
+        .neutral {
+            color: #7f8c8d;
+        }
+
+        .chart-section {
+            margin-top: 20px;
+            height: 200px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #7f8c8d;
+        }
+
+        /* Premium section */
+        .premium-section {
+            background: linear-gradient(135deg, #2c3e50 0%, #1a2530 100%);
+            border-radius: 10px;
+            padding: 30px;
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+            .premium-section h3 {
+                font-size: 1.3rem;
+                margin-bottom: 20px;
+            }
+
+        .premium-features {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+
+        .feature-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .premium-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #1a2530 100%);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+            .modal-header h3 {
+                font-size: 1.3rem;
+            }
+
+        .close {
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+            .close:hover {
+                color: #e74c3c;
+            }
+
+        .chat-messages {
+            padding: 20px;
+            height: 300px;
+            overflow-y: auto;
+            background-color: #f8f9fa;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 8px;
+            max-width: 80%;
+        }
+
+            .message.support {
+                background-color: #e3f2fd;
+                align-self: flex-start;
+            }
+
+            .message.user {
+                background-color: #4CAF50;
+                color: white;
+                margin-left: auto;
+            }
+
+        .chat-input {
+            display: flex;
+            padding: 15px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+            .chat-input input {
+                flex-grow: 1;
+                padding: 12px;
+                border: 1px solid #e0e0e0;
+                border-radius: 4px;
+                margin-right: 10px;
+            }
+
+        /* Steps container */
+        .steps-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .step-number {
+            background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .step-content h4 {
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+
+        .step-content p {
+            color: #7f8c8d;
+            font-size: 0.95rem;
+        }
+
+        .modal-footer {
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        /* Tour highlight */
+        .tour-highlight {
+            position: relative;
+            box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.5);
+            border-radius: 8px;
+            z-index: 999;
+            transition: all 0.5s;
+        }
+
+        /* Responsive styles */
+        @@media (max-width: 1200px) {
+            .main-content {
+                padding: 15px;
+            }
+
+            .stats-cards {
+                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+                gap: 15px;
+            }
+        }
+
+        @@media (max-width: 992px) {
+            .upload-section {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-left h1 {
+                font-size: 1.8rem;
+            }
+
+            .header-left p {
+                font-size: 1.1rem;
+            }
+
+            .premium-features {
+                flex-direction: column;
+                gap: 15px;
+                align-items: center;
+            }
+
+            .feature-item {
+                text-align: center;
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+
+        /* Enhanced mobile responsiveness for all screen sizes */
+        @@media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 280px;
+                z-index: 1000;
+                box-shadow: 3px 0 15px rgba(0, 0, 0, 0.2);
+                transition: transform 0.3s ease;
+            }
+
+                .sidebar.active {
+                    transform: translateX(0);
+                }
+
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                padding: 60px 15px 15px 15px;
+            }
+
+            .menu-toggle {
+                display: flex !important;
+            }
+
+            .top-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+                padding-bottom: 15px;
+            }
+
+            .header-left h1 {
+                font-size: 1.6rem;
+            }
+
+            .header-left p {
+                font-size: 1rem;
+            }
+
+            .header-right {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+
+                .header-right button {
+                    padding: 10px 16px;
+                    font-size: 0.9rem;
+                    min-height: 44px;
+                }
+
+            .theme-toggle {
+                width: 44px;
+                height: 44px;
+            }
+
+            .stats-cards {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                gap: 12px;
+            }
+
+            .stat-card {
+                padding: 15px;
+            }
+
+                .stat-card h3 {
+                    font-size: 1rem;
+                    margin-bottom: 10px;
+                }
+
+            .stat-placeholder {
+                height: 80px;
+                margin-bottom: 10px;
+            }
+
+            .stat-description {
+                font-size: 0.8rem;
+            }
+
+            .upload-card {
+                padding: 20px;
+            }
+
+            .upload-area {
+                padding: 30px 15px;
+            }
+
+            .upload-icon {
+                font-size: 2.5rem;
+                margin-bottom: 10px;
+            }
+
+            .upload-area p {
+                font-size: 0.9rem;
+            }
+
+            .upload-subtitle {
+                font-size: 0.8rem;
+            }
+
+            .stats-section {
+                padding: 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .stat-item {
+                padding: 12px;
+                text-align: center;
+            }
+
+            .stat-number {
+                font-size: 1.5rem;
+            }
+
+            .chart-section {
+                height: 150px;
+                font-size: 0.9rem;
+            }
+
+            .premium-section {
+                padding: 20px;
+            }
+
+                .premium-section h3 {
+                    font-size: 1.1rem;
+                    margin-bottom: 15px;
+                }
+
+            .premium-features {
+                flex-direction: column;
+                gap: 10px;
+                margin: 20px 0;
+            }
+
+            .feature-item {
+                font-size: 0.85rem;
+                padding: 8px 16px;
+            }
+
+            .premium-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+                .premium-buttons button {
+                    width: 100%;
+                    min-height: 44px;
+                }
+            /* Modal responsiveness */
+            .modal-content {
+                width: 95%;
+                max-width: 400px;
+                margin: 10px;
+            }
+
+            .modal-header {
+                padding: 15px;
+            }
+
+                .modal-header h3 {
+                    font-size: 1.1rem;
+                }
+
+            .chat-messages {
+                height: 250px;
+                padding: 15px;
+            }
+
+            .message {
+                font-size: 0.9rem;
+                padding: 8px 12px;
+            }
+
+            .chat-input {
+                padding: 12px;
+            }
+
+                .chat-input input {
+                    padding: 10px;
+                    font-size: 0.9rem;
+                }
+
+            .steps-container {
+                gap: 15px;
+            }
+
+            .step-content h4 {
+                font-size: 1rem;
+            }
+
+            .step-content p {
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Small mobile screens (iPhone SE, etc.) */
+        @@media (max-width: 480px) {
+            .main-content {
+                padding: 55px 10px 10px 10px;
+            }
+
+            .top-header {
+                gap: 12px;
+            }
+
+            .header-left h1 {
+                font-size: 1.4rem;
+            }
+
+            .header-left p {
+                font-size: 0.95rem;
+            }
+
+            .header-right {
+                gap: 8px;
+            }
+
+                .header-right button {
+                    padding: 8px 12px;
+                    font-size: 0.85rem;
+                    min-height: 40px;
+                }
+
+            .theme-toggle {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+
+            .stats-cards {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .stat-card {
+                padding: 12px;
+            }
+
+                .stat-card h3 {
+                    font-size: 0.9rem;
+                    margin-bottom: 8px;
+                }
+
+            .stat-placeholder {
+                height: 60px;
+                margin-bottom: 8px;
+            }
+
+            .stat-description {
+                font-size: 0.75rem;
+            }
+
+            .upload-section {
+                gap: 15px;
+            }
+
+            .upload-card, .stats-section {
+                padding: 15px;
+            }
+
+            .upload-area {
+                padding: 25px 10px;
+            }
+
+            .upload-icon {
+                font-size: 2rem;
+            }
+
+            .upload-area p {
+                font-size: 0.85rem;
+            }
+
+            .upload-card h3 {
+                font-size: 0.95rem;
+            }
+
+            .stats-grid {
+                gap: 12px;
+            }
+
+            .stat-item {
+                padding: 10px;
+            }
+
+            .stat-number {
+                font-size: 1.3rem;
+            }
+
+            .stat-label {
+                font-size: 0.8rem;
+            }
+
+            .premium-section {
+                padding: 15px;
+            }
+
+                .premium-section h3 {
+                    font-size: 1rem;
+                }
+
+            .feature-item {
+                font-size: 0.75rem;
+                padding: 6px 12px;
+            }
+
+            .sidebar {
+                width: 260px;
+            }
+
+            .sidebar-menu a {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+
+                .sidebar-menu a i {
+                    font-size: 16px;
+                }
+            /* Modal adjustments for small screens */
+            .modal-content {
+                width: 98%;
+                max-width: 350px;
+            }
+
+            .modal-header {
+                padding: 12px;
+            }
+
+                .modal-header h3 {
+                    font-size: 1rem;
+                }
+
+            .chat-messages {
+                height: 200px;
+                padding: 12px;
+            }
+
+            .step-number {
+                width: 25px;
+                height: 25px;
+                font-size: 0.9rem;
+            }
+
+            .step-content h4 {
+                font-size: 0.95rem;
+            }
+
+            .step-content p {
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Extra small screens */
+        @@media (max-width: 360px) {
+            .stats-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .header-right {
+                flex-direction: row;
+                width: 100%;
+            }
+
+                .header-right button {
+                    width: 36%;
+                    justify-content: center;
+                }
+
+            #liveChatBtn span {
+                display: none;
+            }
+
+            #howToStartBtn span {
+                display: none;
+            }
+
+            #howToStartBtn {
+                font-size: 13px;
+            }
+
+            button#themeToggle {
+                border-radius: 50%;
+                width: 40px;
+            }
+
+            .upload-area {
+                padding: 20px 8px;
+            }
+
+            .premium-features {
+                gap: 8px;
+            }
+
+            .feature-item {
+                font-size: 0.75rem;
+                padding: 5px 10px;
+            }
+        }
+
+        /* Tablet landscape orientation */
+        @@media (min-width: 769px) and (max-width: 1024px) and (orientation: landscape) {
+            .stats-cards {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 15px;
+            }
+
+            .upload-section {
+                grid-template-columns: 1fr 1fr;
+                gap: 25px;
+            }
+
+            .premium-features {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+
+            .feature-item {
+                flex: 0 1 calc(50% - 7.5px);
+                text-align: center;
+            }
+        }
+
+        /* Tablet portrait orientation */
+        @@media (min-width: 769px) and (max-width: 1024px) and (orientation: portrait) {
+            .main-content {
+                padding: 18px;
+            }
+
+            .stats-cards {
+                grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+                gap: 18px;
+            }
+
+            .upload-section {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 18px;
+            }
+
+            .premium-features {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 15px;
+                justify-content: center;
+            }
+
+            .feature-item {
+                flex: 0 1 calc(50% - 7.5px);
+                text-align: center;
+            }
+
+            .premium-buttons {
+                flex-direction: row;
+                justify-content: center;
+                gap: 15px;
+            }
+        }
+
+        /* Mobile menu toggle (hidden by default) */
+        .menu-toggle {
+            display: none;
+        }
+
+        /* Dark mode styles */
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #f0f0f0;
+        }
+
+            body.dark-mode .stat-card,
+            body.dark-mode .upload-card,
+            body.dark-mode .stats-section {
+                background: #2d2d2d;
+                color: #f0f0f0;
+            }
+
+                body.dark-mode .stat-card h3,
+                body.dark-mode .upload-card h3,
+                body.dark-mode .landing-stats h3 {
+                    color: #f0f0f0;
+                }
+
+            body.dark-mode .top-header {
+                border-bottom: 1px solid #444;
+            }
+
+            body.dark-mode .stat-item {
+                background: #3d3d3d;
+            }
+
+            body.dark-mode .stat-number,
+            body.dark-mode .stat-label {
+                color: #f0f0f0;
+            }
+
+            body.dark-mode .chart-section {
+                background: #3d3d3d;
+                color: #b8b8b8;
+            }
+    </style>
+</head>
+<body>
+    <!-- Mobile Menu Toggle -->
+    <button class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-book"></i> eBook Publisher</h2>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li><a href="/Dashboard" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Index" ? "active" : "")"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="/Dashboard/EBook" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "EBook" ? "active" : "")"><i class="fas fa-book-open"></i> EBook </a></li>
+                <li><a href="/Dashboard/CoverDesign" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "CoverDesign" ? "active" : "")"><i class="fas fa-palette"></i> Cover Design</a></li>
+                <li><a href="/Dashboard/AudioBook" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "AudioBook" ? "active" : "")"><i class="fas fa-microphone"></i> Audio Book</a></li>
+                <li><a href="/Dashboard/EditingFormatting" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "EditingFormatting" ? "active" : "")"><i class="fas fa-edit"></i> Editing & Formatting</a></li>
+                <li><a href="/Dashboard/Proofreading" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Proofreading" ? "active" : "")"><i class="fas fa-spell-check"></i> Proofreading</a></li>
+                <li><a href="/Dashboard/Publishing" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Publishing" ? "active" : "")"><i class="fas fa-upload"></i> Publishing</a></li>
+                <li><a href="/Dashboard/Marketing" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Marketing" ? "active" : "")"><i class="fas fa-bullhorn"></i> Marketing</a></li>
+                <li><a href="/Dashboard/Royalties" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Royalties" ? "active" : "")"><i class="fas fa-chart-line"></i> Royalties</a></li>
+                <li><a href="/Dashboard/OrderAuthorCopy" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "OrderAuthorCopy" ? "active" : "")"><i class="fas fa-shopping-cart"></i> Order Author Copy</a></li>
+                <li><a href="/Dashboard/Copyright" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Copyright" ? "active" : "")"><i class="fas fa-copyright"></i> Copyright</a></li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <a href="/Account/Logout" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+    
+
+            <!-- This is where the content from individual pages will be rendered -->
+            @RenderBody()
+        </main>
+    </div>
+
+    <!-- Live Chat Modal -->
+    <div id="liveChatModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Live Chat Support</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message support">
+                    <strong>Support:</strong> Hello! How can I help you today?
+                </div>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="chatInput" placeholder="Type your message...">
+                <button id="sendMessageBtn">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- How To Start Modal -->
+    <div id="howToStartModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🚀 How To Get Started</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body" style="padding: 2rem;">
+                <div class="steps-container">
+                    <div class="step-item">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Upload Your Manuscript</h4>
+                            <p>Start by uploading your book manuscript in PDF, DOC, or TXT format.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Design Your Cover</h4>
+                            <p>Use our AI-powered cover design tool to create a professional book cover.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Format & Edit</h4>
+                            <p>Format your book for different platforms and use AI proofreading.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h4>Publish & Market</h4>
+                            <p>Publish to multiple platforms and use our marketing tools to promote your book.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-primary" id="getStartedBtn">Get Started Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Plans Modal -->
+    <div id="viewPlansModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Available Plans</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body" style="padding: 2rem;">
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px;">
+                        <h4>Basic Plan - $49</h4>
+                        <p>Ebook formatting, cover design, and distribution to major platforms.</p>
+                    </div>
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px;">
+                        <h4>Professional Plan - $99</h4>
+                        <p>Everything in Basic, plus audiobook conversion and marketing tools.</p>
+                    </div>
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px;">
+                        <h4>Premium Plan - $199</h4>
+                        <p>All features, priority support, and advanced analytics.</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-primary">Select Plan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Smooth, no-shake scroll lock manager
+        const ScrollLock = (() => {
+            let lockCount = 0;
+            let originalPaddingRight = '';
+            let originalOverflow = '';
+
+            const getScrollbarWidth = () => {
+                const width = window.innerWidth - document.documentElement.clientWidth;
+                return width > 0 ? width : 0;
+            };
+
+            const apply = () => {
+                const sbw = getScrollbarWidth();
+                if (lockCount === 1) {
+                    originalOverflow = document.body.style.overflow;
+                    originalPaddingRight = document.body.style.paddingRight;
+                    if (sbw > 0) {
+                        document.body.style.paddingRight = sbw + 'px';
+                    }
+                    document.body.style.overflow = 'hidden';
+                }
+            };
+
+            const remove = () => {
+                if (lockCount === 0) {
+                    document.body.style.overflow = originalOverflow || '';
+                    document.body.style.paddingRight = originalPaddingRight || '';
+                    originalOverflow = '';
+                    originalPaddingRight = '';
+                }
+            };
+
+            const recalc = () => {
+                if (lockCount > 0) {
+                    const sbw = getScrollbarWidth();
+                    if (sbw > 0) {
+                        document.body.style.paddingRight = sbw + 'px';
+                    } else {
+                        document.body.style.paddingRight = '';
+                    }
+                }
+            };
+
+            return {
+                lock() { lockCount++; apply(); },
+                unlock() { if (lockCount > 0) lockCount--; remove(); },
+                recalc,
+                isLocked() { return lockCount > 0; }
+            };
+        })();
+
+        // Function declarations
+        function openLiveChat() {
+            const modal = document.getElementById('liveChatModal');
+            if (modal) openModal(modal);
+        }
+
+        function showHowToStart() {
+            const modal = document.getElementById('howToStartModal');
+            if (modal) openModal(modal);
+        }
+
+        function toggleTheme() {
+            const isDarkMode = document.body.classList.toggle('dark-mode');
+            const themeToggle = document.getElementById('themeToggle');
+            if (themeToggle) {
+                themeToggle.textContent = isDarkMode ? '☀️' : '🌙';
+            }
+        }
+
+        function openModal(modal) {
+            if (modal) {
+                modal.style.display = 'flex';
+                ScrollLock.lock();
+            }
+        }
+
+        function closeModal(modal) {
+            if (modal) {
+                modal.style.display = 'none';
+                ScrollLock.unlock();
+            }
+        }
+
+        // Toggle mobile sidebar (no shake)
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const menuToggle = document.getElementById('menuToggle');
+
+            if (!sidebar || !menuToggle) return;
+
+            const willOpen = !sidebar.classList.contains('active');
+            sidebar.classList.toggle('active');
+
+            if (sidebar.classList.contains('active')) {
+                menuToggle.style.opacity = '0';
+                menuToggle.style.pointerEvents = 'none';
+            } else {
+                menuToggle.style.opacity = '1';
+                menuToggle.style.pointerEvents = 'auto';
+            }
+
+            if (window.innerWidth <= 768) {
+                if (willOpen) {
+                    ScrollLock.lock();
+                } else {
+                    ScrollLock.unlock();
+                }
+            }
+        }
+
+        // Initialize all DOM elements and event listeners
+        function initializeApp() {
+            // Get DOM elements safely
+            const liveChatBtn = document.getElementById('liveChatBtn');
+            const howToStartBtn = document.getElementById('howToStartBtn');
+            const themeToggle = document.getElementById('themeToggle');
+            const fileUploadBtn = document.getElementById('fileUploadBtn');
+            const fileInput = document.getElementById('fileInput');
+            const uploadArea = document.getElementById('uploadArea');
+            const viewPlansBtn = document.getElementById('viewPlansBtn');
+            const scheduleCallBtn = document.getElementById('scheduleCallBtn');
+            const getStartedBtn = document.getElementById('getStartedBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const statCards = document.querySelectorAll('.stat-card');
+            const modalCloseButtons = document.querySelectorAll('.close');
+            const liveChatModal = document.getElementById('liveChatModal');
+            const howToStartModal = document.getElementById('howToStartModal');
+            const viewPlansModal = document.getElementById('viewPlansModal');
+            const chatInput = document.getElementById('chatInput');
+            const sendMessageBtn = document.getElementById('sendMessageBtn');
+            const chatMessages = document.getElementById('chatMessages');
+            const menuToggle = document.getElementById('menuToggle');
+
+            // Attach event listeners only if elements exist
+            if (liveChatBtn) {
+                liveChatBtn.addEventListener('click', openLiveChat);
+            }
+
+            if (howToStartBtn) {
+                howToStartBtn.addEventListener('click', showHowToStart);
+            }
+
+            if (themeToggle) {
+                themeToggle.addEventListener('click', toggleTheme);
+            }
+
+            if (menuToggle) {
+                menuToggle.addEventListener('click', toggleSidebar);
+            }
+
+            if (viewPlansBtn) {
+                viewPlansBtn.addEventListener('click', () => openModal(viewPlansModal));
+            }
+
+            if (scheduleCallBtn) {
+                scheduleCallBtn.addEventListener('click', () => {
+                    alert('Call scheduling feature would open here. In a real application, this would show a calendar interface.');
+                });
+            }
+
+            if (getStartedBtn) {
+                getStartedBtn.addEventListener('click', () => {
+                    closeModal(howToStartModal);
+                    startDashboardTour();
+                });
+            }
+
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (confirm('Are you sure you want to logout?')) {
+                        alert('Logout functionality would be implemented here. Redirecting to login page.');
+                        // In a real app: window.location.href = 'login.html';
+                    }
+                });
+            }
+
+            // File upload functionality
+            if (fileUploadBtn && fileInput) {
+                fileUploadBtn.addEventListener('click', () => {
+                    fileInput.click();
+                });
+            }
+
+            if (fileInput) {
+                fileInput.addEventListener('change', (e) => {
+                    if (e.target.files.length > 0) {
+                        handleFileUpload(e.target.files[0]);
+                    }
+                });
+            }
+
+            // Drag and drop functionality
+            if (uploadArea) {
+                uploadArea.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    uploadArea.classList.add('drag-over');
+                }, { passive: false });
+
+                uploadArea.addEventListener('dragleave', () => {
+                    uploadArea.classList.remove('drag-over');
+                });
+
+                uploadArea.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    uploadArea.classList.remove('drag-over');
+
+                    if (e.dataTransfer.files.length > 0) {
+                        handleFileUpload(e.dataTransfer.files[0]);
+                    }
+                });
+            }
+
+            // Close modals when clicking on close button
+            modalCloseButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const modal = this.closest('.modal');
+                    closeModal(modal);
+                });
+            });
+
+            // Live chat functionality
+            if (sendMessageBtn) {
+                sendMessageBtn.addEventListener('click', sendMessage);
+            }
+
+            if (chatInput) {
+                chatInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        sendMessage();
+                    }
+                });
+            }
+
+            // Stat cards functionality
+            statCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const target = card.getAttribute('data-target') || 'this section';
+                    alert(`Navigating to ${target} section. In a real application, this would change the view.`);
+                });
+            });
+
+            // Close modals when clicking outside
+            window.addEventListener('click', (e) => {
+                if (e.target.classList.contains('modal')) {
+                    closeModal(e.target);
+                }
+            });
+
+            // Close sidebar when clicking outside on mobile
+            document.addEventListener('click', (e) => {
+                const sidebar = document.getElementById('sidebar');
+                const menuToggle = document.getElementById('menuToggle');
+
+                if (window.innerWidth <= 768 && sidebar && sidebar.classList.contains('active') &&
+                    !sidebar.contains(e.target) && e.target !== menuToggle) {
+                    toggleSidebar();
+                }
+            });
+
+            // Recalculate scroll compensation on resize (no shake)
+            window.addEventListener('resize', () => {
+                if (ScrollLock.isLocked()) {
+                    ScrollLock.recalc();
+                }
+            });
+
+            // Initial setup
+            updateOrderSummary();
+        }
+
+        // Handle file upload
+        function handleFileUpload(file) {
+            const validTypes = [
+                'application/pdf',
+                'application/msword',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'text/plain'
+            ];
+
+            if (!validTypes.includes(file.type)) {
+                alert('Please upload a valid document (PDF, DOC, DOCX, or TXT)');
+                return;
+            }
+
+            if (file.size > 10 * 1024 * 1024) { // 10MB limit
+                alert('File size exceeds 10MB limit. Please upload a smaller file.');
+                return;
+            }
+
+            // Simulate file upload
+            setTimeout(() => {
+                const uploadArea = document.getElementById('uploadArea');
+                const fileInput = document.getElementById('fileInput');
+
+                if (uploadArea) {
+                    uploadArea.innerHTML = `
+                        <div class="upload-icon">✅</div>
+                        <p><strong>File Uploaded Successfully!</strong></p>
+                        <p class="upload-subtitle">${file.name}</p>
+                        <button class="btn-secondary" id="changeFileBtn">Change File</button>
+                    `;
+
+                    // Reattach the click event to the new "Change File" button
+                    const changeFileBtn = document.getElementById('changeFileBtn');
+                    if (changeFileBtn && fileInput) {
+                        changeFileBtn.addEventListener('click', () => {
+                            fileInput.click();
+                        });
+                    }
+                }
+            }, 500);
+        }
+
+        // Live chat functionality
+        function sendMessage() {
+            const chatInput = document.getElementById('chatInput');
+            const chatMessages = document.getElementById('chatMessages');
+
+            if (!chatInput || !chatMessages) return;
+
+            const messageText = chatInput.value.trim();
+            if (messageText === '') return;
+
+            const userMessage = document.createElement('div');
+            userMessage.classList.add('message', 'user');
+            userMessage.innerHTML = `<strong>You:</strong> ${messageText}`;
+            chatMessages.appendChild(userMessage);
+            chatInput.value = '';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Simulate support response
+            setTimeout(() => {
+                const supportMessage = document.createElement('div');
+                supportMessage.classList.add('message', 'support');
+                supportMessage.innerHTML = `<strong>Support:</strong> Thank you for your message! We'll get back to you shortly.`;
+                chatMessages.appendChild(supportMessage);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 1000);
+        }
+
+        // Dashboard tour functionality
+        const tourSteps = [
+            { element: '.stat-card[data-target="manuscript"]', message: 'This is where you can upload and edit your manuscript.' },
+            { element: '.stat-card[data-target="formatting"]', message: 'Here you can style and layout your ebook.' },
+            { element: '.stat-card[data-target="proofreading"]', message: 'Use our AI-powered proofreading tool to polish your text.' },
+            { element: '.stat-card[data-target="cover-design"]', message: 'Design a professional cover using our AI tools.' },
+            { element: '.stat-card[data-target="audio-book"]', message: 'Convert your book into an audiobook with voice and sound options.' },
+            { element: '#uploadArea', message: 'Upload your manuscript here to get started!' },
+            { element: '.stats-section', message: 'View your landing page stats here!' },
+            { element: '.premium-section', message: 'Upgrade to premium to unlock all features!' }
+        ];
+
+        function startDashboardTour() {
+            let currentTourStep = 0;
+
+            function showTourStep() {
+                if (currentTourStep >= tourSteps.length) {
+                    endDashboardTour();
+                    return;
+                }
+                const step = tourSteps[currentTourStep];
+                const targetElement = document.querySelector(step.element);
+                if (!targetElement) {
+                    currentTourStep++;
+                    showTourStep();
+                    return;
+                }
+
+                // Highlight the target element
+                targetElement.classList.add('tour-highlight');
+
+                // Show tooltip
+                const tooltip = document.createElement('div');
+                tooltip.classList.add('tour-tooltip');
+                tooltip.textContent = step.message;
+                tooltip.style.position = 'absolute';
+                tooltip.style.background = '#111827';
+                tooltip.style.color = '#fff';
+                tooltip.style.padding = '10px 12px';
+                tooltip.style.borderRadius = '8px';
+                tooltip.style.fontSize = '14px';
+                tooltip.style.boxShadow = '0 6px 20px rgba(0,0,0,0.2)';
+                tooltip.style.maxWidth = '260px';
+                tooltip.style.zIndex = '1000';
+                tooltip.style.cursor = 'pointer';
+                document.body.appendChild(tooltip);
+
+                const rect = targetElement.getBoundingClientRect();
+                tooltip.style.top = `${rect.bottom + window.scrollY + 10}px`;
+                tooltip.style.left = `${rect.left + window.scrollX}px`;
+
+                // Next step on click
+                tooltip.addEventListener('click', () => {
+                    targetElement.classList.remove('tour-highlight');
+                    tooltip.remove();
+                    currentTourStep++;
+                    showTourStep();
+                });
+            }
+
+            showTourStep();
+        }
+
+        function endDashboardTour() {
+            document.querySelectorAll('.tour-highlight').forEach(el => {
+                el.classList.remove('tour-highlight');
+            });
+            alert('Tour completed! You can start using the dashboard now.');
+        }
+
+        function updateOrderSummary() {
+            // Safely update order summary stats
+            const pageViews = document.getElementById('pageViews');
+            const clicksOnLink = document.getElementById('clicksOnLink');
+            const booksSold = document.getElementById('booksSold');
+            const costSoFar = document.getElementById('costSoFar');
+
+            if (pageViews) pageViews.textContent = '2442';
+            if (clicksOnLink) clicksOnLink.textContent = '5442';
+            if (booksSold) booksSold.textContent = '1200';  
+            if (costSoFar) costSoFar.textContent = '$2442';
+        }
+
+        // Placeholder function for charts (to fix the ReferenceError)
+        function initializeCharts() {
+            // This function would initialize charts if needed
+            console.log('Charts initialized');
+        }
+
+        // Initialize the app when DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+            initializeCharts(); // Call the function that was causing ReferenceError
+
+            // Ensure scrollbar presence across pages (extra safety)
+            if (getComputedStyle(document.documentElement).overflowY !== 'scroll') {
+                document.documentElement.style.overflowY = 'scroll';
+            }
+        });
+    </script>
+
+    <!-- Render any additional scripts from individual pages -->
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

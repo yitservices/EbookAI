@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Editing & Formatting - eBook Publisher</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #4a6cf7;
+            --secondary: #6c757d;
+            --success: #198754;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --info: #0dcaf0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --content-bg: #f5f7f9;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --border-color: #e0e0e0;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            background-color: var(--content-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+            body.dark-mode {
+                --content-bg: #121826;
+                --card-bg: #1a243a;
+                --text-color: #e0e0e0;
+                --border-color: #2a2a2a;
+                --shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            }
+
+        /* Main Content Styles */
+        .main-content {
+            padding: 20px;
+            min-height: 100vh;
+            position: relative;
+            width: 93%;
+            max-width: none;
+            margin-left: 115px;
+        }
+
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-left h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-color);
+        }
+
+        .header-right {
+            display: flex;
+            gap: 15px;
+        }
+
+        /* Button Styles */
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 6px rgba(76, 175, 80, 0.2);
+        }
+
+            .btn-primary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 12px rgba(76, 175, 80, 0.3);
+            }
+
+            .btn-primary:active {
+                transform: translateY(0);
+                box-shadow: 0 2px 4px rgba(76, 175, 80, 0.2);
+            }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+            box-shadow: 0 4px 6px rgba(52, 152, 219, 0.2);
+        }
+
+            .btn-secondary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 12px rgba(52, 152, 219, 0.3);
+            }
+
+            .btn-secondary:active {
+                transform: translateY(0);
+                box-shadow: 0 2px 4px rgba(52, 152, 219, 0.2);
+            }
+
+        .theme-toggle {
+            background: var(--dark);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+        }
+
+        /* Custom styles for Editing & Formatting page */
+        .editing-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .format-options, .content-preview {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+            .format-options:hover, .content-preview:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            }
+
+        .size-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .size-option {
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 10px;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            position: relative;
+        }
+
+            .size-option:hover, .size-option.selected {
+                border-color: var(--primary);
+                background-color: rgba(74, 108, 247, 0.1);
+            }
+
+        .size-box {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--content-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .ebook-formats {
+            margin-bottom: 25px;
+        }
+
+        .format-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 6px;
+            transition: background-color 0.3s;
+        }
+
+            .format-option:hover {
+                background-color: var(--content-bg);
+            }
+
+            .format-option input {
+                margin-right: 10px;
+            }
+
+        .text-style {
+            margin-bottom: 25px;
+        }
+
+        .style-options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .style-btn {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+            .style-btn.active {
+                background: var(--primary);
+                color: white;
+                border-color: var(--primary);
+            }
+
+            .style-btn:hover:not(.active) {
+                background: var(--content-bg);
+            }
+
+        .premium-locked {
+            opacity: 0.6;
+            position: relative;
+        }
+
+            .premium-locked::after {
+                content: "🔒";
+                position: absolute;
+                top: -5px;
+                right: -5px;
+                font-size: 0.8rem;
+            }
+
+        .formatting-tools {
+            margin-bottom: 25px;
+        }
+
+        .tool-group {
+            margin-bottom: 15px;
+        }
+
+            .tool-group label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: 500;
+                color: var(--text-color);
+            }
+
+            .tool-group select, .tool-group input {
+                width: 100%;
+                padding: 8px;
+                border: 1px solid var(--border-color);
+                border-radius: 6px;
+                background-color: var(--card-bg);
+                color: var(--text-color);
+            }
+
+        .tool-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .page-count {
+            text-align: center;
+            padding: 15px;
+            background-color: var(--content-bg);
+            border-radius: 8px;
+            font-size: 1.1rem;
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .preview-text {
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: var(--content-bg);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+
+        .text-editor {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .editor-toolbar {
+            display: flex;
+            padding: 10px;
+            background-color: var(--content-bg);
+            border-bottom: 1px solid var(--border-color);
+            gap: 5px;
+        }
+
+        .btn-small {
+            padding: 6px 10px;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+            .btn-small:hover {
+                background: var(--content-bg);
+            }
+
+        .editor-content {
+            min-height: 150px;
+            padding: 15px;
+            outline: none;
+            background-color: var(--card-bg);
+        }
+
+        .premium-upgrade {
+            background: linear-gradient(135deg, #1e2a4a 0%, #4a6cf7 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+            .premium-upgrade h4 {
+                margin-bottom: 10px;
+                font-size: 1.3rem;
+            }
+
+            .premium-upgrade p {
+                margin-bottom: 20px;
+                opacity: 0.9;
+            }
+
+        .upgrade-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateX(150%);
+            transition: transform 0.3s;
+            z-index: 1000;
+            color: var(--text-color);
+        }
+
+            .toast.show {
+                transform: translateX(0);
+            }
+
+            .toast.success {
+                border-left: 4px solid var(--success);
+            }
+
+            .toast.error {
+                border-left: 4px solid var(--danger);
+            }
+
+            .toast.warning {
+                border-left: 4px solid var(--warning);
+            }
+
+        .toast-icon {
+            font-size: 24px;
+        }
+
+        .toast.success .toast-icon {
+            color: var(--success);
+        }
+
+        .toast.error .toast-icon {
+            color: var(--danger);
+        }
+
+        .toast.warning .toast-icon {
+            color: var(--warning);
+        }
+
+        /* Responsive Styles */
+        @@media(max-width: 1200px) {
+            .editing-content
+
+        {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        }
+
+        @@media(max-width: 992px) {
+            .top-header
+
+        {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        .header-right {
+            width: 100%;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        }
+
+        @@media(max-width: 768px) {
+            .top-header
+
+        {
+            flex-direction: column;
+            text-align: center;
+            gap: 20px;
+        }
+
+        .header-right {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .size-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .tool-row {
+            grid-template-columns: 1fr;
+        }
+
+        .upgrade-buttons {
+            flex-direction: column;
+        }
+
+        .preview-header {
+            flex-direction: column;
+            gap: 15px;
+            align-items: flex-start;
+        }
+
+        .header-left h1 {
+            font-size: 1.5rem;
+        }
+
+        }
+
+        @@media(max-width: 576px) {
+            .main-content
+
+        {
+            padding: 15px;
+        }
+
+        .format-options, .content-preview {
+            padding: 15px;
+        }
+
+        .header-right {
+            flex-direction: row;
+            width: 100%;
+            gap: 10px;
+        }
+
+        .theme-toggle {
+            width: 100%;
+        }
+
+        .header-right button {
+            width: 35%;
+            justify-content: center;
+        }
+
+        .style-options {
+            flex-direction: column;
+        }
+
+        .style-btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .editor-toolbar {
+            flex-wrap: wrap;
+        }
+
+        }
+
+        .header-left p {
+            font-size: 1.2rem;
+            color: var(--secondary);
+        }
+    </style>
+</head>
+<body>
+    <div class="main-content">
+        <header class="top-header">
+            <div class="header-left">
+                <h1>Advanced Editing & Formatting</h1>
+                <p>Professional formatting tools for your eBook</p>
+            </div>
+            <div class="header-right">
+                <button class="btn-primary" id="saveFormatBtn"><i class="fas fa-save"></i> Save Format</button>
+                <button class="btn-secondary" id="previewBtn"><i class="fas fa-eye"></i> Preview</button>
+                <button class="theme-toggle" id="themeToggle">🌙</button>
+            </div>
+        </header>
+
+        <div class="editing-content">
+            <div class="format-options">
+                <h3>📐 Page Size & Format</h3>
+
+                <div class="size-grid">
+                    <div class="size-option selected" data-size="6x9">
+                        <div class="size-box">6"×9"</div>
+                        <span>US Trade</span>
+                        <span>Most Popular</span>
+                    </div>
+                    <div class="size-option" data-size="5x8">
+                        <div class="size-box">5"×8"</div>
+                        <span>Digest</span>
+                        <span>Compact</span>
+                    </div>
+                    <div class="size-option" data-size="5.5x8.5">
+                        <div class="size-box">5.5"×8.5"</div>
+                        <span>Standard</span>
+                        <span>Classic</span>
+                    </div>
+                    <div class="size-option" data-size="8.5x11">
+                        <div class="size-box">8.5"×11"</div>
+                        <span>Letter</span>
+                        <span>Large Format</span>
+                    </div>
+                </div>
+
+                <h3>📄 eBook Formats</h3>
+                <div class="ebook-formats">
+                    <label class="format-option">
+                        <input type="checkbox" name="format" value="epub" checked>
+                        <span>📱 EPUB (Standard eBook format)</span>
+                    </label>
+                    <label class="format-option">
+                        <input type="checkbox" name="format" value="mobi">
+                        <span>📚 MOBI (Amazon Kindle)</span>
+                    </label>
+                    <label class="format-option">
+                        <input type="checkbox" name="format" value="pdf">
+                        <span>📄 PDF (Fixed layout)</span>
+                    </label>
+                </div>
+
+                <div class="text-style">
+                    <h3>✍️ Text Styling</h3>
+                    <div class="style-options">
+                        <button class="style-btn active" data-style="bold">
+                            <i class="fas fa-bold"></i> Bold
+                        </button>
+                        <button class="style-btn" data-style="italic">
+                            <i class="fas fa-italic"></i> Italic
+                        </button>
+                        <button class="style-btn" data-style="underline">
+                            <i class="fas fa-underline"></i> Underline
+                        </button>
+                        <button class="style-btn premium-locked" data-style="small-caps">
+                            <i class="fas fa-font"></i> Small Caps
+                        </button>
+                    </div>
+                </div>
+
+                <div class="formatting-tools">
+                    <div class="tool-group">
+                        <label>Font Family</label>
+                        <select id="fontFamily">
+                            <option value="serif">Times New Roman (Serif)</option>
+                            <option value="sans-serif">Arial (Sans-serif)</option>
+                            <option value="garamond">Garamond (Classic)</option>
+                            <option value="georgia">Georgia (Web-safe)</option>
+                        </select>
+                    </div>
+
+                    <div class="tool-row">
+                        <div class="tool-group">
+                            <label>Font Size</label>
+                            <select id="fontSize">
+                                <option value="10pt">10pt</option>
+                                <option value="11pt" selected>11pt</option>
+                                <option value="12pt">12pt</option>
+                                <option value="14pt">14pt</option>
+                            </select>
+                        </div>
+                        <div class="tool-group">
+                            <label>Line Spacing</label>
+                            <select id="lineSpacing">
+                                <option value="1.0">Single</option>
+                                <option value="1.15">1.15</option>
+                                <option value="1.5" selected>1.5</option>
+                                <option value="2.0">Double</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="tool-row">
+                        <div class="tool-group">
+                            <label>Paragraph Indent</label>
+                            <input type="range" min="0" max="2" step="0.1" value="0.5" id="paragraphIndent">
+                        </div>
+                        <div class="tool-group">
+                            <label>Chapter Break</label>
+                            <select id="chapterBreak">
+                                <option value="page">New Page</option>
+                                <option value="line">Line Break</option>
+                                <option value="space">Extra Space</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="page-count">
+                    📊 Estimated Pages: <strong>247 pages</strong>
+                </div>
+            </div>
+
+            <div class="content-preview">
+                <div class="preview-header">
+                    <h3>👀 Live Preview</h3>
+                    <button class="btn-secondary" id="fullscreenPreview">
+                        <i class="fas fa-expand"></i> Fullscreen
+                    </button>
+                </div>
+
+                <div class="preview-text" id="previewText">
+                    <h2>Chapter 1: Introduction</h2>
+                    <p>Welcome to the beginning of our journey. This chapter introduces the main concepts that we'll be exploring throughout this book.</p>
+
+                    <p>In this opening chapter, we'll establish the foundation for everything that follows. You'll discover the core principles that will guide us through each subsequent section.</p>
+
+                    <p>This is where your story begins, where your ideas take shape, and where your readers will first connect with your message. The formatting you see here reflects the current settings you've selected.</p>
+
+                    <h3>What You'll Learn</h3>
+                    <p>Throughout this book, you'll discover:</p>
+                    <ul>
+                        <li>Key concepts and principles</li>
+                        <li>Practical applications</li>
+                        <li>Real-world examples</li>
+                        <li>Advanced techniques</li>
+                    </ul>
+
+                    <p>Each chapter builds upon the previous one, creating a comprehensive learning experience that will transform your understanding of the subject.</p>
+                </div>
+
+                <div class="text-editor">
+                    <div class="editor-toolbar">
+                        <button class="btn-small" data-action="bold"><i class="fas fa-bold"></i></button>
+                        <button class="btn-small" data-action="italic"><i class="fas fa-italic"></i></button>
+                        <button class="btn-small" data-action="underline"><i class="fas fa-underline"></i></button>
+                        <button class="btn-small" data-action="align-left"><i class="fas fa-align-left"></i></button>
+                        <button class="btn-small" data-action="align-center"><i class="fas fa-align-center"></i></button>
+                        <button class="btn-small" data-action="align-right"><i class="fas fa-align-right"></i></button>
+                        <button class="btn-small" data-action="list"><i class="fas fa-list"></i></button>
+                        <button class="btn-small" data-action="quote"><i class="fas fa-quote-left"></i></button>
+                    </div>
+                    <div class="editor-content" id="editorContent" contenteditable="true">
+                        Click here to start editing your text with live formatting preview...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="premium-upgrade">
+            <h4>🌟 Unlock Premium Formatting Features</h4>
+            <p>Get access to advanced typography, custom fonts, professional layouts, and more formatting options.</p>
+            <div class="upgrade-buttons">
+                <button class="btn-primary" id="upgradeBtn">Upgrade to Premium</button>
+                <button class="btn-secondary" id="learnMoreBtn">Learn More</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <span class="toast-icon">✓</span>
+        <span class="toast-message">Format saved successfully!</span>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const themeToggle = document.getElementById('themeToggle');
+            const saveFormatBtn = document.getElementById('saveFormatBtn');
+            const previewBtn = document.getElementById('previewBtn');
+            const fullscreenPreviewBtn = document.getElementById('fullscreenPreview');
+            const upgradeBtn = document.getElementById('upgradeBtn');
+            const learnMoreBtn = document.getElementById('learnMoreBtn');
+            const toast = document.getElementById('toast');
+
+            // Formatting controls
+            const sizeOptions = document.querySelectorAll('.size-option');
+            const styleButtons = document.querySelectorAll('.style-btn');
+            const previewText = document.getElementById('previewText');
+            const editorContent = document.getElementById('editorContent');
+            const editorButtons = document.querySelectorAll('.btn-small');
+
+            // Dark Mode State
+            let isDarkMode = localStorage.getItem('darkMode') === 'true';
+
+            // Apply saved theme on load
+            if (isDarkMode) {
+                document.body.classList.add('dark-mode');
+                themeToggle.textContent = '☀️';
+            }
+
+            // Theme Toggle
+            themeToggle.addEventListener('click', () => {
+                isDarkMode = !isDarkMode;
+                document.body.classList.toggle('dark-mode');
+                themeToggle.textContent = isDarkMode ? '☀️' : '🌙';
+
+                // Save preference to localStorage
+                localStorage.setItem('darkMode', isDarkMode);
+            });
+
+            // Size option selection
+            sizeOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    sizeOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    updatePreview();
+                });
+            });
+
+            // Style button toggles
+            styleButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    if (!this.classList.contains('premium-locked')) {
+                        this.classList.toggle('active');
+                        updatePreview();
+                    } else {
+                        showToast('This feature requires Premium subscription', 'warning');
+                    }
+                });
+            });
+
+            // Font and spacing controls
+            document.getElementById('fontFamily').addEventListener('change', updatePreview);
+            document.getElementById('fontSize').addEventListener('change', updatePreview);
+            document.getElementById('lineSpacing').addEventListener('change', updatePreview);
+            document.getElementById('paragraphIndent').addEventListener('input', updatePreview);
+            document.getElementById('chapterBreak').addEventListener('change', updatePreview);
+
+            // Text editor buttons
+            editorButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const action = this.getAttribute('data-action');
+                    applyTextFormat(action);
+                });
+            });
+
+            // Editor content changes
+            editorContent.addEventListener('input', function() {
+                // Update preview with editor content
+                previewText.innerHTML = this.innerHTML;
+                updatePreviewStyles();
+            });
+
+            function updatePreview() {
+                updatePreviewStyles();
+            }
+
+            function updatePreviewStyles() {
+                const fontFamily = document.getElementById('fontFamily').value;
+                const fontSize = document.getElementById('fontSize').value;
+                const lineSpacing = document.getElementById('lineSpacing').value;
+                const paragraphIndent = document.getElementById('paragraphIndent').value;
+
+                // Apply styles to preview
+                previewText.style.fontFamily = fontFamily === 'serif' ? 'Times, serif' :
+                                               fontFamily === 'sans-serif' ? 'Arial, sans-serif' :
+                                               fontFamily === 'garamond' ? 'Garamond, serif' : 'Georgia, serif';
+                previewText.style.fontSize = fontSize;
+                previewText.style.lineHeight = lineSpacing;
+                previewText.style.textIndent = paragraphIndent + 'em';
+
+                // Apply text styles
+                const isBold = document.querySelector('[data-style="bold"]').classList.contains('active');
+                const isItalic = document.querySelector('[data-style="italic"]').classList.contains('active');
+                const isUnderline = document.querySelector('[data-style="underline"]').classList.contains('active');
+
+                previewText.style.fontWeight = isBold ? 'bold' : 'normal';
+                previewText.style.fontStyle = isItalic ? 'italic' : 'normal';
+                previewText.style.textDecoration = isUnderline ? 'underline' : 'none';
+            }
+
+            function applyTextFormat(action) {
+                document.execCommand(action, false, null);
+                editorContent.focus();
+            }
+
+            // Save format
+            saveFormatBtn.addEventListener('click', function() {
+                const formatSettings = {
+                    size: document.querySelector('.size-option.selected').dataset.size,
+                    fontFamily: document.getElementById('fontFamily').value,
+                    fontSize: document.getElementById('fontSize').value,
+                    lineSpacing: document.getElementById('lineSpacing').value,
+                    paragraphIndent: document.getElementById('paragraphIndent').value,
+                    chapterBreak: document.getElementById('chapterBreak').value,
+                    styles: Array.from(document.querySelectorAll('.style-btn.active')).map(btn => btn.dataset.style),
+                    formats: Array.from(document.querySelectorAll('input[name="format"]:checked')).map(input => input.value)
+                };
+
+                // Save to localStorage or send to server
+                localStorage.setItem('bookFormatSettings', JSON.stringify(formatSettings));
+                showToast('Format settings saved successfully!', 'success');
+            });
+
+            // Preview button
+            previewBtn.addEventListener('click', function() {
+                showToast('Generating preview...', 'success');
+                // In a real app, this would generate a full preview
+            });
+
+            // Fullscreen preview
+            fullscreenPreviewBtn.addEventListener('click', function() {
+                if (document.fullscreenElement) {
+                    document.exitFullscreen();
+                    this.innerHTML = '<i class="fas fa-expand"></i> Fullscreen';
+                } else {
+                    previewText.requestFullscreen();
+                    this.innerHTML = '<i class="fas fa-compress"></i> Exit Fullscreen';
+                }
+            });
+
+            // Premium buttons
+            upgradeBtn.addEventListener('click', function() {
+                showToast('Redirecting to premium upgrade...', 'success');
+                // In a real app, this would redirect to a payment page
+            });
+
+            learnMoreBtn.addEventListener('click', function() {
+                showToast('Opening premium features information...', 'success');
+                // In a real app, this would show a modal with feature details
+            });
+
+            // Toast function
+            function showToast(message, type = 'success') {
+                toast.className = `toast ${type}`;
+                toast.querySelector('.toast-message').textContent = message;
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 3000);
+            }
+
+            // Initialize preview
+            updatePreview();
+
+            // Load saved settings if available
+            const savedSettings = localStorage.getItem('bookFormatSettings');
+            if (savedSettings) {
+                const settings = JSON.parse(savedSettings);
+
+                // Apply saved settings
+                document.querySelector(`.size-option[data-size="${settings.size}"]`).click();
+                document.getElementById('fontFamily').value = settings.fontFamily;
+                document.getElementById('fontSize').value = settings.fontSize;
+                document.getElementById('lineSpacing').value = settings.lineSpacing;
+                document.getElementById('paragraphIndent').value = settings.paragraphIndent;
+                document.getElementById('chapterBreak').value = settings.chapterBreak;
+
+                // Apply saved styles
+                styleButtons.forEach(button => {
+                    if (settings.styles.includes(button.dataset.style)) {
+                        button.classList.add('active');
+                    } else {
+                        button.classList.remove('active');
+                    }
+                });
+
+                // Apply saved formats
+                document.querySelectorAll('input[name="format"]').forEach(input => {
+                    input.checked = settings.formats.includes(input.value);
+                });
+
+                updatePreview();
+                showToast('Previous format settings loaded', 'success');
+            }
+        });
+    </script>
+</body>
+</html>
