@@ -1,0 +1,871 @@
+@{
+    ViewData["Title"] = "Subscription Management";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ebook Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #7c3aed;
+            --primary-light: #a78bfa;
+            --secondary: #ec4899;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --card-bg: #ffffff;
+            --bg-secondary: #f8fafc;
+            --text-primary: #1e293b;
+            --text-muted: #64748b;
+            --border-light: #e2e8f0;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --card-shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: var(--text-primary);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: 24px;
+            padding: 30px;
+            margin-bottom: 30px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+        }
+
+            .welcome-section::before {
+                content: '';
+                position: absolute;
+                top: -50%;
+                right: -20%;
+                width: 400px;
+                height: 400px;
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 50%;
+                z-index: 0;
+            }
+
+        .welcome-content {
+            position: relative;
+            z-index: 1;
+        }
+
+            .welcome-content h2 {
+                font-size: 32px;
+                font-weight: 700;
+                margin-bottom: 8px;
+            }
+
+            .welcome-content p {
+                font-size: 16px;
+                opacity: 0.9;
+                margin-bottom: 20px;
+                max-width: 500px;
+            }
+
+        .explore-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+            .explore-btn:hover {
+                background: white;
+                color: var(--primary);
+                transform: translateY(-2px);
+            }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        /* Stat Cards */
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-light);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+            .stat-card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 5px;
+                height: 100%;
+                background: linear-gradient(180deg, var(--primary) 0%, var(--primary-light) 100%);
+            }
+
+            .stat-card:hover {
+                transform: translateY(-8px);
+                box-shadow: var(--card-shadow-hover);
+            }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            background: rgba(124, 58, 237, 0.1);
+            color: var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover .stat-icon {
+            transform: scale(1.1);
+            background: var(--primary);
+            color: white;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .stat-trend {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+            .stat-trend.up {
+                color: var(--success);
+            }
+
+            .stat-trend.down {
+                color: var(--danger);
+            }
+
+        /* Main Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        /* Section Cards */
+        .section-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-light);
+            transition: all 0.3s ease;
+        }
+
+            .section-card:hover {
+                transform: translateY(-5px);
+                box-shadow: var(--card-shadow-hover);
+            }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .view-all {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+            .view-all:hover {
+                transform: translateX(5px);
+            }
+
+        .section-subtitle {
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        /* Books Grid */
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 16px;
+        }
+
+        .book-card {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 16px;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-light);
+            text-align: center;
+        }
+
+            .book-card:hover {
+                transform: translateY(-5px);
+                box-shadow: var(--card-shadow-hover);
+            }
+
+        .book-cover {
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+            overflow: hidden;
+        }
+
+            .book-cover img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+        .book-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .book-author {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .book-price {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 14px;
+        }
+
+        /* Achievement Section */
+        .achievement-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .achievement-card {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-light);
+        }
+
+            .achievement-card:hover {
+                transform: translateY(-5px);
+                box-shadow: var(--card-shadow-hover);
+            }
+
+        .achievement-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 24px;
+        }
+
+        .achievement-title {
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+
+        .achievement-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* Best Sales Section */
+        .sales-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .sale-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-light);
+        }
+
+            .sale-item:hover {
+                transform: translateX(5px);
+                box-shadow: var(--card-shadow-hover);
+            }
+
+        .sale-cover {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .sale-details {
+            flex: 1;
+        }
+
+        .sale-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .sale-rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            color: var(--warning);
+            margin-bottom: 4px;
+        }
+
+        .sale-price {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 14px;
+        }
+
+        /* Animation Classes */
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .slide-in-left {
+            animation: slideInLeft 0.6s ease-out;
+        }
+
+        .slide-in-right {
+            animation: slideInRight 0.6s ease-out;
+        }
+
+        .bounce-in {
+            animation: bounceIn 0.8s ease-out;
+        }
+
+          @@keyframes fadeInUp {
+            from
+
+        {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        }
+
+          @@keyframes slideInLeft {
+            from
+
+        {
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        }
+
+          @@keyframes slideInRight {
+            from
+
+        {
+            opacity: 0;
+            transform: translateX(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        }
+
+          @@keyframes bounceIn {
+            0%
+
+        {
+            transform: scale(0.3);
+            opacity: 0;
+        }
+
+        50% {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        }
+
+        /* Responsive Design */
+          @@media (max-width: 1200px) {
+            .content-grid
+
+        {
+            grid-template-columns: 1fr;
+        }
+
+        }
+
+          @@media (max-width: 768px) {
+            .dashboard-grid
+
+        {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .books-grid {
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        }
+
+        .achievement-grid {
+            grid-template-columns: 1fr;
+        }
+
+        }
+
+          @@media (max-width: 480px) {
+            .dashboard-grid
+
+        {
+            grid-template-columns: 1fr;
+        }
+
+        .books-grid {
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        }
+
+        .section-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Welcome Section -->
+        <div class="welcome-section fade-in-up">
+            <div class="welcome-content">
+                <div class="">
+                    @{
+                        var userName = User.Identity?.Name ?? "Admin";
+                        var firstLetter = userName.Substring(0, 1).ToUpper();
+                    }
+                   
+                </div>
+                <div class="user-info">
+                    <h2>Hi, @userName</h2>
+                <p>The library serves as a welcoming home for knowledge seekers and avid readers alike</p>
+                <button class="explore-btn">
+                    <i class="fas fa-search"></i> Learn more
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="dashboard-grid">
+            <div class="stat-card slide-in-left" style="animation-delay: 0.1s">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+                <div class="stat-value">2,847</div>
+                <div class="stat-label">Total Users</div>
+                <div class="stat-trend up">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>12.5% from last month</span>
+                </div>
+            </div>
+
+            <div class="stat-card slide-in-left" style="animation-delay: 0.2s">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                </div>
+                <div class="stat-value">1,234</div>
+                <div class="stat-label">Published Books</div>
+                <div class="stat-trend up">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>8.3% from last month</span>
+                </div>
+            </div>
+
+            <div class="stat-card slide-in-right" style="animation-delay: 0.3s">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                </div>
+                <div class="stat-value">$45,678</div>
+                <div class="stat-label">Monthly Revenue</div>
+                <div class="stat-trend up">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>15.7% from last month</span>
+                </div>
+            </div>
+
+            <div class="stat-card slide-in-right" style="animation-delay: 0.4s">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                </div>
+                <div class="stat-value">94.2%</div>
+                <div class="stat-label">User Satisfaction</div>
+                <div class="stat-trend up">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>2.1% from last month</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="content-grid">
+            <!-- Left Column -->
+            <div class="left-column">
+                <!-- Popular Section -->
+                <div class="section-card fade-in-up" style="animation-delay: 0.5s">
+                    <div class="section-header">
+                        <h2 class="section-title">Popular</h2>
+                        <a href="#" class="view-all">VIEW ALL <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <p class="section-subtitle">The book is an essential... This is just a general example...</p>
+
+                    <div class="books-grid">
+                        <div class="book-card">
+                            <div class="book-cover">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div class="book-title">Never Eat Alone</div>
+                            <div class="book-author">Keith Ferrazzi</div>
+                            <div class="book-price">$24.99</div>
+                        </div>
+
+                        <div class="book-card">
+                            <div class="book-cover">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div class="book-title">Great Gatsby</div>
+                            <div class="book-author">F. Scott Fitzgerald</div>
+                            <div class="book-price">$19.99</div>
+                        </div>
+
+                        <div class="book-card">
+                            <div class="book-cover">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div class="book-title">Sapiens</div>
+                            <div class="book-author">Yuval Noah Harari</div>
+                            <div class="book-price">$29.99</div>
+                        </div>
+
+                        <div class="book-card">
+                            <div class="book-cover">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div class="book-title">The Book Thief</div>
+                            <div class="book-author">Markus Zukas</div>
+                            <div class="book-price">$22.99</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ongoing Section -->
+                <div class="section-card fade-in-up" style="animation-delay: 0.6s">
+                    <div class="section-header">
+                        <h2 class="section-title">Ongoing</h2>
+                        <a href="#" class="view-all">VIEW ALL <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <p class="section-subtitle">The book is an essential... This is just a general example...</p>
+
+                    <div class="books-grid">
+                        <div class="book-card">
+                            <div class="book-cover">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div class="book-title">Fault in Our Stars</div>
+                            <div class="book-author">John Green</div>
+                            <div class="book-price">$24.99</div>
+                        </div>
+
+                        <div class="book-card">
+                            <div class="book-cover">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div class="book-title">Sherlock Holmes</div>
+                            <div class="book-author">Conan Doyle</div>
+                            <div class="book-price">$19.99</div>
+                        </div>
+
+                        <div class="book-card">
+                            <div class="book-cover">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div class="book-title">48 Laws of Power</div>
+                            <div class="book-author">Robert Greene</div>
+                            <div class="book-price">$29.99</div>
+                        </div>
+
+                        <div class="book-card">
+                            <div class="book-cover">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div class="book-title">Thinking, Fast and Slow</div>
+                            <div class="book-author">Daniel Kahneman</div>
+                            <div class="book-price">$22.99</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="right-column">
+                <!-- Achievement Section -->
+                <div class="section-card fade-in-up" style="animation-delay: 0.7s">
+                    <div class="section-header">
+                        <h2 class="section-title">Unlocks achievement</h2>
+                    </div>
+                    <p class="section-subtitle">Goal achieved success unlocked.</p>
+
+                    <div class="achievement-grid">
+                        <div class="achievement-card">
+                            <div class="achievement-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="achievement-title">66% Achieved</div>
+                            <div class="achievement-desc">7 Days left</div>
+                        </div>
+
+                        <div class="achievement-card">
+                            <div class="achievement-icon">
+                                <i class="fas fa-medal"></i>
+                            </div>
+                            <div class="achievement-title">33% Achieved</div>
+                            <div class="achievement-desc">12 Days left</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Best Sales Section -->
+                <div class="section-card fade-in-up" style="animation-delay: 0.8s">
+                    <div class="section-header">
+                        <h2 class="section-title">Best sales</h2>
+                        <a href="#" class="view-all">VIEW ALL <i class="fas fa-arrow-right"></i></a>
+                    </div>
+
+                    <div class="sales-grid">
+                        <div class="sale-item">
+                            <div class="sale-cover">
+                                <i class="fas fa-seedling"></i>
+                            </div>
+                            <div class="sale-details">
+                                <div class="sale-title">Grow green</div>
+                                <div class="sale-rating">
+                                    <i class="fas fa-star"></i> 4.5
+                                </div>
+                                <div class="sale-price">Order</div>
+                            </div>
+                        </div>
+
+                        <div class="sale-item">
+                            <div class="sale-cover">
+                                <i class="fas fa-leaf"></i>
+                            </div>
+                            <div class="sale-details">
+                                <div class="sale-title">Raise a plant</div>
+                                <div class="sale-rating">
+                                    <i class="fas fa-star"></i> 4.0
+                                </div>
+                                <div class="sale-price">Order</div>
+                            </div>
+                        </div>
+
+                        <div class="sale-item">
+                            <div class="sale-cover">
+                                <i class="fas fa-question-circle"></i>
+                            </div>
+                            <div class="sale-details">
+                                <div class="sale-title">One question</div>
+                                <div class="sale-rating">
+                                    <i class="fas fa-star"></i> 4.5
+                                </div>
+                                <div class="sale-price">Order</div>
+                            </div>
+                        </div>
+
+                        <div class="sale-item">
+                            <div class="sale-cover">
+                                <i class="fas fa-plug"></i>
+                            </div>
+                            <div class="sale-details">
+                                <div class="sale-title">Unplug day</div>
+                                <div class="sale-rating">
+                                    <i class="fas fa-star"></i> 4.0
+                                </div>
+                                <div class="sale-price">Order</div>
+                            </div>
+                        </div>
+
+                        <div class="sale-item">
+                            <div class="sale-cover">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <div class="sale-details">
+                                <div class="sale-title">Best year</div>
+                                <div class="sale-rating">
+                                    <i class="fas fa-star"></i> 3.5
+                                </div>
+                                <div class="sale-price">Order</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add hover effects and animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add animation classes to elements
+            const animatedElements = document.querySelectorAll('.fade-in-up, .slide-in-left, .slide-in-right, .bounce-in');
+
+            animatedElements.forEach((element, index) => {
+                // Set animation delay based on element order
+                const delay = parseFloat(element.style.animationDelay) || (index * 0.1);
+                element.style.animationDelay = `${delay}s`;
+            });
+
+            // Add click effect to buttons
+            const buttons = document.querySelectorAll('.explore-btn');
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 150);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

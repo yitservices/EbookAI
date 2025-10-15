@@ -1,0 +1,1118 @@
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "User Management";
+}
+
+<style>
+    /* Outstanding User Management Styles */
+    .user-management-container {
+        animation: fadeIn 0.8s ease-out;
+    }
+
+    @@keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Header with Gradient Animation */
+    .user-management-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 20px;
+        padding: 30px;
+        color: white;
+        margin-bottom: 30px;
+        box-shadow: 0 15px 35px rgba(102, 126, 234, 0.2);
+        position: relative;
+        overflow: hidden;
+        border: none;
+        animation: slideInDown 0.6s ease-out;
+    }
+
+    .user-management-header::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.1);
+        transform: rotate(30deg);
+        animation: shimmer 3s infinite;
+    }
+
+    @@keyframes shimmer {
+        0% { transform: rotate(30deg) translateX(-20%); }
+        50% { transform: rotate(30deg) translateX(20%); }
+        100% { transform: rotate(30deg) translateX(-20%); }
+    }
+
+    .user-management-header h1 {
+        font-weight: 800;
+        margin-bottom: 10px;
+        font-size: 2.5rem;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        animation: textGlow 2s infinite alternate;
+    }
+
+    @@keyframes textGlow {
+        from { text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); }
+        to { text-shadow: 0 2px 10px rgba(255, 255, 255, 0.4); }
+    }
+
+    .user-management-header p {
+        opacity: 0.9;
+        margin-bottom: 0;
+        font-size: 1.1rem;
+        max-width: 600px;
+    }
+
+    /* Stats Cards with Outstanding Design */
+    .stats-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 25px;
+        margin-bottom: 35px;
+    }
+
+    .stat-card {
+        background: linear-gradient(145deg, #ffffff, #f8f9fa);
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        border: none;
+        animation: floatIn 0.6s ease-out;
+        animation-fill-mode: both;
+    }
+
+    .stat-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.5s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .stat-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .stat-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+        font-size: 2rem;
+        transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        animation: pulseIcon 3s infinite;
+    }
+
+    @@keyframes pulseIcon {
+        0% { transform: scale(1); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); }
+        50% { transform: scale(1.1); box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15); }
+        100% { transform: scale(1); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); }
+    }
+
+    .stat-card:hover .stat-icon {
+        transform: scale(1.2) rotate(10deg);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .stat-card.admin .stat-icon {
+        background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+        color: white;
+    }
+
+    .stat-card.author .stat-icon {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+    }
+
+    .stat-card.reader .stat-icon {
+        background: linear-gradient(135deg, #4ecdc4, #44a08d);
+        color: white;
+    }
+
+    .stat-card.total .stat-icon {
+        background: linear-gradient(135deg, #ffd166, #ffb347);
+        color: white;
+    }
+
+    .stat-value {
+        font-size: 2.8rem;
+        font-weight: 800;
+        margin-bottom: 10px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        transition: all 0.3s ease;
+    }
+
+    .stat-card:hover .stat-value {
+        transform: scale(1.1);
+    }
+
+    .stat-label {
+        font-size: 1rem;
+        color: #6c757d;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    /* Search Section with Outstanding Design */
+    .search-section {
+        background: linear-gradient(145deg, #ffffff, #f8f9fa);
+        padding: 30px;
+        border-radius: 20px;
+        margin-bottom: 35px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: all 0.4s ease;
+        border: none;
+        animation: slideInUp 0.6s ease-out;
+    }
+
+    .search-section:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 25px;
+        color: #333;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        position: relative;
+        padding-bottom: 15px;
+    }
+
+    .section-title::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 60px;
+        height: 4px;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        border-radius: 2px;
+    }
+
+    .section-title i {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-size: 1.3rem;
+    }
+
+    .search-controls {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .search-input, .filter-select {
+        padding: 15px 20px;
+        border: 2px solid #e9ecef;
+        border-radius: 15px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: white;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .search-input:focus, .filter-select:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+        transform: translateY(-2px);
+    }
+
+    .search-input {
+        flex: 1;
+        min-width: 300px;
+        background: linear-gradient(145deg, #ffffff, #f8f9fa);
+    }
+
+    .search-input::placeholder {
+        color: #adb5bd;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border: none;
+        padding: 15px 25px;
+        border-radius: 15px;
+        font-weight: 600;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-primary:active {
+        transform: translateY(-2px);
+    }
+
+    /* Users Table with Outstanding Design */
+    .users-table-container {
+        background: linear-gradient(145deg, #ffffff, #f8f9fa);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        margin-bottom: 35px;
+        border: none;
+        animation: fadeIn 0.8s ease-out;
+    }
+
+    .table-responsive {
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .table {
+        margin-bottom: 0;
+    }
+
+    .table thead th {
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        color: white;
+        border: none;
+        font-weight: 600;
+        padding: 20px 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-size: 0.9rem;
+    }
+
+    .table tbody td {
+        padding: 20px 15px;
+        vertical-align: middle;
+        border-bottom: 1px solid #e9ecef;
+        transition: all 0.3s ease;
+    }
+
+    .table tbody tr {
+        transition: all 0.3s ease;
+    }
+
+    .table tbody tr:hover {
+        background-color: rgba(102, 126, 234, 0.05);
+        transform: scale(1.01);
+    }
+
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .user-avatar {
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+        font-size: 1.3rem;
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        transition: all 0.3s ease;
+        animation: bounce 4s infinite;
+    }
+
+    @@keyframes bounce {
+        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+        40% { transform: translateY(-10px); }
+        60% { transform: translateY(-5px); }
+    }
+
+    .table tbody tr:hover .user-avatar {
+        transform: scale(1.1) rotate(5deg);
+        box-shadow: 0 12px 25px rgba(102, 126, 234, 0.4);
+    }
+
+    .role-badge, .status-badge {
+        padding: 8px 16px;
+        border-radius: 25px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    .role-badge:hover, .status-badge:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+    }
+
+    .role-badge.admin, .role-badge.Admin {
+        background: linear-gradient(135deg, rgba(255, 107, 107, 0.2), rgba(238, 90, 82, 0.2));
+        color: #ff6b6b;
+    }
+
+    .role-badge.author, .role-badge.Author {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+        color: #667eea;
+    }
+
+    .role-badge.reader, .role-badge.Reader {
+        background: linear-gradient(135deg, rgba(78, 205, 196, 0.2), rgba(68, 160, 141, 0.2));
+        color: #4ecdc4;
+    }
+
+    .status-badge.active {
+        background: linear-gradient(135deg, rgba(76, 209, 55, 0.2), rgba(56, 173, 169, 0.2));
+        color: #4cd137;
+    }
+
+    .status-badge.inactive {
+        background: linear-gradient(135deg, rgba(108, 117, 125, 0.2), rgba(73, 80, 87, 0.2));
+        color: #6c757d;
+    }
+
+    .btn-action {
+        padding: 10px 15px;
+        border: none;
+        border-radius: 12px;
+        margin: 0 5px;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        background: rgba(102, 126, 234, 0.1);
+        color: #667eea;
+        font-size: 1rem;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    .btn-action:hover {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        transform: translateY(-3px) scale(1.1);
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-action.delete {
+        background: rgba(255, 107, 107, 0.1);
+        color: #ff6b6b;
+    }
+
+    .btn-action.delete:hover {
+        background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+        color: white;
+        transform: translateY(-3px) scale(1.1);
+        box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
+    }
+
+    /* Modal Styles with Outstanding Design */
+    .modal-content {
+        border: none;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+        animation: modalSlideIn 0.4s ease-out;
+    }
+
+    @@keyframes modalSlideIn {
+        from { opacity: 0; transform: translateY(-50px) scale(0.9); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .modal-header {
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        color: white;
+        border: none;
+        padding: 25px;
+    }
+
+    .modal-body {
+        padding: 30px;
+    }
+
+    .modal-footer {
+        padding: 25px;
+        border: none;
+        background: #f8f9fa;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 10px;
+        font-size: 1.1rem;
+    }
+
+    .form-control, .form-select {
+        border-radius: 15px;
+        padding: 15px 20px;
+        border: 2px solid #e9ecef;
+        transition: all 0.3s ease;
+        background: #ffffff;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: #667eea;
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+        transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+        background: #6c757d;
+        border: none;
+        border-radius: 15px;
+        padding: 12px 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(108, 117, 125, 0.2);
+    }
+
+    .btn-secondary:hover {
+        background: #5a6268;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(108, 117, 125, 0.3);
+    }
+
+    /* Pagination with Outstanding Design */
+    .pagination-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 25px;
+        background: linear-gradient(145deg, #ffffff, #f8f9fa);
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+        border: none;
+        animation: fadeIn 0.8s ease-out;
+    }
+
+    .pagination-info {
+        color: #6c757d;
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    .pagination .page-link {
+        border-radius: 12px;
+        margin: 0 5px;
+        border: 2px solid #e9ecef;
+        color: #333;
+        padding: 12px 18px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        background: white;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .pagination .page-link:hover {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border-color: #667eea;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .pagination .page-item.active .page-link {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border-color: #667eea;
+        color: white;
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    /* Animations */
+    @@keyframes slideInDown {
+        from { opacity: 0; transform: translateY(-50px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @@keyframes slideInUp {
+        from { opacity: 0; transform: translateY(50px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @@keyframes floatIn {
+        from { opacity: 0; transform: translateY(30px) scale(0.95); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        .user-management-container {
+            padding: 15px;
+        }
+
+        .user-management-header {
+            padding: 25px 20px;
+        }
+
+        .user-management-header h1 {
+            font-size: 2rem;
+        }
+
+        .search-controls {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .search-input, .filter-select {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .table-responsive {
+            font-size: 0.9rem;
+        }
+
+        .user-info {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .stats-container {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .stat-value {
+            font-size: 2.2rem;
+        }
+
+        .pagination-container {
+            flex-direction: column;
+            gap: 20px;
+            text-align: center;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .user-management-container {
+            padding: 10px;
+        }
+
+        .user-management-header {
+            padding: 20px 15px;
+            text-align: center;
+        }
+
+        .user-management-header h1 {
+            font-size: 1.7rem;
+        }
+
+        .stats-container {
+            grid-template-columns: 1fr;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+        }
+
+        .btn-action {
+            margin: 5px 2px;
+            padding: 8px 12px;
+            font-size: 0.9rem;
+        }
+    }
+</style>
+
+<div class="user-management-container">
+    <!-- Header Section -->
+    <div class="user-management-header">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1><i class="fas fa-users-cog me-3"></i>User Management</h1>
+                <p>Manage all users, roles, and permissions in one place with advanced filtering and search capabilities</p>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#userModal">
+                    <i class="fas fa-user-plus me-2"></i>Add New User
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="stats-container">
+        <div class="stat-card admin" data-aos="fade-up" data-aos-delay="100">
+            <div class="stat-icon admin">
+                <i class="fas fa-user-shield"></i>
+            </div>
+            <div class="stat-value">5</div>
+            <div class="stat-label">Admin Users</div>
+        </div>
+
+        <div class="stat-card author" data-aos="fade-up" data-aos-delay="200">
+            <div class="stat-icon author">
+                <i class="fas fa-pen-fancy"></i>
+            </div>
+            <div class="stat-value">42</div>
+            <div class="stat-label">Authors</div>
+        </div>
+
+        <div class="stat-card reader" data-aos="fade-up" data-aos-delay="300">
+            <div class="stat-icon reader">
+                <i class="fas fa-book-reader"></i>
+            </div>
+            <div class="stat-value">1,201</div>
+            <div class="stat-label">Readers</div>
+        </div>
+
+        <div class="stat-card total" data-aos="fade-up" data-aos-delay="400">
+            <div class="stat-icon total">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-value">1,248</div>
+            <div class="stat-label">Total Users</div>
+        </div>
+    </div>
+
+    <!-- Search Section -->
+    <div class="search-section">
+        <h3 class="section-title">
+            <i class="fas fa-search"></i>
+            User Search & Filter
+        </h3>
+        <div class="search-controls">
+            <input type="text" id="searchUsers" class="search-input" placeholder="Search users by name or email...">
+            <select id="roleFilter" class="filter-select">
+                <option value="">All Roles</option>
+                <option value="admin">Admin</option>
+                <option value="author">Author</option>
+                <option value="reader">Reader</option>
+            </select>
+            <select id="statusFilter" class="filter-select">
+                <option value="">All Status</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+            </select>
+            <button class="btn btn-primary" id="exportUsersBtn">
+                <i class="fas fa-file-export me-2"></i>Export Users
+            </button>
+        </div>
+    </div>
+
+    <!-- Users Table -->
+    <div class="users-table-container">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Last Login</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-role="admin" data-status="active">
+                        <td>
+                            <div class="user-info">
+                                <div class="user-avatar">JD</div>
+                                <div>
+                                    <strong>John Doe</strong>
+                                    <div class="text-muted">ID: USR-001</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>john.doe@example.com</td>
+                        <td>
+                            <span class="role-badge admin"><i class="fas fa-user-shield me-1"></i>Admin</span>
+                        </td>
+                        <td><span class="status-badge active"><i class="fas fa-circle me-1"></i>Active</span></td>
+                        <td>Oct 15, 2023</td>
+                        <td>
+                            <button class="btn-action" title="Edit User">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-action delete" title="Delete User">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr data-role="author" data-status="active">
+                        <td>
+                            <div class="user-info">
+                                <div class="user-avatar">SJ</div>
+                                <div>
+                                    <strong>Sarah Johnson</strong>
+                                    <div class="text-muted">ID: USR-002</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>sarah.j@example.com</td>
+                        <td>
+                            <span class="role-badge author"><i class="fas fa-pen-fancy me-1"></i>Author</span>
+                        </td>
+                        <td><span class="status-badge active"><i class="fas fa-circle me-1"></i>Active</span></td>
+                        <td>Oct 14, 2023</td>
+                        <td>
+                            <button class="btn-action" title="Edit User">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-action delete" title="Delete User">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr data-role="reader" data-status="active">
+                        <td>
+                            <div class="user-info">
+                                <div class="user-avatar">MB</div>
+                                <div>
+                                    <strong>Michael Brown</strong>
+                                    <div class="text-muted">ID: USR-003</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>michael.b@example.com</td>
+                        <td>
+                            <span class="role-badge reader"><i class="fas fa-book-reader me-1"></i>Reader</span>
+                        </td>
+                        <td><span class="status-badge active"><i class="fas fa-circle me-1"></i>Active</span></td>
+                        <td>Oct 12, 2023</td>
+                        <td>
+                            <button class="btn-action" title="Edit User">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-action delete" title="Delete User">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr data-role="author" data-status="active">
+                        <td>
+                            <div class="user-info">
+                                <div class="user-avatar">ED</div>
+                                <div>
+                                    <strong>Emily Davis</strong>
+                                    <div class="text-muted">ID: USR-004</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>emily.d@example.com</td>
+                        <td>
+                            <span class="role-badge author"><i class="fas fa-pen-fancy me-1"></i>Author</span>
+                        </td>
+                        <td><span class="status-badge active"><i class="fas fa-circle me-1"></i>Active</span></td>
+                        <td>Oct 10, 2023</td>
+                        <td>
+                            <button class="btn-action" title="Edit User">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-action delete" title="Delete User">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr data-role="reader" data-status="inactive">
+                        <td>
+                            <div class="user-info">
+                                <div class="user-avatar">DW</div>
+                                <div>
+                                    <strong>David Wilson</strong>
+                                    <div class="text-muted">ID: USR-005</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>david.w@example.com</td>
+                        <td>
+                            <span class="role-badge reader"><i class="fas fa-book-reader me-1"></i>Reader</span>
+                        </td>
+                        <td><span class="status-badge inactive"><i class="fas fa-circle me-1"></i>Inactive</span></td>
+                        <td>Sep 28, 2023</td>
+                        <td>
+                            <button class="btn-action" title="Edit User">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-action delete" title="Delete User">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination-container">
+        <div class="pagination-info">
+            Showing 1 to 5 of 1,248 users
+        </div>
+        <nav aria-label="User pagination">
+            <ul class="pagination justify-content-center mb-0">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true"><i class="fas fa-chevron-left"></i></a>
+                </li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<!-- User Modal -->
+<div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="userModalLabel">Add New User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="userForm">
+                    <input type="hidden" id="userId">
+                    <div class="mb-4">
+                        <label for="fullName" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="fullName" required placeholder="Enter full name">
+                    </div>
+                    <div class="mb-4">
+                        <label for="userEmail" class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="userEmail" required placeholder="Enter email address">
+                    </div>
+                    <div class="mb-4">
+                        <label for="userRole" class="form-label">Role</label>
+                        <select class="form-select" id="userRole" required>
+                            <option value="">Select Role</option>
+                            <option value="1">Admin</option>
+                            <option value="2">Author</option>
+                            <option value="3">Reader</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="userStatus" class="form-label">Status</label>
+                        <select class="form-select" id="userStatus" required>
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveUserBtn">Save User</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add entrance animations
+            const elements = document.querySelectorAll('.stat-card, .search-section, .users-table-container, .pagination-container');
+            elements.forEach((el, index) => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                setTimeout(() => {
+                    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, 150 * index);
+            });
+
+            // Search functionality
+            document.getElementById('searchUsers').addEventListener('input', function() {
+                filterUsers();
+            });
+
+            // Role filter
+            document.getElementById('roleFilter').addEventListener('change', function() {
+                filterUsers();
+            });
+
+            // Status filter
+            document.getElementById('statusFilter').addEventListener('change', function() {
+                filterUsers();
+            });
+
+            function filterUsers() {
+                const searchTerm = document.getElementById('searchUsers').value.toLowerCase();
+                const roleFilter = document.getElementById('roleFilter').value.toLowerCase();
+                const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
+                const userRows = document.querySelectorAll('tbody tr');
+
+                userRows.forEach(row => {
+                    const name = row.querySelector('.user-info strong')?.textContent.toLowerCase() || '';
+                    const email = row.cells[1]?.textContent.toLowerCase() || '';
+                    const role = row.getAttribute('data-role')?.toLowerCase() || '';
+                    const status = row.getAttribute('data-status')?.toLowerCase() || '';
+
+                    const matchesSearch = name.includes(searchTerm) || email.includes(searchTerm);
+                    const matchesRole = !roleFilter || role.includes(roleFilter);
+                    const matchesStatus = !statusFilter || status.includes(statusFilter);
+
+                    if (matchesSearch && matchesRole && matchesStatus) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            }
+
+            // Export users functionality
+            document.getElementById('exportUsersBtn').addEventListener('click', function() {
+                Swal.fire({
+                    title: 'Exporting Users',
+                    text: 'Preparing user data for export...',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                setTimeout(() => {
+                    Swal.fire({
+                        title: 'Export Complete!',
+                        text: 'User data has been exported successfully.',
+                        icon: 'success',
+                        confirmButtonColor: '#667eea'
+                    });
+                }, 1500);
+            });
+
+            // Save user functionality
+            document.getElementById('saveUserBtn').addEventListener('click', function() {
+                const userId = document.getElementById('userId').value;
+                const fullName = document.getElementById('fullName').value;
+
+                if (!fullName) {
+                    Swal.fire({
+                        title: 'Name Required',
+                        text: 'Please enter a full name for the user.',
+                        icon: 'warning',
+                        confirmButtonColor: '#667eea'
+                    });
+                    return;
+                }
+
+                const action = userId ? 'Updating' : 'Creating';
+
+                // Show loading state
+                const saveBtn = this;
+                const originalText = saveBtn.innerHTML;
+                saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Saving...';
+                saveBtn.disabled = true;
+
+                // Simulate save process
+                setTimeout(() => {
+                    Swal.fire({
+                        title: 'User ' + (userId ? 'Updated' : 'Created') + '!',
+                        text: 'The user has been ' + (userId ? 'updated' : 'created') + ' successfully.',
+                        icon: 'success',
+                        confirmButtonColor: '#667eea'
+                    });
+
+                    // Close modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('userModal'));
+                    modal.hide();
+
+                    // Reset button
+                    saveBtn.innerHTML = originalText;
+                    saveBtn.disabled = false;
+
+                    // Reset form
+                    document.getElementById('userForm').reset();
+                }, 1500);
+            });
+
+            // Edit user buttons
+            const editButtons = document.querySelectorAll('.btn-action:not(.delete)');
+            editButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    document.getElementById('userModalLabel').textContent = 'Edit User';
+                    // In a real app, you would populate the form with user data
+                    document.getElementById('userId').value = '123';
+                    document.getElementById('fullName').value = 'John Doe';
+                    document.getElementById('userEmail').value = 'john.doe@example.com';
+                    document.getElementById('userRole').value = '1';
+                    document.getElementById('userStatus').value = 'Active';
+
+                    new bootstrap.Modal(document.getElementById('userModal')).show();
+                });
+            });
+
+            // Delete user buttons
+            const deleteButtons = document.querySelectorAll('.btn-action.delete');
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    Swal.fire({
+                        title: 'Delete User?',
+                        text: 'This action cannot be undone',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#ff6b6b',
+                        confirmButtonText: 'Delete',
+                        cancelButtonColor: '#6c757d'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            Swal.fire({
+                                title: 'Deleting User',
+                                text: 'Please wait while we delete the user...',
+                                allowOutsideClick: false,
+                                showConfirmButton: false,
+                                didOpen: () => {
+                                    Swal.showLoading();
+                                }
+                            });
+
+                            // Simulate delete process
+                            setTimeout(() => {
+                                Swal.fire({
+                                    title: 'User Deleted!',
+                                    text: 'The user has been deleted successfully.',
+                                    icon: 'success',
+                                    confirmButtonColor: '#667eea'
+                                });
+                                // In a real app, you would remove the user from the table
+                            }, 1000);
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+}

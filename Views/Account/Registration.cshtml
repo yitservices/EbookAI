@@ -1,0 +1,473 @@
+@{
+    ViewData["Title"] = "Create Account - eBook Publisher";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .auth-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+            padding: 40px;
+            width: 100%;
+            max-width: 520px;
+            animation: slideUp 0.8s ease-out;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        @@keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo i {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo h1 {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 10px 0 5px;
+        }
+
+        .logo p {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .form-title {
+            text-align: center;
+            color: #333;
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: #333;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #667eea;
+            font-size: 1rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px 18px 15px 50px;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            margin: 20px 0;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+        }
+
+        .auth-footer {
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .auth-footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .auth-footer a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            border: 1px solid;
+        }
+
+        .alert-success {
+            background: rgba(34, 197, 94, 0.1);
+            color: #16a34a;
+            border-color: rgba(34, 197, 94, 0.2);
+        }
+
+        .alert-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+            border-color: rgba(239, 68, 68, 0.2);
+        }
+
+        .password-strength {
+            margin-top: 8px;
+            font-size: 0.8rem;
+        }
+
+        .strength-bar {
+            height: 4px;
+            border-radius: 2px;
+            margin-top: 5px;
+            transition: all 0.3s;
+        }
+
+        .strength-weak { background: #ef4444; width: 33%; }
+        .strength-medium { background: #f59e0b; width: 66%; }
+        .strength-strong { background: #22c55e; width: 100%; }
+
+        /* Mobile Responsive */
+        @@media (max-width: 768px) {
+            .auth-container {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .logo h1 {
+                font-size: 1.8rem;
+            }
+
+            .form-title {
+                font-size: 1.4rem;
+            }
+        }
+
+        @@media (max-width: 480px) {
+            .auth-container {
+                padding: 25px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container" data-aos="fade-up">
+        <div class="logo">
+            <i class="fas fa-user-plus"></i>
+            <h1>Create Account</h1>
+            <p>Join thousands of successful authors</p>
+        </div>
+
+        <h2 class="form-title">Start Your Publishing Journey</h2>
+
+        @if (!string.IsNullOrEmpty(ViewBag.Success as string))
+        {
+            <div class="alert alert-success">
+                <i class="fas fa-check-circle"></i> @ViewBag.Success
+            </div>
+        }
+
+        @if (!string.IsNullOrEmpty(ViewBag.Error as string))
+        {
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-circle"></i> @ViewBag.Error
+            </div>
+        }
+
+        <form method="post" id="signupForm" action="/Account/Register">
+            <div class="form-group full-width" data-aos="fade-up" data-aos-delay="100">
+                <label for="FullName">Full Name</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="FullName" name="FullName" class="form-control" 
+                           placeholder="Enter your full name" required>
+                </div>
+            </div>
+
+            <div class="form-group full-width" data-aos="fade-up" data-aos-delay="150">
+                <label for="UserEmail">Email Address</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="UserEmail" name="UserEmail" class="form-control" 
+                           placeholder="Enter your email address" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group" data-aos="fade-up" data-aos-delay="200">
+                    <label for="Password">Password</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="Password" name="Password" class="form-control" 
+                               placeholder="Create password" required>
+                    </div>
+                    <div class="password-strength" id="passwordStrength" style="display: none;">
+                        <span id="strengthText">Password strength</span>
+                        <div class="strength-bar" id="strengthBar"></div>
+                    </div>
+                </div>
+
+                <div class="form-group" data-aos="fade-up" data-aos-delay="250">
+                    <label for="ConfirmPassword">Confirm Password</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="ConfirmPassword" name="ConfirmPassword" class="form-control" 
+                               placeholder="Confirm password" required>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" data-aos="fade-up" data-aos-delay="300">
+                <i class="fas fa-user-plus"></i>
+                <span>Create My Account</span>
+            </button>
+        </form>
+
+        <div class="auth-footer" data-aos="fade-up" data-aos-delay="350">
+            Already have an account? <a href="/Account/Login">Sign in here</a>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 600,
+            easing: 'ease-out',
+            once: true
+        });
+
+        // Password strength checker
+        document.getElementById('Password').addEventListener('input', function() {
+            const password = this.value;
+            const strengthIndicator = document.getElementById('passwordStrength');
+            const strengthText = document.getElementById('strengthText');
+            const strengthBar = document.getElementById('strengthBar');
+
+            if (password.length === 0) {
+                strengthIndicator.style.display = 'none';
+                return;
+            }
+
+            strengthIndicator.style.display = 'block';
+
+            let strength = 0;
+            const checks = [
+                password.length >= 8,
+                /[a-z]/.test(password),
+                /[A-Z]/.test(password),
+                /[0-9]/.test(password),
+                /[^a-zA-Z0-9]/.test(password)
+            ];
+
+            strength = checks.filter(check => check).length;
+
+            strengthBar.className = 'strength-bar';
+            if (strength < 3) {
+                strengthBar.classList.add('strength-weak');
+                strengthText.textContent = 'Weak password';
+                strengthText.style.color = '#ef4444';
+            } else if (strength < 4) {
+                strengthBar.classList.add('strength-medium');
+                strengthText.textContent = 'Medium password';
+                strengthText.style.color = '#f59e0b';
+            } else {
+                strengthBar.classList.add('strength-strong');
+                strengthText.textContent = 'Strong password';
+                strengthText.style.color = '#22c55e';
+            }
+        });
+
+        // Password confirmation validation
+        document.getElementById('ConfirmPassword').addEventListener('input', function() {
+            const password = document.getElementById('Password').value;
+            const confirmPassword = this.value;
+
+            if (confirmPassword && password !== confirmPassword) {
+                this.style.borderColor = '#ef4444';
+            } else {
+                this.style.borderColor = '';
+            }
+        });
+
+        // Form submission
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            const password = document.getElementById('Password').value;
+            const confirmPassword = document.getElementById('ConfirmPassword').value;
+
+            if (password !== confirmPassword) {
+                e.preventDefault();
+                Swal.fire({
+                    title: 'Password Mismatch',
+                    text: 'Passwords do not match. Please check and try again.',
+                    icon: 'error',
+                    confirmButtonColor: '#667eea'
+                });
+                return;
+            }
+
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const btnText = submitBtn.querySelector('span');
+            
+            submitBtn.style.pointerEvents = 'none';
+            submitBtn.style.opacity = '0.7';
+            btnText.textContent = 'Creating Account...';
+            
+            Swal.fire({
+                title: 'Creating Account',
+                text: 'Please wait while we set up your account...',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+        });
+
+        // Real-time validation
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.addEventListener('blur', function() {
+                validateField(this);
+            });
+        });
+
+        function validateField(field) {
+            const value = field.value.trim();
+            
+            if (field.type === 'email' && value) {
+                const emailRegex = /^[^\\s@@]+@@[^\\s@@]+\\.[^\\s@@]+$/;
+                if (!emailRegex.test(value)) {
+                    field.style.borderColor = '#ef4444';
+                } else {
+                    field.style.borderColor = '#22c55e';
+                }
+            }
+            
+            if (field.hasAttribute('required') && !value) {
+                field.style.borderColor = '#ef4444';
+            } else if (field.type !== 'email') {
+                field.style.borderColor = '#22c55e';
+            }
+        }
+    </script>
+</body>
+</html>

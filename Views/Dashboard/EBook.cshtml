@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ebook Publishing Platform</title>
+    <title>Ebook Details</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Prevent layout shift from scrollbar */
@@ -57,7 +57,7 @@
             position: relative;
             width: 93%;
             max-width: none;
-            margin-left: 115px;
+            /* margin-left: 115px; */
         }
 
         .top-header {
@@ -78,6 +78,66 @@
         .header-right {
             display: flex;
             gap: 15px;
+        }
+
+        /* Dropdown Styles */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 6px rgba(76, 175, 80, 0.2);
+        }
+
+            .dropdown-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 12px rgba(76, 175, 80, 0.3);
+            }
+
+            .dropdown-btn:active {
+                transform: translateY(0);
+                box-shadow: 0 2px 4px rgba(76, 175, 80, 0.2);
+            }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: var(--card-bg);
+            min-width: 200px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-top: 5px;
+            border: 1px solid var(--border-color);
+        }
+
+            .dropdown-content a {
+                color: var(--text-color);
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+                transition: background-color 0.3s;
+            }
+
+                .dropdown-content a:hover {
+                    background-color: var(--content-bg);
+                }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
         }
 
         /* Button Styles */
@@ -304,7 +364,7 @@
                 color: var(--text-color);
             }
 
-            .form-group input, .form-group textarea {
+            .form-group input, .form-group textarea, .form-group select {
                 width: 100%;
                 padding: 10px;
                 border: 1px solid var(--border-color);
@@ -315,7 +375,7 @@
                 transition: border-color 0.3s;
             }
 
-                .form-group input:focus, .form-group textarea:focus {
+                .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
                     outline: none;
                     border-color: var(--primary);
                     box-shadow: 0 0 0 2px rgba(74, 108, 247, 0.2);
@@ -561,262 +621,274 @@
         }
 
         @@keyframes spin {
-            to
-
-        {
-            transform: rotate(360deg);
-        }
-
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         /* Responsive Styles */
         @@media (max-width: 1200px) {
-            .title-page-container, .chapters-container
-
-        {
-            grid-template-columns: 1fr;
-        }
-
+            .title-page-container, .chapters-container {
+                grid-template-columns: 1fr;
+            }
         }
 
         @@media (max-width: 992px) {
-            .top-header
+            .top-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
 
-        {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 20px;
-        }
-
-        .header-right {
-            width: 100%;
-            justify-content: space-between;
-            flex-wrap: wrap;
-        }
-
+            .header-right {
+                width: 100%;
+                justify-content: space-between;
+                flex-wrap: wrap;
+            }
         }
 
         @@media (max-width: 768px) {
-            .top-header
+            .top-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
 
-        {
-            flex-direction: column;
-            text-align: center;
-            gap: 20px;
+            .header-right {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .features-section {
+                grid-template-columns: 1fr;
+            }
+
+            .premium-buttons, .editor-actions {
+                flex-direction: column;
+            }
+
+            .upload-section {
+                padding: 20px;
+            }
+
+            .upload-area {
+                padding: 20px;
+            }
+
+            .book-editor, .book-preview, .chapters-list, .chapter-editor {
+                padding: 20px;
+            }
+
+            .upload-icon, .book-cover-placeholder i {
+                font-size: 2rem;
+            }
+
+            .header-left h1 {
+                font-size: 1.5rem;
+            }
+
+            .header-left p {
+                font-size: 1rem;
+            }
+
+            .chapters-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .chapter-editor .form-group textarea {
+                min-height: 200px;
+            }
+
+            .editor-actions {
+                flex-direction: column;
+            }
+
+                .editor-actions button {
+                    width: 100%;
+                }
+
+            .navigation-tabs {
+                flex-wrap: wrap;
+            }
+
+            .dropdown-content {
+                position: static;
+                width: 100%;
+                margin-top: 10px;
+            }
         }
 
-        .header-right {
-            flex-wrap: wrap;
-            justify-content: center;
+        @@media (max-width: 576px) {
+            .book-editor, .book-preview, .chapters-list, .chapter-editor {
+                padding: 15px;
+            }
+
+            .upload-section {
+                padding: 15px;
+            }
+
+            .header-right {
+                flex-direction: column;
+                width: 100%;
+                gap: 10px;
+            }
+
+            .theme-toggle {
+                background-color: var(--dark);
+                border-radius: 8px;
+                width: 100%;
+            }
+
+            .header-right button, .header-right .dropdown {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .title-page-container, .chapters-container {
+                gap: 15px;
+            }
+
+            .chapters-items {
+                max-height: 500px;
+                width: 100%;
+                overflow-y: auto;
+            }
+
+            button#themeToggle {
+                border-radius: 50%;
+                width: 54px;
+            }
+
+            .upload-area {
+                padding: 15px;
+            }
+
+            .upload-text h3 {
+                font-size: 1.2rem;
+            }
+
+            .upload-text p {
+                font-size: 0.9rem;
+            }
+
+            .book-cover-placeholder {
+                width: 150px;
+                height: 225px;
+            }
+
+            .book-title-preview h2 {
+                font-size: 1.5rem;
+            }
+
+            .book-author-preview h3 {
+                font-size: 1.2rem;
+            }
+
+            .form-group input, .form-group textarea, .form-group select {
+                padding: 8px;
+                font-size: 0.9rem;
+            }
+
+            .chapter-title {
+                font-size: 0.95rem;
+            }
+
+            .chapter-preview {
+                font-size: 0.8rem;
+            }
+
+            .count-value {
+                font-size: 1.5rem;
+            }
+
+            .chapters-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+                .chapters-header button {
+                    width: 100%;
+                }
+
+            .chapters-search {
+                flex-direction: column;
+            }
+
+                .chapters-search input {
+                    border-radius: 6px;
+                    border-right: 1px solid var(--border-color);
+                    margin-bottom: 10px;
+                }
+
+                .chapters-search button {
+                    border-radius: 6px;
+                }
+
+            .navigation-tabs {
+                flex-direction: column;
+            }
+
+            .dropdown {
+                width: 100%;
+            }
+
+            .dropdown-btn {
+                width: 100%;
+                justify-content: center;
+            }
         }
 
-        .features-section {
-            grid-template-columns: 1fr;
-        }
+        @@media (max-width: 400px) {
+            .header-right button {
+                padding: 8px 12px;
+                font-size: 0.8rem;
+            }
 
-        .premium-buttons, .editor-actions {
-            flex-direction: column;
-        }
+            .theme-toggle {
+                width: 100%;
+            }
 
-        .upload-section {
-            padding: 20px;
-        }
-
-        .upload-area {
-            padding: 20px;
-        }
-
-        .book-editor, .book-preview, .chapters-list, .chapter-editor {
-            padding: 20px;
-        }
-
-        .upload-icon, .book-cover-placeholder i {
-            font-size: 2rem;
-        }
-
-        .header-left h1 {
-            font-size: 1.5rem;
-        }
-
-        .header-left p {
-            font-size: 1rem;
-        }
-
-        .chapters-container {
-            grid-template-columns: 1fr;
-            gap: 20px;
-        }
-
-        .chapter-editor .form-group textarea {
-            min-height: 200px;
-        }
-
-        .editor-actions {
-            flex-direction: column;
-        }
+            .premium-buttons button {
+                width: 100%;
+            }
 
             .editor-actions button {
                 width: 100%;
             }
 
-        .navigation-tabs {
-            flex-wrap: wrap;
-        }
-
-        }
-
-        @@media (max-width: 576px) {
-            .book-editor, .book-preview, .chapters-list, .chapter-editor
-
-        {
-            padding: 15px;
-        }
-
-        .upload-section {
-            padding: 15px;
-        }
-
-        .header-right {
-            flex-direction: row;
-            width: 100%;
-            gap: 10px;
-        }
-
-        .theme-toggle {
-            background-color: var(--dark);
-            border-radius: 8px;
-            width: 100%;
-        }
-
-        .header-right button {
-            width: 35%;
-            justify-content: center;
-        }
-
-        .title-page-container, .chapters-container {
-            gap: 15px;
-        }
-
-        .chapters-items {
-            max-height: 500px;
-            width: 100%;
-            overflow-y: auto;
-        }
-
-        button#themeToggle {
-            border-radius: 50%;
-            width: 54px;
-        }
-
-        .upload-area {
-            padding: 15px;
-        }
-
-        .upload-text h3 {
-            font-size: 1.2rem;
-        }
-
-        .upload-text p {
-            font-size: 0.9rem;
-        }
-
-        .book-cover-placeholder {
-            width: 150px;
-            height: 225px;
-        }
-
-        .book-title-preview h2 {
-            font-size: 1.5rem;
-        }
-
-        .book-author-preview h3 {
-            font-size: 1.2rem;
-        }
-
-        .form-group input, .form-group textarea {
-            padding: 8px;
-            font-size: 0.9rem;
-        }
-
-        .chapter-title {
-            font-size: 0.95rem;
-        }
-
-        .chapter-preview {
-            font-size: 0.8rem;
-        }
-
-        .count-value {
-            font-size: 1.5rem;
-        }
-
-        .chapters-header {
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-            .chapters-header button {
-                width: 100%;
+            .book-cover-placeholder {
+                width: 120px;
+                height: 180px;
             }
 
-        .chapters-search {
-            flex-direction: column;
-        }
-
-            .chapters-search input {
-                border-radius: 6px;
-                border-right: 1px solid var(--border-color);
-                margin-bottom: 10px;
+            .feature-card {
+                padding: 15px;
             }
 
-            .chapters-search button {
-                border-radius: 6px;
+            .feature-icon {
+                font-size: 2rem;
             }
-
-        .navigation-tabs {
-            flex-direction: column;
-        }
-
-        }
-
-        @@media (max-width: 400px) {
-            .header-right button
-
-        {
-            padding: 8px 12px;
-            font-size: 0.8rem;
-        }
-
-        .theme-toggle {
-            width: 100%;
-        }
-
-        .premium-buttons button {
-            width: 100%;
-        }
-
-        .editor-actions button {
-            width: 100%;
-        }
-
-        .book-cover-placeholder {
-            width: 120px;
-            height: 180px;
-        }
-
-        .feature-card {
-            padding: 15px;
-        }
-
-        .feature-icon {
-            font-size: 2rem;
-        }
-
         }
 
         .header-left p {
             font-size: 1.2rem;
             color: var(--secondary);
+        }
+        
+        /* Dropdown sections in ebook details */
+        .dropdown-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: var(--content-bg);
+            border-radius: 8px;
+        }
+        
+        .dropdown-section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
         }
     </style>
 </head>
@@ -824,8 +896,8 @@
     <div class="main-content">
         <header class="top-header">
             <div class="header-left">
-                <h1 id="screen-title">E-Book Creator</h1>
-                <p>First eBook complete! Keep creating, writing, and inspiring others with your voice.</p>
+                <h1 id="screen-title">Ebook Details</h1>
+                <p>Manage all aspects of your ebook in one place</p>
             </div>
             <div class="header-right">
                 <button class="btn-primary" id="previewBtn"><i class="fas fa-eye"></i> Preview</button>
@@ -840,7 +912,7 @@
                 <i class="fas fa-upload"></i> Upload Manuscript
             </div>
             <div class="nav-tab" data-screen="title-page-screen">
-                <i class="fas fa-font"></i> Title Page
+                <i class="fas fa-font"></i> Ebook Details
             </div>
             <div class="nav-tab" data-screen="chapters-screen">
                 <i class="fas fa-list"></i> Chapters
@@ -857,9 +929,9 @@
                     <div class="upload-text">
                         <h3>Upload Your Manuscript</h3>
                         <p>Drag & drop your file here or click to browse</p>
-                        <p class="small">Supported formats: DOC, DOCX, PDF, TXT</p>
+                        <p class="small">Supported formats: DOC, DOCX, PDF, TXT, EPUB</p>
                     </div>
-                    <input type="file" id="fileInput" class="file-input" accept=".doc,.docx,.pdf,.txt">
+                    <input type="file" id="fileInput" class="file-input" accept=".doc,.docx,.pdf,.txt,.epub">
                     <button class="btn-primary upload-btn" id="uploadBtn"><i class="fas fa-upload"></i> Upload File</button>
                 </div>
             </div>
@@ -899,40 +971,69 @@
             <div class="title-page-container">
                 <div class="book-editor">
                     <div class="editor-section">
-                        <h3>Book Details</h3>
+                        <h3>Ebook Details</h3>
                         <div class="form-group">
-                            <label for="bookTitle">Book Title</label>
-                            <input type="text" id="bookTitle" placeholder="Enter book title" value="The Secret Garden">
+                            <label for="bookTitle">Ebook Title</label>
+                            <input type="text" id="bookTitle" placeholder="Enter ebook title" value="Digital Marketing Mastery">
                         </div>
                         <div class="form-group">
                             <label for="bookSubtitle">Subtitle</label>
-                            <input type="text" id="bookSubtitle" placeholder="Enter subtitle" value="A timeless classic">
+                            <input type="text" id="bookSubtitle" placeholder="Enter subtitle" value="Strategies for the Modern Business">
                         </div>
                         <div class="form-group">
                             <label for="bookAuthor">Author Name</label>
-                            <input type="text" id="bookAuthor" placeholder="Enter author name" value="Frances Hodgson Burnett">
+                            <input type="text" id="bookAuthor" placeholder="Enter author name" value="Alex Johnson">
                         </div>
                         <div class="form-group">
-                            <label for="coAuthor">Co-Author Name (Optional)</label>
-                            <input type="text" id="coAuthor" placeholder="Enter co-author name">
+                            <label for="bookCategory">Category</label>
+                            <select id="bookCategory">
+                                <option value="business">Business</option>
+                                <option value="fiction">Fiction</option>
+                                <option value="non-fiction">Non-Fiction</option>
+                                <option value="technology">Technology</option>
+                                <option value="self-help">Self-Help</option>
+                                <option value="education">Education</option>
+                            </select>
                         </div>
                     </div>
+                    
+                    <!-- Book Options Dropdown Section -->
+                    <div class="dropdown-section">
+                        <div class="dropdown-section-header">
+                            <h3>Book Options</h3>
+                            <div class="dropdown">
+                                <button class="dropdown-btn"><i class="fas fa-book"></i> Book Actions <i class="fas fa-chevron-down"></i></button>
+                                <div class="dropdown-content">
+                                    <a href="#" id="exportBookBtn"><i class="fas fa-file-export"></i> Export Book</a>
+                                    <a href="#" id="publishBookBtn"><i class="fas fa-globe"></i> Publish Book</a>
+                                    <a href="#" id="duplicateBookBtn"><i class="fas fa-copy"></i> Duplicate Book</a>
+                                    <a href="#" id="bookSettingsBtn"><i class="fas fa-cog"></i> Book Settings</a>
+                                </div>
+                            </div>
+                        </div>
+                        <p>Use these options to manage your ebook publishing and distribution.</p>
+                    </div>
+                    
                     <div class="editor-section">
-                        <h3>Publisher Details</h3>
+                        <h3>Publication Details</h3>
                         <div class="form-group">
                             <label for="publisherName">Publisher Name</label>
-                            <input type="text" id="publisherName" placeholder="Enter publisher name" value="Classic Publishing House">
+                            <input type="text" id="publisherName" placeholder="Enter publisher name" value="Modern Publishing">
                         </div>
                         <div class="form-group">
-                            <label for="publisherLink">Publisher Link</label>
-                            <input type="text" id="publisherLink" placeholder="Enter publisher website" value="www.classicpublishing.com">
+                            <label for="publicationDate">Publication Date</label>
+                            <input type="date" id="publicationDate" value="2023-10-15">
+                        </div>
+                        <div class="form-group">
+                            <label for="isbn">ISBN</label>
+                            <input type="text" id="isbn" placeholder="Enter ISBN" value="978-1-234567-89-0">
                         </div>
                     </div>
                     <div class="editor-section">
-                        <h3>Book Description</h3>
+                        <h3>Ebook Description</h3>
                         <div class="form-group">
                             <label for="bookDescription">Description</label>
-                            <textarea id="bookDescription" placeholder="Enter book description">A beautiful and timeless classic about a young girl who discovers a hidden garden and learns about the magic of nature and friendship.</textarea>
+                            <textarea id="bookDescription" placeholder="Enter ebook description">A comprehensive guide to digital marketing strategies that help businesses thrive in the modern digital landscape. Learn about SEO, social media marketing, content creation, and more.</textarea>
                         </div>
                     </div>
                     <button class="btn-primary" id="nextStepBtn"><i class="fas fa-arrow-right"></i> Next: Chapters</button>
@@ -946,15 +1047,15 @@
                             <button class="btn-secondary" id="uploadCoverBtn"><i class="fas fa-upload"></i> Upload Cover Image</button>
                         </div>
                         <div class="book-title-preview">
-                            <h2 id="previewTitle">The Secret Garden</h2>
-                            <p id="previewSubtitle">A timeless classic</p>
+                            <h2 id="previewTitle">Digital Marketing Mastery</h2>
+                            <p id="previewSubtitle">Strategies for the Modern Business</p>
                         </div>
                         <div class="book-author-preview">
-                            <h3 id="previewAuthor">Frances Hodgson Burnett</h3>
+                            <h3 id="previewAuthor">Alex Johnson</h3>
                         </div>
                         <div class="publisher-info">
-                            <p id="previewPublisher">Classic Publishing House</p>
-                            <p id="previewLink">www.classicpublishing.com</p>
+                            <p id="previewPublisher">Modern Publishing</p>
+                            <p id="previewDate">October 15, 2023</p>
                         </div>
                     </div>
                     <div class="premium-section">
@@ -975,30 +1076,48 @@
                         <h3>Table of Contents</h3>
                         <button class="btn-primary" id="addChapterBtn"><i class="fas fa-plus"></i> Add Chapter</button>
                     </div>
+                    
+                    <!-- Chapter Options Dropdown Section -->
+                    <div class="dropdown-section">
+                        <div class="dropdown-section-header">
+                            <h4>Chapter Management</h4>
+                            <div class="dropdown">
+                                <button class="dropdown-btn"><i class="fas fa-list"></i> Chapter Actions <i class="fas fa-chevron-down"></i></button>
+                                <div class="dropdown-content">
+                                    <a href="#" id="reorderChaptersBtn"><i class="fas fa-sort"></i> Reorder Chapters</a>
+                                    <a href="#" id="importChapterBtn"><i class="fas fa-file-import"></i> Import Chapter</a>
+                                    <a href="#" id="exportChapterBtn"><i class="fas fa-file-export"></i> Export Chapter</a>
+                                    <a href="#" id="chapterTemplatesBtn"><i class="fas fa-layer-group"></i> Chapter Templates</a>
+                                </div>
+                            </div>
+                        </div>
+                        <p>Use these options to manage your chapters and content.</p>
+                    </div>
+                    
                     <div class="chapters-search">
                         <input type="text" placeholder="Search chapters..." id="searchChapters">
                         <button class="btn-secondary" id="searchBtn"><i class="fas fa-search"></i></button>
                     </div>
                     <div class="chapters-items">
                         <div class="chapter-item active" data-chapter="1">
-                            <div class="chapter-title">1. There is No One Left</div>
-                            <div class="chapter-preview">When Mary Lennox was sent to Misselthwaite Manor to live with her uncle, everybody said she was the most disagreeable-looking child ever seen.</div>
+                            <div class="chapter-title">1. Introduction to Digital Marketing</div>
+                            <div class="chapter-preview">Understanding the fundamentals of digital marketing and its importance in today's business landscape.</div>
                         </div>
                         <div class="chapter-item" data-chapter="2">
-                            <div class="chapter-title">2. Mistress Mary Quite Contrary</div>
-                            <div class="chapter-preview">Mary had liked to look at her mother from a distance and she had thought her very pretty, but as she knew very little of her, she could not have been expected to love her or to miss her very much when she was gone.</div>
+                            <div class="chapter-title">2. Search Engine Optimization</div>
+                            <div class="chapter-preview">Learn how to optimize your website to rank higher in search engine results and drive organic traffic.</div>
                         </div>
                         <div class="chapter-item" data-chapter="3">
-                            <div class="chapter-title">3. Across The Moor</div>
-                            <div class="chapter-preview">She slept a long time, and when she awakened Mrs. Medlock had bought a lunchbasket at one of the stations and they had some chicken and cold beef and bread and butter and some hot tea.</div>
+                            <div class="chapter-title">3. Social Media Marketing</div>
+                            <div class="chapter-preview">Strategies for leveraging social media platforms to build brand awareness and engage with your audience.</div>
                         </div>
                         <div class="chapter-item" data-chapter="4">
-                            <div class="chapter-title">4. Martha</div>
-                            <div class="chapter-preview">When she opened her eyes in the morning, she lay and looked at the wall. The house was perfectly still. She had never been in a still house before.</div>
+                            <div class="chapter-title">4. Content Creation & Marketing</div>
+                            <div class="chapter-preview">Creating valuable content that attracts and retains customers while driving profitable actions.</div>
                         </div>
                         <div class="chapter-item" data-chapter="5">
-                            <div class="chapter-title">5. The Cry in The Corridor</div>
-                            <div class="chapter-preview">At first each day which passed by for Mary Lennox was exactly like the others. Every morning she awoke in her tapestried room and found Martha kneeling upon the hearth.</div>
+                            <div class="chapter-title">5. Email Marketing Strategies</div>
+                            <div class="chapter-preview">Building effective email campaigns that convert subscribers into loyal customers.</div>
                         </div>
                     </div>
                 </div>
@@ -1007,11 +1126,19 @@
                         <h3>Edit Chapter</h3>
                         <div class="form-group">
                             <label for="chapterTitle">Chapter Title</label>
-                            <input type="text" id="chapterTitle" value="1. There is No One Left">
+                            <input type="text" id="chapterTitle" value="1. Introduction to Digital Marketing">
                         </div>
                         <div class="form-group">
                             <label for="chapterContent">Chapter Content</label>
-                            <textarea id="chapterContent">When Mary Lennox was sent to Misselthwaite Manor to live with her uncle, everybody said she was the most disagreeable-looking child ever seen. It was true, too. She had a little thin face and a little thin body, thin light hair and a sour expression. Her hair was yellow, and her face was yellow because she had been born in India and had always been ill in one way or another. Her father had held a position under the English Government and had always been busy and ill himself, and her mother had been a great beauty who cared only to go to parties and amuse herself with gay people. She had not wanted a little girl at all, and when Mary was born she handed her over to the care of an Ayah, who was made to understand that if she wished to please the Mem Sahib she must keep the child out of sight as much as possible.</textarea>
+                            <textarea id="chapterContent">Digital marketing encompasses all marketing efforts that use an electronic device or the internet. Businesses leverage digital channels such as search engines, social media, email, and other websites to connect with current and prospective customers.
+
+In today's digital age, having a strong online presence is crucial for business success. This chapter will explore the fundamental concepts of digital marketing and why it's essential for modern businesses.
+
+We'll cover:
+- The evolution of marketing from traditional to digital
+- Key components of a digital marketing strategy
+- How digital marketing differs from traditional marketing
+- The importance of data and analytics in digital campaigns</textarea>
                         </div>
                         <div class="editor-actions">
                             <button class="btn-primary" id="saveChapterBtn"><i class="fas fa-save"></i> Save Chapter</button>
@@ -1020,8 +1147,8 @@
                     </div>
                     <div class="word-count">
                         <h4>Word Count</h4>
-                        <div class="count-value">81,319</div>
-                        <p>Total words in your book</p>
+                        <div class="count-value">24,567</div>
+                        <p>Total words in your ebook</p>
                     </div>
                 </div>
             </div>
@@ -1039,9 +1166,6 @@
         const themeToggle = document.getElementById('themeToggle');
         const helpBtn = document.getElementById('helpBtn');
         const previewBtn = document.getElementById('previewBtn');
-        const uploadArea = document.getElementById('uploadArea');
-        const fileInput = document.getElementById('fileInput');
-        const uploadBtn = document.getElementById('uploadBtn');
         const nextStepBtn = document.getElementById('nextStepBtn');
         const viewPlansBtn = document.getElementById('viewPlansBtn');
         const unlockNowBtn = document.getElementById('unlockNowBtn');
@@ -1053,6 +1177,19 @@
         const toast = document.getElementById('toast');
         const screenTitle = document.getElementById('screen-title');
         const navTabs = document.querySelectorAll('.nav-tab');
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const uploadBtn = document.getElementById('uploadBtn');
+
+        // Dropdown buttons
+        const exportBookBtn = document.getElementById('exportBookBtn');
+        const publishBookBtn = document.getElementById('publishBookBtn');
+        const duplicateBookBtn = document.getElementById('duplicateBookBtn');
+        const bookSettingsBtn = document.getElementById('bookSettingsBtn');
+        const reorderChaptersBtn = document.getElementById('reorderChaptersBtn');
+        const importChapterBtn = document.getElementById('importChapterBtn');
+        const exportChapterBtn = document.getElementById('exportChapterBtn');
+        const chapterTemplatesBtn = document.getElementById('chapterTemplatesBtn');
 
         // Screens
         const screens = document.querySelectorAll('.screen');
@@ -1061,9 +1198,10 @@
         const bookTitle = document.getElementById('bookTitle');
         const bookSubtitle = document.getElementById('bookSubtitle');
         const bookAuthor = document.getElementById('bookAuthor');
-        const coAuthor = document.getElementById('coAuthor');
+        const bookCategory = document.getElementById('bookCategory');
         const publisherName = document.getElementById('publisherName');
-        const publisherLink = document.getElementById('publisherLink');
+        const publicationDate = document.getElementById('publicationDate');
+        const isbn = document.getElementById('isbn');
         const bookDescription = document.getElementById('bookDescription');
 
         // Preview Elements
@@ -1071,7 +1209,7 @@
         const previewSubtitle = document.getElementById('previewSubtitle');
         const previewAuthor = document.getElementById('previewAuthor');
         const previewPublisher = document.getElementById('previewPublisher');
-        const previewLink = document.getElementById('previewLink');
+        const previewDate = document.getElementById('previewDate');
 
         // Chapter Elements
         const chapterItems = document.querySelectorAll('.chapter-item');
@@ -1081,7 +1219,7 @@
         // Screen titles
         const screenTitles = {
             'upload-screen': 'Upload Manuscript',
-            'title-page-screen': 'Title Page Editor',
+            'title-page-screen': 'Ebook Details',
             'chapters-screen': 'Chapters Editor'
         };
 
@@ -1131,7 +1269,7 @@
             }
 
             // Update screen title
-            screenTitle.textContent = screenTitles[screenId] || 'E-Book Creator';
+            screenTitle.textContent = screenTitles[screenId] || 'Ebook Details';
         }
 
         // File Upload
@@ -1328,14 +1466,66 @@
         });
 
         // Real-time preview update
-        [bookTitle, bookSubtitle, bookAuthor, publisherName, publisherLink].forEach(input => {
+        [bookTitle, bookSubtitle, bookAuthor, publisherName, publicationDate].forEach(input => {
             input?.addEventListener('input', () => {
-                previewTitle.textContent = bookTitle.value || 'Book Title';
-                previewSubtitle.textContent = bookSubtitle.value || 'Book Subtitle';
+                previewTitle.textContent = bookTitle.value || 'Ebook Title';
+                previewSubtitle.textContent = bookSubtitle.value || 'Ebook Subtitle';
                 previewAuthor.textContent = bookAuthor.value || 'Author Name';
                 previewPublisher.textContent = publisherName.value || 'Publisher Name';
-                previewLink.textContent = publisherLink.value || 'website.com';
+                
+                // Format date for preview
+                if (publicationDate.value) {
+                    const date = new Date(publicationDate.value);
+                    previewDate.textContent = date.toLocaleDateString('en-US', { 
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric' 
+                    });
+                } else {
+                    previewDate.textContent = 'Publication Date';
+                }
             });
+        });
+
+        // Dropdown button actions
+        exportBookBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            showToast('Exporting ebook...', 'success');
+        });
+
+        publishBookBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            showToast('Publishing ebook...', 'success');
+        });
+
+        duplicateBookBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            showToast('Duplicating ebook...', 'success');
+        });
+
+        bookSettingsBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            showToast('Opening ebook settings...', 'success');
+        });
+
+        reorderChaptersBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            showToast('Opening chapter reorder interface...', 'success');
+        });
+
+        importChapterBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            showToast('Importing chapter...', 'success');
+        });
+
+        exportChapterBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            showToast('Exporting chapter...', 'success');
+        });
+
+        chapterTemplatesBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            showToast('Opening chapter templates...', 'success');
         });
 
         // Premium features buttons
@@ -1385,7 +1575,17 @@
             previewSubtitle.textContent = bookSubtitle.value;
             previewAuthor.textContent = bookAuthor.value;
             previewPublisher.textContent = publisherName.value;
-            previewLink.textContent = publisherLink.value;
+            
+            if (publicationDate.value) {
+                const date = new Date(publicationDate.value);
+                previewDate.textContent = date.toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                });
+            } else {
+                previewDate.textContent = 'Publication Date';
+            }
         }
     </script>
 </body>

@@ -1,0 +1,81 @@
+[
+  {
+    "ContainingType": "EBookDashboard.Controllers.AuthController",
+    "Method": "Login",
+    "RelativePath": "api/Auth/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "req",
+        "Type": "EBookDashboard.Controllers.AuthController\u002BLoginRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EBookDashboard.Controllers.AuthorPlansController",
+    "Method": "GetAllPlans",
+    "RelativePath": "api/AuthorPlans/all-plans",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EBookDashboard.Controllers.AuthorPlansController",
+    "Method": "AssignPlan",
+    "RelativePath": "api/AuthorPlans/assign",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "plan",
+        "Type": "EBookDashboard.Models.AuthorPlans",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EBookDashboard.Controllers.AuthorPlansController",
+    "Method": "GetAuthorPlans",
+    "RelativePath": "api/AuthorPlans/by-author/{authorId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "authorId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EBookDashboard.Controllers.AuthorPlansController",
+    "Method": "CancelPlan",
+    "RelativePath": "api/AuthorPlans/cancel/{planId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "planId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "reason",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

@@ -37,6 +37,9 @@ function initializeApp() {
     // Setup auto-save functionality
     setupAutoSave();
     
+    // Setup theme toggle button
+    setupThemeToggle();
+    
     console.log('Dashboard initialized successfully');
 }
 
@@ -192,6 +195,14 @@ function saveFormData(form) {
     
     localStorage.setItem(`autosave_${form.id}`, JSON.stringify(data));
     showToast('Draft saved automatically', 'info');
+}
+
+// Theme toggle setup
+function setupThemeToggle() {
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', toggleTheme);
+    }
 }
 
 // Utility functions

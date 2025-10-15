@@ -1,321 +1,1731 @@
+@model IEnumerable<EBookDashboard.Models.Plans>
+
 @{
-    ViewData["Title"] = "eBook Publisher - Dashboard";
+    ViewData["Title"] = "Dashboard - eBook Publisher";
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
 }
-<header class="top-header">
-    <div class="header-left">
-        <h1>Welcome back, @ViewBag.UserName!</h1>
-        <p>Let's continue your publishing journey</p>
+
+<style>
+/* Unified Dashboard Styles */
+.dashboard-wrapper {
+    padding: 20px;
+        max-width: 1653px;
+    margin: 0 auto;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.header-content h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0;
+}
+
+.header-content p {
+    font-size: 1.1rem;
+    color: #ffffff;
+    margin: 5px 0 0 0;
+}
+
+.user-greeting {
+    background: linear-gradient(135deg, #4a6cf7, #667eea);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(74, 108, 247, 0.2);
+}
+
+.user-greeting h2 {
+    margin: 0 0 5px 0;
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+.user-greeting p {
+    margin: 0;
+    opacity: 0.9;
+    font-size: 1rem;
+}
+
+/* Stats Section */
+.stats-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    border: 1px solid #eaeaea;
+    text-align: center;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #4a6cf7, #667eea);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    font-size: 1rem;
+    color: #7f8c8d;
+}
+
+/* Book Management Section */
+.book-management-section {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid #eaeaea;
+    margin-bottom: 30px;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.section-title i {
+    color: #4a6cf7;
+}
+
+.book-controls {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 0;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.form-control:focus {
+    border-color: #4a6cf7;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.1);
+}
+
+.control-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #4a6cf7, #667eea);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #3a5cf6, #566eea);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(74, 108, 247, 0.3);
+}
+
+.btn-secondary {
+    background: #f1f5f9;
+    color: #2c3e50;
+    border: 1px solid #e2e8f0;
+}
+
+.btn-secondary:hover {
+    background: #e2e8f0;
+    transform: translateY(-2px);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #0da271, #04865d);
+    transform: translateY(-2px);
+}
+
+/* Current Book Display */
+.current-book-display {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    padding: 25px;
+    color: white;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.current-book-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.current-book-header h2 {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.book-info-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.book-cover {
+    width: 80px;
+    height: 120px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+}
+
+.book-details {
+    flex: 1;
+    min-width: 200px;
+}
+
+.book-name {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.book-id {
+    font-size: 1rem;
+    opacity: 0.9;
+    margin-bottom: 15px;
+}
+
+.book-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* Editing Section */
+.editing-section {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid #eaeaea;
+    margin-bottom: 30px;
+}
+
+.editor-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 20px;
+}
+
+.toolbar-group {
+    display: flex;
+    gap: 5px;
+}
+
+.btn-tool {
+    background: #f8fafc;
+    color: #64748b;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+}
+
+.btn-tool:hover {
+    background: #f1f5f9;
+    color: #4a6cf7;
+}
+
+.toolbar-actions {
+    margin-left: auto;
+    display: flex;
+    gap: 10px;
+}
+
+.editor-container {
+    margin-top: 20px;
+}
+
+.editor-container textarea {
+    width: 100%;
+    min-height: 200px;
+    padding: 15px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1rem;
+    resize: vertical;
+    transition: border-color 0.3s;
+}
+
+.editor-container textarea:focus {
+    border-color: #4a6cf7;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.1);
+}
+
+/* Projects Section */
+.projects-section {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid #eaeaea;
+    margin-bottom: 30px;
+}
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.project-card {
+    border: 1px solid #eaeaea;
+    border-radius: 10px;
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+.project-card:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+}
+
+.project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.project-header h3 {
+    font-size: 1.2rem;
+    color: #2c3e50;
+    margin: 0;
+    flex: 1;
+}
+
+.project-status {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.project-status.active {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.project-status.review {
+    background: #ffedd5;
+    color: #c2410c;
+}
+
+.project-status.draft {
+    background: #e0f2fe;
+    color: #0c4a6e;
+}
+
+.project-progress {
+    margin-bottom: 20px;
+}
+
+.progress-bar {
+    height: 8px;
+    background: #e5e7eb;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4a6cf7, #667eea);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+.progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+/* Quick Actions */
+.quick-actions-section {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid #eaeaea;
+    margin-bottom: 30px;
+}
+
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.action-card {
+    background: #f8fafc;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid #e2e8f0;
+}
+
+.action-card:hover {
+    background: white;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    border-color: #4a6cf7;
+}
+
+.action-icon {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #4a6cf7, #667eea);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px;
+    font-size: 1.2rem;
+    color: white;
+}
+
+.action-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    color: #2c3e50;
+}
+
+.action-card p {
+    font-size: 0.9rem;
+    color: #64748b;
+    margin: 0;
+}
+
+/* Premium Features */
+.premium-section {
+    background: linear-gradient(135deg, #1e3a8a, #312e81);
+    border-radius: 12px;
+    padding: 30px;
+    color: white;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.premium-section h3 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.premium-section p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 25px;
+}
+
+.premium-features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.feature-item {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.feature-item:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-5px);
+}
+
+.feature-item i {
+    font-size: 2rem;
+}
+
+.feature-item span {
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.premium-buttons {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+/* Recent Activity */
+.activity-section {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid #eaeaea;
+}
+
+.activity-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.activity-item {
+    display: flex;
+    gap: 15px;
+    padding: 15px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.activity-item:hover {
+    background: #f8fafc;
+}
+
+.activity-icon {
+    width: 40px;
+    height: 40px;
+    background: #e0f2fe;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0ea5e9;
+    flex-shrink: 0;
+    font-size: 1.2rem;
+}
+
+.activity-content {
+    flex: 1;
+}
+
+.activity-content h4 {
+    font-size: 1rem;
+    margin-bottom: 5px;
+    color: #2c3e50;
+}
+
+.activity-content p {
+    font-size: 0.9rem;
+    color: #64748b;
+    margin: 0;
+}
+
+.activity-time {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    white-space: nowrap;
+}
+
+/* Responsive Adjustments */
+@@media (max-width: 768px) {
+    .dashboard-wrapper {
+        padding: 15px;
+    }
+    
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .user-greeting {
+        width: 100%;
+    }
+    
+    .stats-section,
+    .book-controls,
+    .projects-grid,
+    .actions-grid,
+    .premium-features,
+    .premium-buttons {
+        grid-template-columns: 1fr;
+    }
+    
+    .editor-toolbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .toolbar-actions {
+        margin-left: 0;
+        width: 100%;
+        margin-top: 15px;
+    }
+    
+    .book-info-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .book-actions {
+        width: 100%;
+    }
+    
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@@media (max-width: 480px) {
+    .header-content h1 {
+        font-size: 1.8rem;
+    }
+    
+    .current-book-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .control-actions {
+        width: 100%;
+    }
+    
+    .control-actions .btn {
+        flex: 1;
+    }
+}
+</style>
+
+<div class="dashboard-wrapper">
+    <!-- Header with User Greeting -->
+    <div class="dashboard-header">
+        <div class="header-content">
+            <h1>Dashboard</h1>
+            <p>Your publishing command center</p>
+        </div>
+        <div class="user-greeting">
+            <h2>Welcome back, @ViewBag.UserName!</h2>
+            <p>Ready to continue your publishing journey?</p>
+        </div>
     </div>
 
-    <div class="header-right">
-        <button class="btn btn-primary" id="liveChatBtn">
-            <i class="fas fa-comments"></i> <span>Live Chat</span>
-        </button>
-        <button class="btn btn-secondary" id="howToStartBtn">
-            <i class="fas fa-question-circle"></i> <span>How to Start</span>
-        </button>
-        <button class="theme-toggle" id="themeToggle">🌙</button>
-    </div>
-</header>
-<div class="dashboard-content">
-    <div class="stats-cards">
+    <!-- Stats Overview -->
+    <div class="stats-section">
         <div class="stat-card">
-            <h3>Total Books Published</h3>
-            <div class="stat-placeholder" style="background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; font-weight: bold;">
-                12
+            <div class="stat-icon">
+                <i class="fas fa-book"></i>
             </div>
-            <p class="stat-description">Books successfully published and available for sale</p>
+            <div class="stat-number">12</div>
+            <div class="stat-label">Books Published</div>
         </div>
         
         <div class="stat-card">
-            <h3>Monthly Revenue</h3>
-            <div class="stat-placeholder" style="background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; font-weight: bold;">
-                $2,847
+            <div class="stat-icon">
+                <i class="fas fa-chart-line"></i>
             </div>
-            <p class="stat-description">Revenue generated this month</p>
+            <div class="stat-number">$2,847</div>
+            <div class="stat-label">Monthly Revenue</div>
         </div>
         
         <div class="stat-card">
-            <h3>Total Sales</h3>
-            <div class="stat-placeholder" style="background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; font-weight: bold;">
-                1,234
+            <div class="stat-icon">
+                <i class="fas fa-download"></i>
             </div>
-            <p class="stat-description">Total copies sold across all books</p>
+            <div class="stat-number">1,234</div>
+            <div class="stat-label">Total Downloads</div>
         </div>
         
         <div class="stat-card">
-            <h3>Active Projects</h3>
-            <div class="stat-placeholder" style="background: linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; font-weight: bold;">
-                3
+            <div class="stat-icon">
+                <i class="fas fa-star"></i>
             </div>
-            <p class="stat-description">Books currently in development</p>
+            <div class="stat-number">4.8</div>
+            <div class="stat-label">Average Rating</div>
         </div>
     </div>
-    
-    <div class="upload-section">
-        <div class="upload-card">
-            <div class="upload-highlight">
-                📖 MANUSCRIPT UPLOAD
+
+    <!-- Current Working Book -->
+    <div class="current-book-display">
+        <div class="current-book-header">
+            <h2><i class="fas fa-book-open"></i> Currently Working On</h2>
+            <div class="book-actions">
+                <button class="btn btn-primary" onclick="editCurrentBook()">
+                    <i class="fas fa-edit"></i> Edit Book
+                </button>
+                <button class="btn btn-secondary" onclick="viewBookDetails()">
+                    <i class="fas fa-eye"></i> View Details
+                </button>
             </div>
-            
-            <h3>Upload Your Manuscript</h3>
-            
-            <div class="upload-area" id="uploadArea" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
-                <div class="upload-icon">📄</div>
-                <p><strong>Drag & drop your manuscript here</strong></p>
-                <p class="upload-subtitle">or click to browse files</p>
-                <p style="font-size: 0.8rem; color: #7f8c8d; margin-top: 10px;">
-                    Supported formats: PDF, DOC, DOCX, TXT (Max 10MB)
-                </p>
-                <input type="file" id="fileInput" style="display: none;" accept=".pdf,.doc,.docx,.txt" onchange="handleFileUpload(event)">
-            </div>
-            
-            <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
-                <i class="fas fa-upload"></i> Choose File
-            </button>
         </div>
-        
-        <div class="stats-section">
-            <div class="landing-stats">
-                <h3><i class="fas fa-chart-line"></i> Your Publishing Stats</h3>
-                
-                <div class="stats-grid">
-                    <div class="stat-item">
-                        <span class="stat-number" data-target="1234">0</span>
-                        <span class="stat-label">Total Downloads</span>
-                        <div class="stat-trend positive">+15% from last month</div>
+        <div class="book-info-card">
+            <div class="book-cover">
+                <i class="fas fa-book"></i>
+            </div>
+            <div class="book-details">
+                <div class="book-name" id="currentBookName">The Art of Digital Publishing</div>
+                <div class="book-id" id="currentBookId">ID: 12345</div>
+                <div class="progress-bar" style="height: 10px; background: rgba(255,255,255,0.3); border-radius: 5px; margin-top: 15px;">
+                    <div class="progress-fill" style="width: 75%; height: 100%; background: white; border-radius: 5px;"></div>
+                </div>
+                <div style="margin-top: 10px; font-size: 0.9rem;">75% Complete - Chapter 8 of 10</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Book and Chapter Management -->
+    <div class="book-management-section">
+        <h2 class="section-title"><i class="fas fa-list"></i> Book & Chapter Management</h2>
+        <div class="book-controls">
+            <div class="form-group">
+                <label for="bookSelect"><i class="fas fa-book"></i> Select Book</label>
+                <select id="bookSelect" class="form-control" onchange="loadChapters()">
+                    <option value="">-- Select a Book --</option>
+                    <option value="1">The Art of Digital Publishing (ID: 12345)</option>
+                    <option value="2">Modern Web Development (ID: 12346)</option>
+                    <option value="3">AI in Everyday Life (ID: 12347)</option>
+                    <option value="4">Creative Writing Techniques (ID: 12348)</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="chapterSelect"><i class="fas fa-file-alt"></i> Select Chapter</label>
+                <select id="chapterSelect" class="form-control" disabled>
+                    <option value="">-- Select a Book First --</option>
+                </select>
+            </div>
+            
+            <div class="control-actions">
+                <button class="btn btn-primary" id="editChapterBtn" disabled onclick="editSelectedChapter()">
+                    <i class="fas fa-edit"></i> Edit Chapter
+                </button>
+                <button class="btn btn-secondary" id="previewChapterBtn" disabled onclick="previewSelectedChapter()">
+                    <i class="fas fa-eye"></i> Preview
+                </button>
+                <button class="btn btn-success" id="saveChapterBtn" disabled onclick="saveSelectedChapter()">
+                    <i class="fas fa-save"></i> Save
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Editing Section (Merged from Editing/Formatting and Advanced Editing) -->
+    <div class="editing-section">
+        <h2 class="section-title"><i class="fas fa-edit"></i> Content Editor</h2>
+        <div class="editor-toolbar">
+            <div class="toolbar-group">
+                <button class="btn-tool" onclick="formatText('bold')" title="Bold"><i class="fas fa-bold"></i></button>
+                <button class="btn-tool" onclick="formatText('italic')" title="Italic"><i class="fas fa-italic"></i></button>
+                <button class="btn-tool" onclick="formatText('underline')" title="Underline"><i class="fas fa-underline"></i></button>
+            </div>
+            <div class="toolbar-group">
+                <button class="btn-tool" onclick="insertHeading()" title="Heading"><i class="fas fa-heading"></i></button>
+                <button class="btn-tool" onclick="insertList('ul')" title="Bullet List"><i class="fas fa-list-ul"></i></button>
+                <button class="btn-tool" onclick="insertList('ol')" title="Numbered List"><i class="fas fa-list-ol"></i></button>
+            </div>
+            <div class="toolbar-group">
+                <button class="btn-tool" onclick="insertLink()" title="Insert Link"><i class="fas fa-link"></i></button>
+                <button class="btn-tool" onclick="insertImage()" title="Insert Image"><i class="fas fa-image"></i></button>
+            </div>
+            <div class="toolbar-actions">
+                <button class="btn btn-secondary" id="saveContentBtn" onclick="saveContent()">
+                    <i class="fas fa-save"></i> Save Content
+                </button>
+                <button class="btn btn-primary" onclick="toggleAdvancedTools()">
+                    <i class="fas fa-tools"></i> Advanced Tools
+                </button>
+            </div>
+        </div>
+        <div class="editor-container">
+            <textarea id="contentEditor" placeholder="Start writing your content here...">Chapter 8: Advanced Digital Publishing Techniques
+
+In this chapter, we'll explore cutting-edge methods for creating and distributing digital content that engages readers and maximizes your reach in the modern marketplace.
+
+Key topics covered:
+- Interactive content elements
+- Multimedia integration
+- Cross-platform optimization
+- Accessibility considerations
+- SEO best practices for digital publications
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+
+Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</textarea>
+        </div>
+    </div>
+
+    <!-- Current Projects -->
+    <div class="projects-section">
+        <h2 class="section-title"><i class="fas fa-project-diagram"></i> Current Projects</h2>
+        <div class="projects-grid">
+            <div class="project-card">
+                <div class="project-header">
+                    <h3>The Art of Digital Publishing</h3>
+                    <span class="project-status active">Active</span>
+                </div>
+                <div class="project-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 75%"></div>
                     </div>
-                    
-                    <div class="stat-item">
-                        <span class="stat-number" data-target="89">0</span>
-                        <span class="stat-label">Reviews</span>
-                        <div class="stat-trend positive">4.8 ⭐ average rating</div>
-                    </div>
-                    
-                    <div class="stat-item">
-                        <span class="stat-number" data-target="567">0</span>
-                        <span class="stat-label">Page Views</span>
-                        <div class="stat-trend neutral">This week</div>
-                    </div>
-                    
-                    <div class="stat-item">
-                        <span class="stat-number" data-target="23">0</span>
-                        <span class="stat-label">Countries</span>
-                        <div class="stat-trend positive">Global reach</div>
+                    <div class="progress-info">
+                        <span>75% Complete</span>
+                        <span>Chapter 8 of 10</span>
                     </div>
                 </div>
-                
-                <div class="chart-section">
-                    <canvas id="statsChart" width="400" height="200"></canvas>
+                <div class="control-actions">
+                    <button class="btn btn-primary" onclick="editProject(1)">
+                        <i class="fas fa-edit"></i> Continue
+                    </button>
+                    <button class="btn btn-secondary" onclick="addToCart('Advanced Analytics', 'Project Feature')">
+                        <i class="fas fa-chart-bar"></i> Analytics
+                    </button>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <h3>Modern Web Development</h3>
+                    <span class="project-status review">In Review</span>
+                </div>
+                <div class="project-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 90%"></div>
+                    </div>
+                    <div class="progress-info">
+                        <span>90% Complete</span>
+                        <span>Final Review</span>
+                    </div>
+                </div>
+                <div class="control-actions">
+                    <button class="btn btn-secondary" onclick="previewProject(2)">
+                        <i class="fas fa-eye"></i> Preview
+                    </button>
+                    <button class="btn btn-success" onclick="addToCart('Priority Support', 'Project Feature')">
+                        <i class="fas fa-rocket"></i> Priority
+                    </button>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <h3>Creative Writing Techniques</h3>
+                    <span class="project-status draft">Draft</span>
+                </div>
+                <div class="project-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 30%"></div>
+                    </div>
+                    <div class="progress-info">
+                        <span>30% Complete</span>
+                        <span>Chapter 2 of 8</span>
+                    </div>
+                </div>
+                <div class="control-actions">
+                    <button class="btn btn-primary" onclick="editProject(3)">
+                        <i class="fas fa-edit"></i> Continue
+                    </button>
+                    <button class="btn btn-secondary" onclick="addToCart('AI Cover Design', 'Project Feature')">
+                        <i class="fas fa-palette"></i> Cover
+                    </button>
                 </div>
             </div>
         </div>
     </div>
-    
+
+    <!-- Quick Actions (Merged from Enhanced Dashboard) -->
+    <div class="quick-actions-section">
+        <h2 class="section-title"><i class="fas fa-bolt"></i> Quick Actions</h2>
+        <div class="actions-grid">
+            <div class="action-card" onclick="location.href='/Dashboard/AdvancedEditing'">
+                <div class="action-icon">
+                    <i class="fas fa-edit"></i>
+                </div>
+                <h3>Advanced Editing</h3>
+                <p>Professional editing tools</p>
+            </div>
+
+            <div class="action-card" onclick="addToCart('AI Cover Design', 'Premium Feature')">
+                <div class="action-icon">
+                    <i class="fas fa-palette"></i>
+                </div>
+                <h3>AI Cover Design</h3>
+                <p>Create stunning book covers</p>
+            </div>
+
+            <div class="action-card" onclick="location.href='/Dashboard/LivePreview'">
+                <div class="action-icon">
+                    <i class="fas fa-eye"></i>
+                </div>
+                <h3>Live Preview</h3>
+                <p>Preview your book</p>
+            </div>
+
+            <div class="action-card" onclick="addToCart('Audio Book Creation', 'Premium Feature')">
+                <div class="action-icon">
+                    <i class="fas fa-microphone"></i>
+                </div>
+                <h3>Audio Book</h3>
+                <p>Convert to audio format</p>
+            </div>
+
+            <div class="action-card" onclick="location.href='/Dashboard/Billing'">
+                <div class="action-icon">
+                    <i class="fas fa-credit-card"></i>
+                </div>
+                <h3>Billing</h3>
+                <p>Manage payments</p>
+            </div>
+
+            <div class="action-card" onclick="location.href='/Dashboard/FeaturesSelection'">
+                <div class="action-icon">
+                    <i class="fas fa-plus-circle"></i>
+                </div>
+                <h3>Add Features</h3>
+                <p>Enhance your publishing</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Premium Features -->
     <div class="premium-section">
         <h3><i class="fas fa-crown"></i> Unlock Premium Features</h3>
         <p>Take your publishing to the next level with our premium tools and services</p>
         
         <div class="premium-features">
-            <div class="feature-item">
-                <i class="fas fa-palette"></i> AI Cover Design
+            <div class="feature-item" onclick="addToCart('AI Cover Design', 'Premium Feature')">
+                <i class="fas fa-palette"></i>
+                <span>AI Cover Design</span>
             </div>
-            <div class="feature-item">
-                <i class="fas fa-microphone"></i> Audio Book Creation
+            <div class="feature-item" onclick="addToCart('Audio Book Creation', 'Premium Feature')">
+                <i class="fas fa-microphone"></i>
+                <span>Audio Book Creation</span>
             </div>
-            <div class="feature-item">
-                <i class="fas fa-chart-bar"></i> Advanced Analytics
+            <div class="feature-item" onclick="addToCart('Advanced Analytics', 'Premium Feature')">
+                <i class="fas fa-chart-bar"></i>
+                <span>Advanced Analytics</span>
             </div>
-            <div class="feature-item">
-                <i class="fas fa-rocket"></i> Priority Support
+            <div class="feature-item" onclick="addToCart('Priority Support', 'Premium Feature')">
+                <i class="fas fa-rocket"></i>
+                <span>Priority Support</span>
             </div>
         </div>
         
         <div class="premium-buttons">
-            <button class="btn btn-primary" onclick="showUpgradeModal()">
-                <i class="fas fa-arrow-up"></i> Upgrade Now
+            <button class="btn btn-primary" onclick="showPricingPlans()">
+                <i class="fas fa-crown"></i> View All Plans
             </button>
-            <button class="btn btn-secondary" onclick="scheduleCall()">
-                <i class="fas fa-phone"></i> Schedule Call
+            <button class="btn btn-secondary" onclick="showFeatureDetails()">
+                <i class="fas fa-info-circle"></i> Feature Details
             </button>
         </div>
     </div>
-</div>
 
-<!-- Modals -->
-<div id="upgradeModal" class="modal" style="display: none;">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3><i class="fas fa-crown"></i> Upgrade to Premium</h3>
-            <span class="close" onclick="closeUpgradeModal()">&times;</span>
-        </div>
-        <div class="modal-body" style="padding: 2rem; text-align: center;">
-            <div class="pricing-cards" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 2rem 0;">
-                <div class="pricing-card" style="border: 2px solid var(--border-color); border-radius: 1rem; padding: 1.5rem;">
-                    <h4 style="color: var(--primary-color); margin-bottom: 1rem;">Professional</h4>
-                    <div style="font-size: 2rem; font-weight: bold; margin-bottom: 1rem;">$29<span style="font-size: 1rem; color: var(--text-secondary);">/month</span></div>
-                    <ul style="text-align: left; color: var(--text-secondary); line-height: 1.8;">
-                        <li>✓ AI Cover Design</li>
-                        <li>✓ Advanced Analytics</li>
-                        <li>✓ Priority Support</li>
-                        <li>✓ Marketing Tools</li>
-                    </ul>
-                    <button class="btn btn-primary mt-3">Choose Plan</button>
+    <!-- Recent Activity -->
+    <div class="activity-section">
+        <h2 class="section-title"><i class="fas fa-history"></i> Recent Activity</h2>
+        <div class="activity-list">
+            <div class="activity-item">
+                <div class="activity-icon">
+                    <i class="fas fa-book"></i>
                 </div>
-                <div class="pricing-card" style="border: 2px solid var(--success-color); border-radius: 1rem; padding: 1.5rem; position: relative;">
-                    <div style="position: absolute; top: -0.5rem; right: 1rem; background: var(--success-color); color: white; padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.8rem;">POPULAR</div>
-                    <h4 style="color: var(--success-color); margin-bottom: 1rem;">Enterprise</h4>
-                    <div style="font-size: 2rem; font-weight: bold; margin-bottom: 1rem;">$99<span style="font-size: 1rem; color: var(--text-secondary);">/month</span></div>
-                    <ul style="text-align: left; color: var(--text-secondary); line-height: 1.8;">
-                        <li>✓ Everything in Professional</li>
-                        <li>✓ Audio Book Creation</li>
-                        <li>✓ White-label Options</li>
-                        <li>✓ Custom Integrations</li>
-                    </ul>
-                    <button class="btn btn-success mt-3">Choose Plan</button>
+                <div class="activity-content">
+                    <h4>Chapter 5 of "The Art of Digital Publishing" was updated</h4>
+                    <p>Your latest changes have been saved successfully</p>
                 </div>
+                <div class="activity-time">2 hours ago</div>
+            </div>
+            <div class="activity-item">
+                <div class="activity-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <div class="activity-content">
+                    <h4>New order for "Modern Web Development" received</h4>
+                    <p>Customer purchased 3 copies of your book</p>
+                </div>
+                <div class="activity-time">5 hours ago</div>
+            </div>
+            <div class="activity-item">
+                <div class="activity-icon">
+                    <i class="fas fa-comment"></i>
+                </div>
+                <div class="activity-content">
+                    <h4>New review for "AI in Everyday Life"</h4>
+                    <p>Received 5-star rating with positive feedback</p>
+                </div>
+                <div class="activity-time">1 day ago</div>
+            </div>
+            <div class="activity-item">
+                <div class="activity-icon">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                <div class="activity-content">
+                    <h4>New manuscript uploaded for "Creative Writing Techniques"</h4>
+                    <p>File processed and ready for editing</p>
+                </div>
+                <div class="activity-time">2 days ago</div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-// Dashboard specific JavaScript
+// Unified Dashboard JavaScript
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize charts
-    setTimeout(initializeCharts, 500);
+    // Initialize any components that need initialization
+    initializeEditor();
     
-    // Animate counters
-    setTimeout(animateCounters, 1000);
-    
-    // File upload area click handler
-    document.getElementById('uploadArea').addEventListener('click', function() {
-        document.getElementById('fileInput').click();
-    });
+    // Show welcome message
+    showWelcomeMessage();
 });
 
-function showUpgradeModal() {
-    document.getElementById('upgradeModal').style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-}
-
-function closeUpgradeModal() {
-    document.getElementById('upgradeModal').style.display = 'none';
-    document.body.style.overflow = 'auto';
-}
-
-function scheduleCall() {
-    showToast('Redirecting to calendar booking...', 'info');
-    setTimeout(() => {
-        showToast('Calendar booking system would open here', 'success');
-    }, 1000);
-}
-
-// File upload handlers
-function handleFileUpload(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-    processFile(file);
-}
-
-function handleDrop(event) {
-    event.preventDefault();
-    const uploadArea = document.getElementById('uploadArea');
-    uploadArea.classList.remove('drag-over');
-    
-    const files = event.dataTransfer.files;
-    if (files.length > 0) {
-        processFile(files[0]);
+// Show welcome message (only once per session)
+function showWelcomeMessage() {
+    if (!sessionStorage.getItem('welcomeShown')) {
+        Swal.fire({
+            title: 'Welcome Back!',
+            text: `Hello @ViewBag.UserName, ready to explore amazing books?`,
+            icon: 'success',
+            timer: 3000,
+            timerProgressBar: true,
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            background: 'linear-gradient(135deg, #4a6cf7, #667eea)',
+            color: 'white'
+        });
+        sessionStorage.setItem('welcomeShown', 'true');
     }
 }
 
-function handleDragOver(event) {
-    event.preventDefault();
-    const uploadArea = document.getElementById('uploadArea');
-    uploadArea.classList.add('drag-over');
-}
-
-function handleDragLeave(event) {
-    event.preventDefault();
-    const uploadArea = document.getElementById('uploadArea');
-    uploadArea.classList.remove('drag-over');
-}
-
-function processFile(file) {
-    const allowedTypes = ['.pdf', '.doc', '.docx', '.txt'];
-    const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
-    
-    if (!allowedTypes.includes(fileExtension)) {
-        showToast('Please upload a valid document file (PDF, DOC, DOCX, TXT)', 'error');
-        return;
+// Initialize editor
+function initializeEditor() {
+    const editor = document.getElementById('contentEditor');
+    if (editor) {
+        editor.addEventListener('input', function() {
+            // Show save button as active when content changes
+            const saveBtn = document.getElementById('saveContentBtn');
+            if (saveBtn) {
+                saveBtn.classList.add('btn-success');
+                saveBtn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+            }
+        });
     }
-    
-    if (file.size > 10 * 1024 * 1024) {
-        showToast('File size must be less than 10MB', 'error');
-        return;
-    }
-    
-    // Show upload progress
-    showUploadProgress(file.name);
-    
-    // Simulate upload process
-    setTimeout(() => {
-        showToast('File uploaded successfully!', 'success');
-        updateUploadArea(file.name);
-    }, 2000);
 }
 
-function showUploadProgress(fileName) {
-    const uploadArea = document.getElementById('uploadArea');
-    uploadArea.innerHTML = `
-        <div class="upload-progress">
-            <div class="upload-icon">📄</div>
-            <p><strong>Uploading ${fileName}...</strong></p>
-            <div class="progress-bar" style="width: 100%; height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden; margin-top: 1rem;">
-                <div class="progress-fill" style="height: 100%; background: var(--success-color); width: 0%; transition: width 0.3s;"></div>
-            </div>
-        </div>
-    `;
+// Book and Chapter Management
+function loadChapters() {
+    const bookSelect = document.getElementById('bookSelect');
+    const chapterSelect = document.getElementById('chapterSelect');
+    const editChapterBtn = document.getElementById('editChapterBtn');
+    const previewChapterBtn = document.getElementById('previewChapterBtn');
+    const saveChapterBtn = document.getElementById('saveChapterBtn');
     
-    // Animate progress bar
-    const progressFill = uploadArea.querySelector('.progress-fill');
-    let progress = 0;
-    const interval = setInterval(() => {
-        progress += Math.random() * 30;
-        if (progress >= 100) {
-            progress = 100;
-            clearInterval(interval);
+    const bookId = bookSelect.value;
+    
+    if (bookId) {
+        // Enable chapter select and buttons
+        chapterSelect.disabled = false;
+        editChapterBtn.disabled = false;
+        previewChapterBtn.disabled = false;
+        saveChapterBtn.disabled = false;
+        
+        // Clear existing options
+        chapterSelect.innerHTML = '<option value="">-- Select a Chapter --</option>';
+        
+        // Sample chapters data
+        const chapters = {
+            '1': [
+                { id: '1-1', title: 'Introduction to Digital Publishing' },
+                { id: '1-2', title: 'History of eBooks' },
+                { id: '1-3', title: 'Modern Publishing Platforms' },
+                { id: '1-4', title: 'Content Creation Tools' },
+                { id: '1-5', title: 'Formatting and Layout' }
+            ],
+            '2': [
+                { id: '2-1', title: 'HTML Fundamentals' },
+                { id: '2-2', title: 'CSS Styling' },
+                { id: '2-3', title: 'JavaScript Basics' },
+                { id: '2-4', title: 'Responsive Design' },
+                { id: '2-5', title: 'Performance Optimization' }
+            ],
+            '3': [
+                { id: '3-1', title: 'What is AI?' },
+                { id: '3-2', title: 'AI in Healthcare' },
+                { id: '3-3', title: 'Future of AI' },
+                { id: '3-4', title: 'Ethical Considerations' },
+                { id: '3-5', title: 'Practical Applications' }
+            ],
+            '4': [
+                { id: '4-1', title: 'Finding Your Voice' },
+                { id: '4-2', title: 'Character Development' },
+                { id: '4-3', title: 'Plot Construction' },
+                { id: '4-4', title: 'Dialogue Writing' },
+                { id: '4-5', title: 'Editing and Revising' }
+            ]
+        };
+        
+        // Populate chapters
+        if (chapters[bookId]) {
+            chapters[bookId].forEach(chapter => {
+                const option = document.createElement('option');
+                option.value = chapter.id;
+                option.textContent = chapter.title;
+                chapterSelect.appendChild(option);
+            });
         }
-        progressFill.style.width = progress + '%';
-    }, 200);
+        
+        // Show success message
+        Swal.fire({
+            title: 'Book Selected',
+            text: 'Chapters loaded successfully. Select a chapter to begin editing.',
+            icon: 'success',
+            timer: 2000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+            toast: true,
+            position: 'top-end'
+        });
+    } else {
+        // Disable chapter select and buttons
+        chapterSelect.disabled = true;
+        chapterSelect.innerHTML = '<option value="">-- Select a Book First --</option>';
+        editChapterBtn.disabled = true;
+        previewChapterBtn.disabled = true;
+        saveChapterBtn.disabled = true;
+    }
 }
 
-function updateUploadArea(fileName) {
-    const uploadArea = document.getElementById('uploadArea');
-    uploadArea.innerHTML = `
-        <div class="upload-success">
-            <div class="upload-icon">✅</div>
-            <p><strong>${fileName}</strong></p>
-            <p class="upload-success-text" style="color: var(--success-color); margin: 1rem 0;">File uploaded successfully!</p>
-            <div class="upload-actions" style="display: flex; gap: 1rem; justify-content: center; margin-top: 1rem;">
-                <a href="/Dashboard/EBook" class="btn btn-primary">Start Editing</a>
-                <button class="btn btn-secondary" onclick="removeFile()">Remove File</button>
+// Edit functions
+function editCurrentBook() {
+    Swal.fire({
+        title: 'Edit Book',
+        text: 'Opening book editor...',
+        icon: 'info',
+        timer: 1500,
+        timerProgressBar: true,
+        showConfirmButton: false
+    }).then(() => {
+        window.location.href = '/Books/Edit/12345';
+    });
+}
+
+function viewBookDetails() {
+    Swal.fire({
+        title: 'Book Details',
+        text: 'Loading book details...',
+        icon: 'info',
+        timer: 1500,
+        timerProgressBar: true,
+        showConfirmButton: false
+    });
+}
+
+function editSelectedChapter() {
+    const chapterSelect = document.getElementById('chapterSelect');
+    const chapterId = chapterSelect.value;
+    
+    if (chapterId) {
+        Swal.fire({
+            title: 'Edit Chapter',
+            text: 'Opening chapter editor...',
+            icon: 'info',
+            timer: 1500,
+            timerProgressBar: true,
+            showConfirmButton: false
+        }).then(() => {
+            // In a real app, this would open the editor for the selected chapter
+            Swal.fire({
+                title: 'Chapter Editor',
+                text: 'You are now editing the selected chapter. Make your changes and save when done.',
+                icon: 'success',
+                confirmButtonColor: '#4a6cf7'
+            });
+        });
+    } else {
+        Swal.fire({
+            title: 'No Chapter Selected',
+            text: 'Please select a chapter to edit',
+            icon: 'warning',
+            confirmButtonColor: '#4a6cf7'
+        });
+    }
+}
+
+function previewSelectedChapter() {
+    const chapterSelect = document.getElementById('chapterSelect');
+    const chapterId = chapterSelect.value;
+    
+    if (chapterId) {
+        Swal.fire({
+            title: 'Chapter Preview',
+            text: 'Loading chapter preview...',
+            icon: 'info',
+            timer: 1500,
+            timerProgressBar: true,
+            showConfirmButton: false
+        }).then(() => {
+            window.open('/Dashboard/LivePreview', '_blank');
+        });
+    } else {
+        Swal.fire({
+            title: 'No Chapter Selected',
+            text: 'Please select a chapter to preview',
+            icon: 'warning',
+            confirmButtonColor: '#4a6cf7'
+        });
+    }
+}
+
+function saveSelectedChapter() {
+    const chapterSelect = document.getElementById('chapterSelect');
+    const chapterId = chapterSelect.value;
+    
+    if (chapterId) {
+        // Show saving state
+        const saveBtn = document.getElementById('saveChapterBtn');
+        const originalText = saveBtn.innerHTML;
+        saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+        saveBtn.disabled = true;
+        
+        // Simulate save process
+        setTimeout(() => {
+            // Reset button
+            saveBtn.innerHTML = originalText;
+            saveBtn.disabled = false;
+            
+            // Show success message
+            Swal.fire({
+                title: 'Chapter Saved!',
+                text: 'Your changes have been saved successfully.',
+                icon: 'success',
+                timer: 2000,
+                timerProgressBar: true,
+                showConfirmButton: false,
+                toast: true,
+                position: 'top-end'
+            });
+        }, 1500);
+    } else {
+        Swal.fire({
+            title: 'No Chapter Selected',
+            text: 'Please select a chapter to save',
+            icon: 'warning',
+            confirmButtonColor: '#4a6cf7'
+        });
+    }
+}
+
+// Editor functions
+function formatText(command) {
+    const editor = document.getElementById('contentEditor');
+    if (editor) {
+        // In a real implementation, this would apply formatting
+        Swal.fire({
+            title: 'Formatting Applied',
+            text: `Applied ${command} formatting to selected text`,
+            icon: 'success',
+            timer: 1500,
+            timerProgressBar: true,
+            showConfirmButton: false,
+            toast: true,
+            position: 'top-end'
+        });
+    }
+}
+
+function insertHeading() {
+    const editor = document.getElementById('contentEditor');
+    if (editor) {
+        const selectionStart = editor.selectionStart;
+        const selectionEnd = editor.selectionEnd;
+        const selectedText = editor.value.substring(selectionStart, selectionEnd);
+        
+        if (selectedText) {
+            const newText = `# ${selectedText}`;
+            editor.value = editor.value.substring(0, selectionStart) + newText + editor.value.substring(selectionEnd);
+            
+            Swal.fire({
+                title: 'Heading Inserted',
+                text: 'Heading formatting applied to selected text',
+                icon: 'success',
+                timer: 1500,
+                timerProgressBar: true,
+                showConfirmButton: false,
+                toast: true,
+                position: 'top-end'
+            });
+        } else {
+            Swal.fire({
+                title: 'No Text Selected',
+                text: 'Please select text to format as a heading',
+                icon: 'warning',
+                confirmButtonColor: '#4a6cf7'
+            });
+        }
+    }
+}
+
+function insertList(type) {
+    const editor = document.getElementById('contentEditor');
+    if (editor) {
+        const selectionStart = editor.selectionStart;
+        const selectionEnd = editor.selectionEnd;
+        const selectedText = editor.value.substring(selectionStart, selectionEnd);
+        
+        if (selectedText) {
+            const lines = selectedText.split('\n');
+            const newList = lines.map(line => {
+                return type === 'ul' ? `- ${line}` : `1. ${line}`;
+            }).join('\n');
+            
+            editor.value = editor.value.substring(0, selectionStart) + newList + editor.value.substring(selectionEnd);
+            
+            Swal.fire({
+                title: 'List Inserted',
+                text: `${type === 'ul' ? 'Bullet' : 'Numbered'} list created`,
+                icon: 'success',
+                timer: 1500,
+                timerProgressBar: true,
+                showConfirmButton: false,
+                toast: true,
+                position: 'top-end'
+            });
+        } else {
+            Swal.fire({
+                title: 'No Text Selected',
+                text: 'Please select text to convert to a list',
+                icon: 'warning',
+                confirmButtonColor: '#4a6cf7'
+            });
+        }
+    }
+}
+
+function insertLink() {
+    Swal.fire({
+        title: 'Insert Link',
+        html: `
+            <input type="text" id="linkText" class="swal2-input" placeholder="Link text">
+            <input type="url" id="linkUrl" class="swal2-input" placeholder="https://example.com">
+        `,
+        confirmButtonText: 'Insert Link',
+        confirmButtonColor: '#4a6cf7',
+        focusConfirm: false,
+        preConfirm: () => {
+            const linkText = document.getElementById('linkText').value;
+            const linkUrl = document.getElementById('linkUrl').value;
+            
+            if (!linkText || !linkUrl) {
+                Swal.showValidationMessage('Please fill in both fields');
+                return false;
+            }
+            
+            return { linkText, linkUrl };
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const editor = document.getElementById('contentEditor');
+            if (editor) {
+                const linkMarkdown = `[${result.value.linkText}](${result.value.linkUrl})`;
+                const cursorPos = editor.selectionStart;
+                editor.value = editor.value.substring(0, cursorPos) + linkMarkdown + editor.value.substring(cursorPos);
+                
+                Swal.fire({
+                    title: 'Link Inserted',
+                    text: 'Hyperlink added to your content',
+                    icon: 'success',
+                    timer: 1500,
+                    timerProgressBar: true,
+                    showConfirmButton: false,
+                    toast: true,
+                    position: 'top-end'
+                });
+            }
+        }
+    });
+}
+
+function insertImage() {
+    Swal.fire({
+        title: 'Insert Image',
+        html: `
+            <input type="text" id="imageAlt" class="swal2-input" placeholder="Image description">
+            <input type="url" id="imageUrl" class="swal2-input" placeholder="https://example.com/image.jpg">
+        `,
+        confirmButtonText: 'Insert Image',
+        confirmButtonColor: '#4a6cf7',
+        focusConfirm: false,
+        preConfirm: () => {
+            const imageAlt = document.getElementById('imageAlt').value;
+            const imageUrl = document.getElementById('imageUrl').value;
+            
+            if (!imageAlt || !imageUrl) {
+                Swal.showValidationMessage('Please fill in both fields');
+                return false;
+            }
+            
+            return { imageAlt, imageUrl };
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const editor = document.getElementById('contentEditor');
+            if (editor) {
+                const imageMarkdown = `![${result.value.imageAlt}](${result.value.imageUrl})`;
+                const cursorPos = editor.selectionStart;
+                editor.value = editor.value.substring(0, cursorPos) + imageMarkdown + editor.value.substring(cursorPos);
+                
+                Swal.fire({
+                    title: 'Image Inserted',
+                    text: 'Image added to your content',
+                    icon: 'success',
+                    timer: 1500,
+                    timerProgressBar: true,
+                    showConfirmButton: false,
+                    toast: true,
+                    position: 'top-end'
+                });
+            }
+        }
+    });
+}
+
+function saveContent() {
+    const saveBtn = document.getElementById('saveContentBtn');
+    
+    // Show saving state
+    const originalText = saveBtn.innerHTML;
+    saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+    saveBtn.disabled = true;
+    
+    // Simulate save process
+    setTimeout(() => {
+        // Reset button
+        saveBtn.innerHTML = '<i class="fas fa-check"></i> Saved!';
+        saveBtn.classList.remove('btn-success');
+        
+        // Show success message
+        Swal.fire({
+            title: 'Content Saved!',
+            text: 'Your changes have been saved successfully.',
+            icon: 'success',
+            timer: 2000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+            toast: true,
+            position: 'top-end'
+        });
+        
+        // Reset button after delay
+        setTimeout(() => {
+            saveBtn.innerHTML = '<i class="fas fa-save"></i> Save Content';
+            saveBtn.disabled = false;
+        }, 2000);
+    }, 1500);
+}
+
+function toggleAdvancedTools() {
+    Swal.fire({
+        title: 'Advanced Tools',
+        text: 'Switching to advanced editing tools...',
+        icon: 'info',
+        timer: 1500,
+        timerProgressBar: true,
+        showConfirmButton: false
+    }).then(() => {
+        window.location.href = '/Dashboard/AdvancedEditing';
+    });
+}
+
+// Project functions
+function editProject(projectId) {
+    Swal.fire({
+        title: 'Edit Project',
+        text: 'Opening project editor...',
+        icon: 'info',
+        timer: 1500,
+        timerProgressBar: true,
+        showConfirmButton: false
+    }).then(() => {
+        // In a real app, this would open the editor for the selected project
+        Swal.fire({
+            title: 'Project Editor',
+            text: 'You are now editing the selected project. Make your changes and save when done.',
+            icon: 'success',
+            confirmButtonColor: '#4a6cf7'
+        });
+    });
+}
+
+function previewProject(projectId) {
+    Swal.fire({
+        title: 'Project Preview',
+        text: 'Loading project preview...',
+        icon: 'info',
+        timer: 1500,
+        timerProgressBar: true,
+        showConfirmButton: false
+    }).then(() => {
+        window.open('/Dashboard/LivePreview', '_blank');
+    });
+}
+
+// Add to Cart functionality
+function addToCart(itemName, itemType = 'Premium Feature') {
+    // Add to cart using our Cart module
+    Cart.addItem({
+        id: Date.now(),
+        name: itemName,
+        type: itemType,
+        price: 9.99
+    });
+    
+    Swal.fire({
+        title: 'Added to Cart!',
+        text: `${itemName} has been added to your cart.`,
+        icon: 'success',
+        timer: 2000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+        toast: true,
+        position: 'top-end'
+    });
+}
+
+
+    //=======================================
+    // Plans from Plans => PlansController
+    //=======================================
+        function showPricingPlans() {
+                fetch('/Plans/GetPlans')
+                    .then(response => response.json())
+                    .then(plans => {
+                        let html = `<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 20px 0;">`;
+
+                        plans.forEach(plan => {
+                            html += `
+                                <div style="border: 2px solid #e0e0e0; border-radius: 15px; padding: 25px; text-align: center;">
+                                    <h4 style="color: #4a6cf7; margin-bottom: 15px;">${plan.planName}</h4>
+                                    <div style="font-size: 2rem; font-weight: bold; margin-bottom: 15px;">
+                                        $${plan.planRate}<span style="font-size: 1rem; color: #666;"> / ${plan.planDays} days</span>
+                                    </div>
+                                    <p><strong>Max eBooks:</strong> ${plan.maxEBooks}</p>
+                                    <p>${plan.planDescription ?? ""}</p>
+                                    <button class="btn btn-primary" onclick="selectPlan(${plan.planId})">
+                                        Select ${plan.planName}
+                                    </button>
+                                </div>
+                            `;
+                        });
+                        html += `</div>`;
+
+                        Swal.fire({
+                            title: 'Choose Your Plan',
+                            html: html,
+                            showConfirmButton: false,
+                            showCloseButton: true,
+                            width: '900px'
+                        });
+                    })
+                    .catch(error => {
+                        console.error("Error fetching plans:", error);
+                        Swal.fire("Error", "Could not load plans.", "error");
+                    });
+        }
+        
+        function selectPlan(planId) {
+            // Redirect to the checkout page with the selected plan ID
+            window.location.href = `/Payments/Checkout?planId=${planId}`;
+        }
+
+
+// Pricing and Features
+// function showPricingPlans01() {
+//     Swal.fire({
+//         title: 'Choose Your Plan',
+//         html: `
+//             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 20px 0;">
+//                 <div style="border: 2px solid #e0e0e0; border-radius: 15px; padding: 25px; text-align: center;">
+//                     <h4 style="color: #4a6cf7; margin-bottom: 15px;">Basic Plan</h4>
+//                     <div style="font-size: 2rem; font-weight: bold; margin-bottom: 15px;">$9.99<span style="font-size: 1rem; color: #666;">/month</span></div>
+//                     <ul style="text-align: left; margin: 15px 0; line-height: 1.8;">
+//                         <li>✓ Basic eBook creation</li>
+//                         <li>✓ Standard templates</li>
+//                         <li>✓ Email support</li>
+//                         <li>✓ 5 books per month</li>
+//                     </ul>
+//                     <button class="btn btn-primary" style="margin-top: 15px;" onclick="selectPlan('basic')">Select Basic</button>
+//                 </div>
+//                 <div style="border: 2px solid #4a6cf7; border-radius: 15px; padding: 25px; text-align: center; position: relative;">
+//                     <div style="position: absolute; top: -10px; right: 15px; background: #4a6cf7; color: white; padding: 5px 15px; border-radius: 15px; font-size: 0.8rem;">POPULAR</div>
+//                     <h4 style="color: #4a6cf7; margin-bottom: 15px;">Professional</h4>
+//                     <div style="font-size: 2rem; font-weight: bold; margin-bottom: 15px;">$29.99<span style="font-size: 1rem; color: #666;">/month</span></div>
+//                     <ul style="text-align: left; margin: 15px 0; line-height: 1.8;">
+//                         <li>✓ Everything in Basic</li>
+//                         <li>✓ AI Cover Design</li>
+//                         <li>✓ Advanced Analytics</li>
+//                         <li>✓ Priority Support</li>
+//                         <li>✓ Unlimited books</li>
+//                     </ul>
+//                     <button class="btn btn-primary" style="margin-top: 15px;" onclick="selectPlan('professional')">Select Professional</button>
+//                 </div>
+//                 <div style="border: 2px solid #22c55e; border-radius: 15px; padding: 25px; text-align: center;">
+//                     <h4 style="color: #22c55e; margin-bottom: 15px;">Enterprise</h4>
+//                     <div style="font-size: 2rem; font-weight: bold; margin-bottom: 15px;">$99.99<span style="font-size: 1rem; color: #666;">/month</span></div>
+//                     <ul style="text-align: left; margin: 15px 0; line-height: 1.8;">
+//                         <li>✓ Everything in Professional</li>
+//                         <li>✓ Audio Book Creation</li>
+//                         <li>✓ White-label Options</li>
+//                         <li>✓ Custom Integrations</li>
+//                         <li>✓ Dedicated Support</li>
+//                     </ul>
+//                     <button class="btn btn-primary" style="margin-top: 15px;" onclick="selectPlan('enterprise')">Select Enterprise</button>
+//                 </div>
+//             </div>
+//         `,
+//         showConfirmButton: false,
+//         showCloseButton: true,
+//         width: '900px'
+//     });
+// }
+
+function showFeatureDetails() {
+    Swal.fire({
+        title: 'Premium Features',
+        html: `
+            <div style="text-align: left; max-height: 400px; overflow-y: auto;">
+                <h4>AI Cover Design</h4>
+                <p>Create professional book covers using artificial intelligence. Generate multiple designs based on your book's genre and content.</p>
+                
+                <h4>Audio Book Creation</h4>
+                <p>Convert your written content into high-quality audiobooks with professional voice actors and studio-quality production.</p>
+                
+                <h4>Advanced Analytics</h4>
+                <p>Get detailed insights into your readership, sales performance, and content engagement with advanced analytics dashboard.</p>
+                
+                <h4>Priority Support</h4>
+                <p>Get faster response times and dedicated support from our expert team for all your publishing needs.</p>
             </div>
-        </div>
-    `;
+        `,
+        showConfirmButton: false,
+        showCloseButton: true,
+        width: '600px'
+    });
 }
 
-function removeFile() {
-    const uploadArea = document.getElementById('uploadArea');
-    uploadArea.innerHTML = `
-        <div class="upload-icon">📄</div>
-        <p><strong>Drag & drop your manuscript here</strong></p>
-        <p class="upload-subtitle">or click to browse files</p>
-        <p style="font-size: 0.8rem; color: #7f8c8d; margin-top: 10px;">
-            Supported formats: PDF, DOC, DOCX, TXT (Max 10MB)
-        </p>
-    `;
-    showToast('File removed', 'info');
-}
-</script>"
+// function selectPlan01(planType) {
+//     Swal.fire({
+//         title: 'Confirm Plan Selection',
+//         text: `You have selected the ${planType.charAt(0).toUpperCase() + planType.slice(1)} plan. Continue to payment?`,
+//         icon: 'question',
+//         showCancelButton: true,
+//         confirmButtonColor: '#4a6cf7',
+//         cancelButtonColor: '#d33',
+//         confirmButtonText: 'Continue to Payment',
+//         cancelButtonText: 'Cancel'
+//     }).then((result) => {
+//         if (result.isConfirmed) {
+//             Swal.fire({
+//                 title: 'Redirecting to Payment',
+//                 text: 'Please wait while we redirect you to the payment gateway...',
+//                 icon: 'info',
+//                 timer: 2000,
+//                 timerProgressBar: true,
+//                 showConfirmButton: false
+//             }).then(() => {
+//                 Redirect to payment page
+//                 window.location.href = `/Payment/Checkout?plan=${planType}`;
+//             });
+//         }
+//     });
+// }
+</script>

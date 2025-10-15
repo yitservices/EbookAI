@@ -45,14 +45,93 @@
                 color: #e0e0e0;
             }
 
-        /* Main Content Styles - Full Width */
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 250px;
+            background: white;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transform: translateX(-100%);
+            transition: transform var(--transition-speed);
+            overflow-y: auto;
+        }
+
+        body.dark-mode .sidebar {
+            background: var(--dark-card);
+        }
+
+        .sidebar.show {
+            transform: translateX(0);
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        body.dark-mode .sidebar-header {
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .close-sidebar {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--secondary);
+        }
+
+        .sidebar-nav {
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+
+            .nav-item:hover {
+                background: #f5f7f9;
+            }
+
+        body.dark-mode .nav-item:hover {
+            background: #1e2a4a;
+        }
+
+        .nav-item.active {
+            background: rgba(74, 108, 247, 0.1);
+            border-left: 3px solid var(--primary);
+            color: var(--primary);
+        }
+
+        body.dark-mode .nav-item.active {
+            background: rgba(74, 108, 247, 0.2);
+        }
+
+        /* Main Content Styles */
         .main-content {
             padding: 20px;
             min-height: 100vh;
             position: relative;
-            width: 93%;
-            max-width: none;
-            margin-left: 115px;
+            width: 100%;
+            transition: margin-left var(--transition-speed);
         }
 
         .top-header {
@@ -82,6 +161,19 @@
         .header-right {
             display: flex;
             gap: 15px;
+        }
+
+        /* Mobile Menu Button */
+        .menu-toggle {
+            display: none;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s;
         }
 
         /* Navigation Tabs */
@@ -749,6 +841,10 @@
             height: 40px;
         }
 
+        .menu-toggle {
+            display: flex;
+        }
+
         }
 
         @@media (max-width: 768px) {
@@ -813,6 +909,10 @@
                 width: 100%;
                 justify-content: center;
             }
+
+        .sidebar {
+            width: 39%;
+        }
 
         }
 
@@ -899,9 +999,57 @@
     </style>
 </head>
 <body>
-    <div class="main-content">
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>eBook Publisher</h2>
+            <button class="close-sidebar" id="closeSidebar">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="sidebar-nav">
+            <div class="nav-item" data-screen="home-screen">
+                <i class="fas fa-home"></i> Home
+            </div>
+            <div class="nav-item" data-screen="ebook-screen">
+                <i class="fas fa-book"></i> E-Book
+            </div>
+            <div class="nav-item active" data-screen="cover-design-screen">
+                <i class="fas fa-palette"></i> Cover Design
+            </div>
+            <div class="nav-item" data-screen="editing-screen">
+                <i class="fas fa-edit"></i> Editing & Formatting
+            </div>
+            <div class="nav-item" data-screen="proofreading-screen">
+                <i class="fas fa-check-circle"></i> Proofreading
+            </div>
+            <div class="nav-item" data-screen="copyright-screen">
+                <i class="fas fa-copyright"></i> Copyright
+            </div>
+            <div class="nav-item" data-screen="publishing-screen">
+                <i class="fas fa-upload"></i> Publishing
+            </div>
+            <div class="nav-item" data-screen="audio-book-screen">
+                <i class="fas fa-volume-up"></i> Audio Book
+            </div>
+            <div class="nav-item" data-screen="marketing-screen">
+                <i class="fas fa-chart-line"></i> Marketing
+            </div>
+            <div class="nav-item" data-screen="royalties-screen">
+                <i class="fas fa-money-bill-wave"></i> Royalties
+            </div>
+            <div class="nav-item" data-screen="author-copy-screen">
+                <i class="fas fa-copy"></i> Order Author Copy
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content" id="mainContent">
         <header class="top-header">
             <div class="header-left">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
                 <h1>Cover Design</h1>
                 <p>First Cover Design complete! Keep creating, writing, and inspiring others with your voice.</p>
             </div>
@@ -913,7 +1061,7 @@
         </header>
 
         <!-- Navigation Tabs -->
-        @* <div class="navigation-tabs">
+        <div class="navigation-tabs">
             <div class="nav-tab" data-screen="home-screen">
                 <i class="fas fa-home"></i> Home
             </div>
@@ -947,7 +1095,7 @@
             <div class="nav-tab" data-screen="author-copy-screen">
                 <i class="fas fa-copy"></i> Order Author Copy
             </div>
-        </div> *@
+        </div>
 
         <div class="cover-design-content">
             <div>
@@ -1048,6 +1196,10 @@
 
     <script>
         // DOM Elements
+        const sidebar = document.getElementById('sidebar');
+        const menuToggle = document.getElementById('menuToggle');
+        const closeSidebar = document.getElementById('closeSidebar');
+        const mainContent = document.getElementById('mainContent');
         const themeToggle = document.getElementById('themeToggle');
         const downloadBtn = document.getElementById('downloadBtn');
         const previewBtn = document.getElementById('previewBtn');
@@ -1065,6 +1217,7 @@
         const useDesignBtn = document.getElementById('useDesignBtn');
         const previewImage = document.getElementById('previewImage');
         const navTabs = document.querySelectorAll('.nav-tab');
+        const navItems = document.querySelectorAll('.nav-item');
 
         // Current state
         let isPremiumUser = false;
@@ -1078,6 +1231,25 @@
             document.body.classList.add('dark-mode');
             themeToggle.textContent = '☀️';
         }
+
+        // Sidebar functionality
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.add('show');
+        });
+
+        closeSidebar.addEventListener('click', () => {
+            sidebar.classList.remove('show');
+        });
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth <= 992 &&
+                !sidebar.contains(e.target) &&
+                !menuToggle.contains(e.target) &&
+                sidebar.classList.contains('show')) {
+                sidebar.classList.remove('show');
+            }
+        });
 
         // Theme toggle functionality
         themeToggle.addEventListener('click', () => {
@@ -1097,6 +1269,24 @@
                 // Update active tab
                 navTabs.forEach(t => t.classList.remove('active'));
                 this.classList.add('active');
+
+                // In a real app, this would navigate to the selected section
+                const screen = this.getAttribute('data-screen');
+                showToast(`Navigating to ${screen.replace('-', ' ')}`);
+            });
+        });
+
+        // Sidebar navigation
+        navItems.forEach(item => {
+            item.addEventListener('click', function() {
+                // Update active item
+                navItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+
+                // Close sidebar on mobile after selection
+                if (window.innerWidth <= 992) {
+                    sidebar.classList.remove('show');
+                }
 
                 // In a real app, this would navigate to the selected section
                 const screen = this.getAttribute('data-screen');

@@ -30,13 +30,13 @@ namespace EBookDashboard.Models
         [Required(ErrorMessage = "Please confirm your password")]
         public string ConfirmPassword { get; set; } = string.Empty;
 
-        public string? AuthorName { get; set; }
+        public string? AuthorName { get; set; } 
 
-        public string? Genre { get; set; }
+        public string? Genre { get; set; } 
 
-        public string? Experience { get; set; }
+        public string? Experience { get; set; } 
 
-        public string? Goals { get; set; }
+        public string? Goals { get; set; } 
 
         public bool Newsletter { get; set; }
 

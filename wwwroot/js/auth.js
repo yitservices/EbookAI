@@ -47,13 +47,18 @@ document.addEventListener('DOMContentLoaded', function() {
         submitBtn.disabled = true;
         
         try {
+            // Use the FormData directly
+            const formData = new FormData(this);
+            
+            // Get anti-forgery token
+            const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
+            
             const response = await fetch('/Account/Register', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'RequestVerificationToken': document.querySelector('input[name=\"__RequestVerificationToken\"]')?.value
+                    'RequestVerificationToken': token
                 },
-                body: JSON.stringify(data)
+                body: formData
             });
             
             const result = await response.json();
@@ -89,13 +94,18 @@ document.addEventListener('DOMContentLoaded', function() {
         submitBtn.disabled = true;
         
         try {
+            // Use the FormData directly
+            const formData = new FormData(this);
+            
+            // Get anti-forgery token
+            const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
+            
             const response = await fetch('/Account/Login', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'RequestVerificationToken': document.querySelector('input[name=\"__RequestVerificationToken\"]')?.value
+                    'RequestVerificationToken': token
                 },
-                body: JSON.stringify(data)
+                body: formData
             });
             
             const result = await response.json();

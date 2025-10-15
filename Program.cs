@@ -1,163 +1,100 @@
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿using EBookDashboard.Interfaces;
+using EBookDashboard.Models;
+using EBookDashboard.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Authorization;
-using EBookDashboard.Middleware;
+using Microsoft.EntityFrameworkCore;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllersWithViews(options =>
-{
-    // Add global authorization filter
-    options.Filters.Add(new AuthorizeFilter());
-});
+// ✅ Add services to the container.
+builder.Services.AddControllersWithViews();
 
-// Add enhanced session support
+// ✅ Configure MySQL DbContext
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        new MySqlServerVersion(new Version(8, 0, 34)) // adjust version to your MySQL
+    ));
+
+// ✅ Enable Authentication with Cookie Scheme
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login";        // where to go if not logged in
+        options.LogoutPath = "/Account/Logout";      // logout URL
+        options.AccessDeniedPath = "/Account/AccessDenied"; // unauthorized
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);  // session timeout
+        options.SlidingExpiration = true;            // extend session if active
+    });
+
+// ✅ Authorization middleware (roles, policies etc.)
+builder.Services.AddAuthorization();
+builder.Services.AddScoped<IUserService, UserService>();
+// Add EmailService
+builder.Services.AddScoped<IEmailService, EmailService>();
+// Add BookService
+builder.Services.AddScoped<IBookService, BookService>();
+// Add PlanService
+builder.Services.AddScoped<IPlanService, PlanService>();
+// Add FeatureCartService
+builder.Services.AddScoped<IFeatureCartService, FeatureCartService>();
+// Add CheckoutService
+builder.Services.AddScoped<ICheckoutService, CheckoutService>();
+
+// Add session services
+builder.Services.AddDistributedMemoryCache();
+//Register HttpClient factory
+builder.Services.AddHttpClient();
+//Register Sessions
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // session timeout
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
-    options.Cookie.SameSite = SameSiteMode.Lax;
-    options.Cookie.Name = "EBookDashboard.Session";
 });
 
-// Add enhanced authentication
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
-    {
-        options.LoginPath = "/Account/Login";
-        options.LogoutPath = "/Account/Logout";
-        options.AccessDeniedPath = "/Account/AccessDenied";
-        options.ReturnUrlParameter = "returnUrl";
-        options.ExpireTimeSpan = TimeSpan.FromHours(8);
-        options.SlidingExpiration = true;
-        options.Cookie.HttpOnly = true;
-        options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
-        options.Cookie.SameSite = SameSiteMode.Lax;
-        options.Cookie.Name = "EBookDashboard.Auth";
-        
-        // Custom events
-        options.Events.OnRedirectToLogin = context =>
-        {
-            if (context.Request.Path.StartsWithSegments("/api") ||
-                context.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-            {
-                context.Response.StatusCode = 401;
-                return Task.CompletedTask;
-            }
-            context.Response.Redirect(context.RedirectUri);
-            return Task.CompletedTask;
-        };
-    });
-
-// Add authorization policies
-builder.Services.AddAuthorization(options =>
-{
-    options.DefaultPolicy = new AuthorizationPolicyBuilder()
-        .RequireAuthenticatedUser()
-        .Build();
-    
-    // Add custom policies
-    options.AddPolicy("RequireAdminRole", policy =>
-        policy.RequireClaim("Role", "Admin"));
-});
-
-// Add CORS support
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(policy =>
-    {
-        policy.WithOrigins("https://localhost:7000", "http://localhost:5282")
-              .AllowAnyMethod()
-              .AllowAnyHeader()
-              .AllowCredentials();
-    });
-});
-
-// Add data protection
-builder.Services.AddDataProtection();
-
-// Add anti-forgery
-builder.Services.AddAntiforgery(options =>
-{
-    options.HeaderName = "RequestVerificationToken";
-    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
-});
-
-// Add compression
-builder.Services.AddResponseCompression(options =>
-{
-    options.EnableForHttps = true;
-});
+// Add HttpContextAccessor
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// ✅ Middleware pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
-    
-    // Add security headers in production
-    app.Use(async (context, next) =>
-    {
-        context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
-        context.Response.Headers.Add("X-Frame-Options", "DENY");
-        context.Response.Headers.Add("X-XSS-Protection", "1; mode=block");
-        context.Response.Headers.Add("Referrer-Policy", "strict-origin-when-cross-origin");
-        await next();
-    });
-}
-else
-{
-    app.UseDeveloperExceptionPage();
 }
 
-// Enable response compression
-app.UseResponseCompression();
-
-// Enable CORS
-app.UseCors();
-
-// HTTPS redirection
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 
-// Static files with caching
-app.UseStaticFiles(new StaticFileOptions
-{
-    OnPrepareResponse = ctx =>
-    {
-        if (!app.Environment.IsDevelopment())
-        {
-            ctx.Context.Response.Headers.Append("Cache-Control", "public,max-age=31536000");
-        }
-    }
-});
-
-// Routing
 app.UseRouting();
 
-// Session middleware (before authentication)
 app.UseSession();
-
-// Custom session management middleware
-app.UseSessionManagement();
-
-// Authentication and authorization
+// ✅ Authentication + Authorization
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Configure routing
-app.MapStaticAssets();
-
-// Define routes with constraints
 app.MapControllerRoute(
-    name: "account",
-    pattern: "Account/{action=Login}",
-    defaults: new { controller = "Account" },
-    constraints: new { action = "Login|Register|Logout|AccessDenied" });
+    name: "default",
+    pattern: "{controller=Account}/{action=Login}/{id?}");
+
+// Role-based dashboard routes
+app.MapControllerRoute(
+    name: "admin",
+    pattern: "Admin/{action=Dashboard}/{id?}",
+    defaults: new { controller = "Admin" });
+
+app.MapControllerRoute(
+    name: "author",
+    pattern: "Author/{action=Dashboard}/{id?}",
+    defaults: new { controller = "Author" });
+
+app.MapControllerRoute(
+    name: "reader",
+    pattern: "Reader/{action=Dashboard}/{id?}",
+    defaults: new { controller = "Reader" });
 
 app.MapControllerRoute(
     name: "dashboard",
@@ -165,39 +102,13 @@ app.MapControllerRoute(
     defaults: new { controller = "Dashboard" });
 
 app.MapControllerRoute(
-    name: "api",
-    pattern: "api/{controller}/{action}/{id?}");
+    name: "features",
+    pattern: "Features/{action=Index}/{id?}",
+    defaults: new { controller = "Features" });
 
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Account}/{action=Login}/{id?}")
-    .WithStaticAssets();
-
-// Add health check endpoint
-app.MapGet("/health", () => Results.Ok(new { 
-    status = "Healthy", 
-    timestamp = DateTime.UtcNow,
-    environment = app.Environment.EnvironmentName 
-}));
-
-// Add API endpoints for AJAX calls
-app.MapGet("/Account/CheckSession", async (HttpContext context) =>
-{
-    if (context.User.Identity?.IsAuthenticated == true)
-    {
-        return Results.Ok(new { isAuthenticated = true });
-    }
-    return Results.Unauthorized();
-});
-
-app.MapGet("/Account/CheckAuth", async (HttpContext context) =>
-{
-    if (context.User.Identity?.IsAuthenticated == true)
-    {
-        return Results.Ok(new { isAuthenticated = true });
-    }
-    return Results.Unauthorized();
-});
-
+    name: "checkout",
+    pattern: "Checkout/{action}/{id?}",
+    defaults: new { controller = "Checkout", action = "GetPublishableKey" });
 
 app.Run();

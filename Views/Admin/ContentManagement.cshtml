@@ -1,0 +1,764 @@
+@model IEnumerable<EBookDashboard.Models.Books>
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Content Management";
+}
+
+<style>
+    /* Outstanding Content Management Styles */
+    .content-management {
+        animation: fadeIn 0.8s ease-out;
+        padding: 20px;
+    }
+
+    @@keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Header with Outstanding Design */
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 35px;
+        padding: 30px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(102, 126, 234, 0.2);
+        color: white;
+        position: relative;
+        overflow: hidden;
+        border: none;
+        animation: slideInDown 0.6s ease-out;
+    }
+
+    .page-header::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.1);
+        transform: rotate(30deg);
+        animation: shimmer 3s infinite;
+    }
+
+    @@keyframes shimmer {
+        0% { transform: rotate(30deg) translateX(-20%); }
+        50% { transform: rotate(30deg) translateX(20%); }
+        100% { transform: rotate(30deg) translateX(-20%); }
+    }
+
+    .header-content h1 {
+        margin: 0;
+        font-size: 2.5rem;
+        font-weight: 800;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        animation: textGlow 2s infinite alternate;
+    }
+
+    @@keyframes textGlow {
+        from { text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); }
+        to { text-shadow: 0 2px 10px rgba(255, 255, 255, 0.4); }
+    }
+
+    .header-content p {
+        margin: 10px 0 0;
+        font-size: 1.1rem;
+        opacity: 0.9;
+        max-width: 500px;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+        border: none;
+        padding: 15px 25px;
+        border-radius: 15px;
+        font-weight: 600;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+        color: white;
+        text-decoration: none;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 12px 30px rgba(255, 107, 107, 0.4);
+        color: white;
+    }
+
+    .btn-primary:active {
+        transform: translateY(-2px);
+    }
+
+    /* Filter Section with Outstanding Design */
+    .filter-section {
+        display: flex;
+        gap: 25px;
+        margin-bottom: 35px;
+        flex-wrap: wrap;
+        align-items: center;
+        background: linear-gradient(145deg, #ffffff, #f8f9fa);
+        padding: 25px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: all 0.4s ease;
+        border: none;
+        animation: slideInUp 0.6s ease-out;
+    }
+
+    .filter-section:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .search-bar {
+        flex: 1;
+        min-width: 350px;
+    }
+
+    .input-wrapper {
+        position: relative;
+    }
+
+    .input-wrapper i {
+        position: absolute;
+        left: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #667eea;
+        font-size: 1.2rem;
+        z-index: 2;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 15px 20px 15px 50px;
+        border: 2px solid #e9ecef;
+        border-radius: 15px;
+        background: #ffffff;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+        transform: translateY(-2px);
+    }
+
+    .filter-options {
+        display: flex;
+        gap: 20px;
+    }
+
+    .filter-options .form-control {
+        padding: 15px 20px;
+        min-width: 180px;
+        background: linear-gradient(145deg, #ffffff, #f8f9fa);
+    }
+
+    /* Books Grid with Outstanding Design */
+    .books-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 30px;
+        margin-bottom: 30px;
+    }
+
+    .book-card {
+        background: linear-gradient(145deg, #ffffff, #f8f9fa);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        border: none;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        position: relative;
+        animation: floatIn 0.6s ease-out;
+        animation-fill-mode: both;
+    }
+
+    .book-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.5s ease;
+    }
+
+    .book-card:hover {
+        transform: translateY(-15px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .book-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .book-cover {
+        position: relative;
+        height: 220px;
+        overflow: hidden;
+    }
+
+    .book-cover img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: all 0.5s ease;
+    }
+
+    .book-card:hover .book-cover img {
+        transform: scale(1.1);
+    }
+
+    .default-cover {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 3.5rem;
+        animation: pulse 3s infinite;
+    }
+
+    @@keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+
+    .book-status {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        padding: 8px 16px;
+        border-radius: 25px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        animation: bounce 4s infinite;
+    }
+
+    @@keyframes bounce {
+        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+        40% { transform: translateY(-5px); }
+        60% { transform: translateY(-3px); }
+    }
+
+    .book-status.draft {
+        background: linear-gradient(135deg, #ffd166, #ffb347);
+        color: #5a3e00;
+    }
+
+    .book-status.published {
+        background: linear-gradient(135deg, #4ecdc4, #44a08d);
+        color: white;
+    }
+
+    .book-status.archived {
+        background: linear-gradient(135deg, #6c757d, #495057);
+        color: white;
+    }
+
+    .book-info {
+        padding: 25px;
+    }
+
+    .book-title {
+        margin: 0 0 10px;
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #333;
+        line-height: 1.3;
+        transition: all 0.3s ease;
+    }
+
+    .book-card:hover .book-title {
+        color: #667eea;
+        transform: scale(1.02);
+    }
+
+    .book-subtitle {
+        margin: 0 0 15px;
+        color: #6c757d;
+        font-size: 1rem;
+        font-style: italic;
+    }
+
+    .book-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .book-meta span {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15));
+        color: #667eea;
+        padding: 6px 12px;
+        border-radius: 12px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    .book-meta span:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+    }
+
+    .book-dates {
+        margin-bottom: 20px;
+        padding-top: 15px;
+        border-top: 1px solid #e9ecef;
+    }
+
+    .book-dates small {
+        display: block;
+        color: #6c757d;
+        font-size: 0.85rem;
+        margin-bottom: 5px;
+    }
+
+    .book-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        padding: 10px 15px;
+        border: none;
+        border-radius: 12px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    .btn:hover {
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .btn:active {
+        transform: translateY(-1px);
+    }
+
+    .btn-info {
+        background: linear-gradient(135deg, #17a2b8, #138496);
+        color: white;
+    }
+
+    .btn-primary-action {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+    }
+
+    .btn-success {
+        background: linear-gradient(135deg, #4ecdc4, #44a08d);
+        color: white;
+    }
+
+    .btn-warning {
+        background: linear-gradient(135deg, #ffd166, #ffb347);
+        color: #5a3e00;
+    }
+
+    .btn-danger {
+        background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+        color: white;
+    }
+
+    .btn-sm {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+    }
+
+    /* Empty State with Outstanding Design */
+    .empty-state {
+        text-align: center;
+        padding: 80px 30px;
+        color: #6c757d;
+        background: linear-gradient(145deg, #ffffff, #f8f9fa);
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        margin: 30px 0;
+        border: none;
+        animation: fadeIn 0.8s ease-out;
+    }
+
+    .empty-state i {
+        font-size: 5rem;
+        margin-bottom: 25px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: bounce 3s infinite;
+    }
+
+    .empty-state h3 {
+        margin-bottom: 15px;
+        font-size: 2rem;
+        font-weight: 700;
+        color: #333;
+    }
+
+    .empty-state p {
+        margin-bottom: 25px;
+        font-size: 1.1rem;
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Animations */
+    @@keyframes slideInDown {
+        from { opacity: 0; transform: translateY(-50px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @@keyframes slideInUp {
+        from { opacity: 0; transform: translateY(50px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @@keyframes floatIn {
+        from { opacity: 0; transform: translateY(30px) scale(0.95); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Mobile Responsive */
+    @@media (max-width: 768px) {
+        .content-management {
+            padding: 15px;
+        }
+
+        .page-header {
+            flex-direction: column;
+            gap: 20px;
+            text-align: center;
+            padding: 25px 20px;
+        }
+
+        .header-content h1 {
+            font-size: 2rem;
+        }
+
+        .filter-section {
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .search-bar {
+            min-width: auto;
+            width: 100%;
+        }
+
+        .filter-options {
+            width: 100%;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .filter-options .form-control {
+            width: 100%;
+            min-width: auto;
+        }
+
+        .books-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .book-cover {
+            height: 180px;
+        }
+
+        .book-info {
+            padding: 20px;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .content-management {
+            padding: 10px;
+        }
+
+        .page-header {
+            padding: 20px 15px;
+        }
+
+        .header-content h1 {
+            font-size: 1.7rem;
+        }
+
+        .btn-primary {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .filter-section {
+            padding: 15px;
+        }
+
+        .form-control {
+            padding: 12px 15px 12px 45px;
+        }
+
+        .input-wrapper i {
+            left: 15px;
+        }
+
+        .book-meta {
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .book-actions {
+            flex-direction: column;
+        }
+
+        .btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .empty-state {
+            padding: 60px 20px;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+        }
+
+        .empty-state h3 {
+            font-size: 1.7rem;
+        }
+    }
+</style>
+
+<div class="content-management">
+    <!-- Header Section -->
+    <div class="page-header">
+        <div class="header-content">
+            <h1><i class="fas fa-book-open me-3"></i>Content Management</h1>
+            <p>Manage all eBooks, categories, and publications with advanced filtering and search capabilities</p>
+        </div>
+        
+        <div class="header-actions">
+            <a href="@Url.Action("Create", "Books")" class="btn btn-primary">
+                <i class="fas fa-plus"></i>
+                Add New Book
+            </a>
+        </div>
+    </div>
+
+    <!-- Filter and Search Section -->
+    <div class="filter-section">
+        <div class="search-bar">
+            <div class="input-wrapper">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchBooks" placeholder="Search books by title, author, or genre..." class="form-control">
+            </div>
+        </div>
+        
+        <div class="filter-options">
+            <select class="form-control" id="statusFilter">
+                <option value="">All Status</option>
+                <option value="Draft">Draft</option>
+                <option value="Published">Published</option>
+                <option value="Archived">Archived</option>
+            </select>
+            
+            <select class="form-control" id="genreFilter">
+                <option value="">All Genres</option>
+                <option value="Fiction">Fiction</option>
+                <option value="Non-Fiction">Non-Fiction</option>
+                <option value="Romance">Romance</option>
+                <option value="Thriller">Thriller</option>
+                <option value="Biography">Biography</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Books Grid -->
+    <div class="books-grid">
+        @foreach (var book in Model)
+        {
+            <div class="book-card" data-status="@book.Status.ToLower()" data-genre="@book.Genre.ToLower()">
+                <div class="book-cover">
+                    @if (!string.IsNullOrEmpty(book.CoverImagePath))
+                    {
+                        <img src="@book.CoverImagePath" alt="@book.Title" onerror="this.src='/images/default-book-cover.jpg'">
+                    }
+                    else
+                    {
+                        <div class="default-cover">
+                            <i class="fas fa-book"></i>
+                        </div>
+                    }
+                    
+                    <div class="book-status @book.Status.ToLower()">
+                        @book.Status
+                    </div>
+                </div>
+                
+                <div class="book-info">
+                    <h3 class="book-title">@book.Title</h3>
+                    @if (!string.IsNullOrEmpty(book.Subtitle))
+                    {
+                        <p class="book-subtitle">@book.Subtitle</p>
+                    }
+                    
+                    <div class="book-meta">
+                        <span class="genre"><i class="fas fa-tag me-1"></i>@book.Genre</span>
+                        <span class="word-count"><i class="fas fa-font me-1"></i>@book.WordCount.ToString("N0") words</span>
+                        <span class="chapters"><i class="fas fa-list me-1"></i>@book.Chapters.Count chapters</span>
+                    </div>
+                    
+                    <div class="book-dates">
+                        <small class="created-date"><i class="fas fa-calendar-plus me-1"></i>Created: @book.CreatedAt.ToString("MMM dd, yyyy")</small>
+                        @if (book.UpdatedAt.HasValue)
+                        {
+                            <small class="updated-date"><i class="fas fa-history me-1"></i>Updated: @book.UpdatedAt.Value.ToString("MMM dd, yyyy")</small>
+                        }
+                    </div>
+                    
+                    <div class="book-actions">
+                        <a href="@Url.Action("Details", "Books", new { id = book.BookId })" class="btn btn-info btn-sm" title="View Details">
+                            <i class="fas fa-eye"></i>
+                            <span class="d-none d-md-inline">View</span>
+                        </a>
+                        
+                        <a href="@Url.Action("Edit", "Books", new { id = book.BookId })" class="btn btn-primary-action btn-sm" title="Edit">
+                            <i class="fas fa-edit"></i>
+                            <span class="d-none d-md-inline">Edit</span>
+                        </a>
+                        
+                        @if (book.Status == "Draft")
+                        {
+                            <form method="post" action="@Url.Action("Publish", "Books", new { id = book.BookId })" style="display: inline;">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-success btn-sm" title="Publish" onclick="return confirm('Publish this book?')">
+                                    <i class="fas fa-upload"></i>
+                                    <span class="d-none d-md-inline">Publish</span>
+                                </button>
+                            </form>
+                        }
+                        else if (book.Status == "Published")
+                        {
+                            <form method="post" action="@Url.Action("Archive", "Books", new { id = book.BookId })" style="display: inline;">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-warning btn-sm" title="Archive" onclick="return confirm('Archive this book?')">
+                                    <i class="fas fa-archive"></i>
+                                    <span class="d-none d-md-inline">Archive</span>
+                                </button>
+                            </form>
+                        }
+                        
+                        <a href="@Url.Action("Delete", "Books", new { id = book.BookId })" class="btn btn-danger btn-sm" title="Delete">
+                            <i class="fas fa-trash"></i>
+                            <span class="d-none d-md-inline">Delete</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="empty-state">
+            <i class="fas fa-book-open"></i>
+            <h3>No Books Found</h3>
+            <p>Start by adding your first book to the platform. Create engaging content and share it with readers worldwide.</p>
+            <a href="@Url.Action("Create", "Books")" class="btn btn-primary">
+                <i class="fas fa-plus"></i>
+                Add First Book
+            </a>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add entrance animations
+            const elements = document.querySelectorAll('.filter-section, .books-grid .book-card, .empty-state');
+            elements.forEach((el, index) => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                setTimeout(() => {
+                    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, 100 * index);
+            });
+
+            // Search functionality
+            document.getElementById('searchBooks').addEventListener('input', function() {
+                filterBooks();
+            });
+
+            // Status filter
+            document.getElementById('statusFilter').addEventListener('change', function() {
+                filterBooks();
+            });
+
+            // Genre filter
+            document.getElementById('genreFilter').addEventListener('change', function() {
+                filterBooks();
+            });
+
+            function filterBooks() {
+                const searchTerm = document.getElementById('searchBooks').value.toLowerCase();
+                const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
+                const genreFilter = document.getElementById('genreFilter').value.toLowerCase();
+                const bookCards = document.querySelectorAll('.book-card');
+
+                bookCards.forEach(card => {
+                    const title = card.querySelector('.book-title').textContent.toLowerCase();
+                    const genre = card.getAttribute('data-genre') || '';
+                    const status = card.getAttribute('data-status') || '';
+
+                    const matchesSearch = title.includes(searchTerm);
+                    const matchesStatus = !statusFilter || status === statusFilter;
+                    const matchesGenre = !genreFilter || genre === genreFilter;
+
+                    if (matchesSearch && matchesStatus && matchesGenre) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+        });
+    </script>
+}
