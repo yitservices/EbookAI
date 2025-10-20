@@ -1,0 +1,354 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Hp\\EbookAI\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\ebookai\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\ebookai\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\ebookai\\views\\dashboard\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:views\\dashboard\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\ebookai\\views\\dashboard\\coverdesign.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:views\\dashboard\\coverdesign.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\ebookai\\views\\dashboard\\ebook.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:views\\dashboard\\ebook.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\shahm\\Downloads\\EBookDashboard (2)\\EBookDashboard\\Controllers\\HomeController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\ebookai\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\ebookai\\models\\authmodels.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:models\\authmodels.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\ebookai\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\ebookai\\middleware\\sessionmanagementmiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:middleware\\sessionmanagementmiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\ebookai\\ebookdashboard.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:ebookdashboard.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\ebookai\\views\\_viewstart.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:views\\_viewstart.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\ebookai\\views\\dashboard\\home.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:views\\dashboard\\home.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\ebookai\\ebookdashboard.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:ebookdashboard.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\ebookai\\views\\dashboard\\copyright.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:views\\dashboard\\copyright.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\ebookai\\views\\shared\\_dashboardlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:views\\shared\\_dashboardlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\ebookai\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\ebookai\\views\\dashboard\\proofreading.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:views\\dashboard\\proofreading.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\ebookai\\views\\dashboard\\audiobook.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:views\\dashboard\\audiobook.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\ebookai\\controllers\\dashboardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:controllers\\dashboardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\ebookai\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 223,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Hp\\EbookAI\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\Hp\\EbookAI\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAALQAAAAAAAAAAADwv8QAAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-28T07:46:28.887Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\Hp\\EbookAI\\Views\\Dashboard\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\Dashboard\\Index.cshtml",
+              "ToolTip": "C:\\Users\\Hp\\EbookAI\\Views\\Dashboard\\Index.cshtml",
+              "RelativeToolTip": "Views\\Dashboard\\Index.cshtml",
+              "ViewState": "AgIAAMkFAAAAAAAAAAAAAEcGAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-09-29T10:44:00.562Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Hp\\EbookAI\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "C:\\Users\\Hp\\EbookAI\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAABYAAAAAAAAAAAAkwCoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-09-28T09:07:42.856Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "CoverDesign.cshtml",
+              "DocumentMoniker": "C:\\Users\\Hp\\EbookAI\\Views\\Dashboard\\CoverDesign.cshtml",
+              "RelativeDocumentMoniker": "Views\\Dashboard\\CoverDesign.cshtml",
+              "ToolTip": "C:\\Users\\Hp\\EbookAI\\Views\\Dashboard\\CoverDesign.cshtml",
+              "RelativeToolTip": "Views\\Dashboard\\CoverDesign.cshtml",
+              "ViewState": "AgIAAEMAAAAAAAAAAAAYwFwAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-10-15T17:41:48.066Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "AccountController.cs",
+              "DocumentMoniker": "C:\\Users\\Hp\\EbookAI\\Controllers\\AccountController.cs",
+              "RelativeDocumentMoniker": "Controllers\\AccountController.cs",
+              "ToolTip": "C:\\Users\\Hp\\EbookAI\\Controllers\\AccountController.cs",
+              "RelativeToolTip": "Controllers\\AccountController.cs",
+              "ViewState": "AgIAAGUAAAAAAAAAAAAawHMAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-28T09:08:10.951Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "AuthModels.cs",
+              "DocumentMoniker": "C:\\Users\\Hp\\EbookAI\\Models\\AuthModels.cs",
+              "RelativeDocumentMoniker": "Models\\AuthModels.cs",
+              "ToolTip": "C:\\Users\\Hp\\EbookAI\\Models\\AuthModels.cs",
+              "RelativeToolTip": "Models\\AuthModels.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-28T09:05:28.887Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "appsettings.Development.json",
+              "DocumentMoniker": "C:\\Users\\Hp\\EbookAI\\appsettings.Development.json",
+              "RelativeDocumentMoniker": "appsettings.Development.json",
+              "ToolTip": "C:\\Users\\Hp\\EbookAI\\appsettings.Development.json",
+              "RelativeToolTip": "appsettings.Development.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-09-29T22:13:35.837Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\Users\\shahm\\Downloads\\EBookDashboard (2)\\EBookDashboard\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "..\\..\\shahm\\Downloads\\EBookDashboard (2)\\EBookDashboard\\Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Users\\shahm\\Downloads\\EBookDashboard (2)\\EBookDashboard\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "..\\..\\shahm\\Downloads\\EBookDashboard (2)\\EBookDashboard\\Controllers\\HomeController.cs",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-28T12:10:36.133Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "SessionManagementMiddleware.cs",
+              "DocumentMoniker": "C:\\Users\\Hp\\EbookAI\\Middleware\\SessionManagementMiddleware.cs",
+              "RelativeDocumentMoniker": "Middleware\\SessionManagementMiddleware.cs",
+              "ToolTip": "C:\\Users\\Hp\\EbookAI\\Middleware\\SessionManagementMiddleware.cs",
+              "RelativeToolTip": "Middleware\\SessionManagementMiddleware.cs",
+              "ViewState": "AgIAAD8AAAAAAAAAAAAowDUAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-29T22:13:47.828Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "EBook.cshtml",
+              "DocumentMoniker": "C:\\Users\\Hp\\EbookAI\\Views\\Dashboard\\EBook.cshtml",
+              "RelativeDocumentMoniker": "Views\\Dashboard\\EBook.cshtml",
+              "ToolTip": "C:\\Users\\Hp\\EbookAI\\Views\\Dashboard\\EBook.cshtml",
+              "RelativeToolTip": "Views\\Dashboard\\EBook.cshtml",
+              "ViewState": "AgIAAB0GAAAAAAAAAAAAwDIGAAA9AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-09-29T23:03:22.659Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "EBookDashboard.csproj",
+              "DocumentMoniker": "C:\\Users\\Hp\\EbookAI\\EBookDashboard.csproj",
+              "RelativeDocumentMoniker": "EBookDashboard.csproj",
+              "ToolTip": "C:\\Users\\Hp\\EbookAI\\EBookDashboard.csproj",
+              "RelativeToolTip": "EBookDashboard.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-09-29T22:14:16.441Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "_ViewStart.cshtml",
+              "DocumentMoniker": "C:\\Users\\Hp\\EbookAI\\Views\\_ViewStart.cshtml",
+              "RelativeDocumentMoniker": "Views\\_ViewStart.cshtml",
+              "ToolTip": "C:\\Users\\Hp\\EbookAI\\Views\\_ViewStart.cshtml",
+              "RelativeToolTip": "Views\\_ViewStart.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-09-29T18:28:34.505Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Home.cshtml",
+              "DocumentMoniker": "C:\\Users\\Hp\\EbookAI\\Views\\Dashboard\\Home.cshtml",
+              "RelativeDocumentMoniker": "Views\\Dashboard\\Home.cshtml",
+              "ToolTip": "C:\\Users\\Hp\\EbookAI\\Views\\Dashboard\\Home.cshtml",
+              "RelativeToolTip": "Views\\Dashboard\\Home.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-09-29T10:43:06.557Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "EBookDashboard",
+              "DocumentMoniker": "C:\\Users\\Hp\\EbookAI\\EBookDashboard.csproj",
+              "RelativeDocumentMoniker": "EBookDashboard.csproj",
+              "ToolTip": "C:\\Users\\Hp\\EbookAI\\EBookDashboard.csproj",
+              "RelativeToolTip": "EBookDashboard.csproj",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-09-29T15:47:56.513Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "Copyright.cshtml",
+              "DocumentMoniker": "C:\\Users\\Hp\\EbookAI\\Views\\Dashboard\\Copyright.cshtml",
+              "RelativeDocumentMoniker": "Views\\Dashboard\\Copyright.cshtml",
+              "ToolTip": "C:\\Users\\Hp\\EbookAI\\Views\\Dashboard\\Copyright.cshtml",
+              "RelativeToolTip": "Views\\Dashboard\\Copyright.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQDAABPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-09-29T11:33:36.25Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "_DashboardLayout.cshtml",
+              "DocumentMoniker": "C:\\Users\\Hp\\EbookAI\\Views\\Shared\\_DashboardLayout.cshtml",
+              "RelativeDocumentMoniker": "Views\\Shared\\_DashboardLayout.cshtml",
+              "ToolTip": "C:\\Users\\Hp\\EbookAI\\Views\\Shared\\_DashboardLayout.cshtml",
+              "RelativeToolTip": "Views\\Shared\\_DashboardLayout.cshtml",
+              "ViewState": "AgIAAB0LAAAAAAAAAAAqwA4LAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-09-29T11:20:33.942Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\Hp\\EbookAI\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\Home\\Index.cshtml",
+              "ToolTip": "C:\\Users\\Hp\\EbookAI\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-09-29T11:20:18.962Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "Proofreading.cshtml",
+              "DocumentMoniker": "C:\\Users\\Hp\\EbookAI\\Views\\Dashboard\\Proofreading.cshtml",
+              "RelativeDocumentMoniker": "Views\\Dashboard\\Proofreading.cshtml",
+              "ToolTip": "C:\\Users\\Hp\\EbookAI\\Views\\Dashboard\\Proofreading.cshtml",
+              "RelativeToolTip": "Views\\Dashboard\\Proofreading.cshtml",
+              "ViewState": "AgIAAIsDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-09-29T11:17:25.082Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "AudioBook.cshtml",
+              "DocumentMoniker": "C:\\Users\\Hp\\EbookAI\\Views\\Dashboard\\AudioBook.cshtml",
+              "RelativeDocumentMoniker": "Views\\Dashboard\\AudioBook.cshtml",
+              "ToolTip": "C:\\Users\\Hp\\EbookAI\\Views\\Dashboard\\AudioBook.cshtml",
+              "RelativeToolTip": "Views\\Dashboard\\AudioBook.cshtml",
+              "ViewState": "AgIAAIMDAAAAAAAAAAAnwJADAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-09-29T10:42:45.827Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "DashboardController.cs",
+              "DocumentMoniker": "C:\\Users\\Hp\\EbookAI\\Controllers\\DashboardController.cs",
+              "RelativeDocumentMoniker": "Controllers\\DashboardController.cs",
+              "ToolTip": "C:\\Users\\Hp\\EbookAI\\Controllers\\DashboardController.cs",
+              "RelativeToolTip": "Controllers\\DashboardController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-28T13:45:51.699Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\Users\\Hp\\EbookAI\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\Users\\Hp\\EbookAI\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-09-28T12:45:37.299Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
