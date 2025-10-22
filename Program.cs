@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // ✅ Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddSession();  // ✅ add session support
 
 // ✅ Configure MySQL DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -41,6 +42,10 @@ builder.Services.AddScoped<IPlanService, PlanService>();
 builder.Services.AddScoped<IFeatureCartService, FeatureCartService>();
 // Add CheckoutService
 builder.Services.AddScoped<ICheckoutService, CheckoutService>();
+// Register Plan Features Service
+builder.Services.AddScoped<IPlanFeaturesService, PlanFeaturesService>();
+//
+builder.Services.AddScoped<IAPIRawResponseService, APIRawResponseService>();
 
 // Add session services
 builder.Services.AddDistributedMemoryCache();
@@ -71,7 +76,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseSession();
+app.UseSession(); // ✅ enable session middleware
+
+
 // ✅ Authentication + Authorization
 app.UseAuthentication();
 app.UseAuthorization();

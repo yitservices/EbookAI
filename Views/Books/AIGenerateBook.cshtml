@@ -1,0 +1,173 @@
+﻿@model EBookDashboard.Models.AIBookRequest
+@{
+    ViewData["Title"] = "Generate Book";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">📚 Generate Book</h2>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label class="form-label">User ID:</label>
+            <input type="text" id="UserId" class="form-control" value="123" />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Book ID:</label>
+            <input type="text" id="BookId" class="form-control" value="456" />
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label class="form-label">Number of Chapters:</label>
+            <input type="text" id="Chapter" class="form-control" value="18" />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">User Input (Topic):</label>
+            <input type="text" id="UserInput" class="form-control" value="how gravity discover" />
+        </div>
+    </div>
+
+    <div class="text-center mb-4">
+        <button class="btn btn-primary px-4" onclick="generateBook()">
+            <i class="bi bi-book"></i> Generate Book
+        </button>
+    </div>
+
+    <div id="bookResult" class="mt-4"></div>
+</div>
+
+@section Scripts {
+    <script>
+        async function generateBook() {
+            console.log("🟢 Step 1: generateBook() function started");
+
+            // --- Step 2: Collect input values from the page ---
+           const requestData = {
+                UserId: document.getElementById('UserId').value,
+                BookId: document.getElementById('BookId').value,
+                Chapter: parseInt(document.getElementById('Chapter').value),
+                UserInput: document.getElementById('UserInput').value
+            };
+           console.log("📋 Step 2: Collected input data:", requestData);
+
+            // --- Step 3: Show loading spinner on page ---
+            document.getElementById('bookResult').innerHTML = `
+                <div class="text-center">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <p class="mt-2"><strong>Generating book...</strong></p>
+                </div>`;
+            console.log("⏳ Step 3: Displayed loading spinner");
+
+            // --- Step 4: Send data to backend controller ---
+            console.log("🚀 Step 4: Sending POST request to /Books/AIGenerateBook");
+            try {
+                const response = await fetch('/Books/AIGenerateBook', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(requestData)
+                });
+
+                console.log("📨 Step 5: Received response:", response);
+
+                // --- Step 5a: Handle success ---
+                if (response.ok) {
+                    const bookData = await response.json();
+                    console.log("✅ Step 6: Response converted to JSON:", bookData);
+                    displayBook(bookData);
+                }
+                // --- Step 5b: Handle error ---
+                else {
+                    const errorText = await response.text();
+                    console.error("❌ Step 6: Server returned error:", errorText);
+                    document.getElementById('bookResult').innerHTML =
+                        `<div class='alert alert-danger'>${errorText}</div>`;
+                }
+            }
+            catch (error) {
+                // --- Step 7: Handle network or unexpected errors ---
+                console.error("🔥 Step 7: Exception occurred:", error);
+                document.getElementById('bookResult').innerHTML =
+                    `<div class='alert alert-danger'>Error: ${error.message}</div>`;
+            }
+        }
+
+        // --- Step 8: Display book content in collapsible accordion ---
+        function displayBook(bookData) {
+            console.log("📖 Step 8: Displaying book on page");
+            console.log("📋 Raw bookData:", bookData);
+
+            const bookTitle = bookData.title || "Generated Book";
+            const chapters = bookData.chapters || [];
+
+            // Debug: Check the structure of the response
+            console.log("🔍 Chapters array:", chapters);
+            console.log("🔍 Response status:", bookData.status);
+            console.log("🔍 Full data structure:", bookData.data);
+
+            let html = `
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-body text-center bg-light rounded">
+                        <h3 class="fw-bold mb-2">${bookTitle}</h3>
+                        <p class="text-muted">Total Chapters: ${chapters.length}</p>
+                         <div class="alert alert-success mt-2">
+                                <i class="bi bi-check-circle"></i> Book successfully generated and saved to database!
+                        </div>
+                    </div>
+                </div>`;
+                 // Show raw response for debugging
+                   html += `
+                    <div class="card mt-3">
+                        <div class="card-header bg-warning text-dark">
+                            <strong>Debug Information</strong>
+                        </div>
+                        <div class="card-body">
+                            <pre class="mb-0">${JSON.stringify(bookData, null, 2)}</pre>
+                        </div>
+                    </div>`;
+            if (chapters.length > 0) {
+                html += `<div class="accordion" id="bookAccordion">`;
+
+                chapters.forEach((ch, index) => {
+                    const chapterId = `chapter${index}`;
+                    html += `
+                        <div class="accordion-item mb-2">
+                            <h2 class="accordion-header" id="heading${chapterId}">
+                                <button class="accordion-button ${index === 0 ? '' : 'collapsed'}"
+                                        type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#collapse${chapterId}"
+                                        aria-expanded="${index === 0}"
+                                        aria-controls="collapse${chapterId}">
+                                    Chapter ${index + 1}: ${ch.title || 'Untitled'}
+                                </button>
+                            </h2>
+                            <div id="collapse${chapterId}"
+                                 class="accordion-collapse collapse ${index === 0 ? 'show' : ''}"
+                                 aria-labelledby="heading${chapterId}"
+                                 data-bs-parent="#bookAccordion">
+                                <div class="accordion-body">
+                                    <p>${ch.content || 'No content available.'}</p>
+                                </div>
+                            </div>
+                        </div>`;
+                });
+
+                html += `</div>`;
+            } else {
+               html += `
+            <div class='alert alert-warning mt-3'>
+                <strong>No chapters generated.</strong>
+                <p class="mb-0">The API returned an empty chapters array. Check the debug information above.</p>
+            </div>`;
+
+            }
+
+            document.getElementById('bookResult').innerHTML = html;
+            console.log("✅ Step 9: Book rendering complete!");
+        }
+    </script>
+
+    <!-- Bootstrap icons (optional for nice icons) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+}

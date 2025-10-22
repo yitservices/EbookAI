@@ -14,11 +14,14 @@ namespace EBookDashboard.Models
         public DbSet<BookPrice> BookPrices { get; set; }
         public DbSet<BookVersion> BookVersions { get; set; }
         public DbSet<Chapters> Chapters { get; set; }
+        // Add this new DbSet for raw responses
+        public DbSet<APIRawResponse> APIRawResponse { get; set; }
 
         // ✍️ Author-related
         public DbSet<Authors> Authors { get; set; }
         public DbSet<AuthorPlans> AuthorPlans { get; set; }
         public DbSet<AuthorPlanFeatures> AuthorPlanFeaturesSet { get; set; } // Renamed to avoid conflict
+        public DbSet<AuthorBills> AuthorBills { get; set; }
 
         // 👥 User-related
         public DbSet<Users> Users { get; set; }
