@@ -1,0 +1,329 @@
+@model EBookDashboard.Controllers.FeaturesViewModel
+@{
+    ViewData["Title"] = "All Features - eBook Publisher";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<div class="features-header">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <h1>All Features</h1>
+            <p>Browse all available features for your eBook publishing needs</p>
+        </div>
+        <div>
+            <a href="@Url.Action("Cart", "Features")" class="btn btn-outline-primary">
+                <i class="fas fa-shopping-cart"></i> View Cart 
+                <span id="cartBadge" class="badge bg-primary" style="display: @(Model.TempFeatures.Count > 0 ? "inline-flex" : "none");">
+                    @Model.TempFeatures.Count
+                </span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Feature Categories -->
+<div class="feature-categories mb-4">
+    <h3>Browse by Category</h3>
+    <div class="row">
+        <div class="col-md-2 mb-2">
+            <button class="btn btn-outline-primary w-100 category-btn" data-category="all">All Features</button>
+        </div>
+        <div class="col-md-2 mb-2">
+            <button class="btn btn-outline-primary w-100 category-btn" data-category="design">Design</button>
+        </div>
+        <div class="col-md-2 mb-2">
+            <button class="btn btn-outline-primary w-100 category-btn" data-category="content">Content</button>
+        </div>
+        <div class="col-md-2 mb-2">
+            <button class="btn btn-outline-primary w-100 category-btn" data-category="publishing">Publishing</button>
+        </div>
+        <div class="col-md-2 mb-2">
+            <button class="btn btn-outline-primary w-100 category-btn" data-category="marketing">Marketing</button>
+        </div>
+        <div class="col-md-2 mb-2">
+            <button class="btn btn-outline-primary w-100 category-btn" data-category="analytics">Analytics</button>
+        </div>
+    </div>
+</div>
+
+<!-- Features Grid -->
+<div class="features-grid" id="featuresGrid">
+    @foreach (var feature in Model.Features)
+    {
+        <div class="feature-card"
+             data-feature-id="@feature.FeatureId"
+             data-category="all">
+            <div class="feature-icon">
+                @if (feature.FeatureName == "EBook Creation")
+                {
+                    <i class="fas fa-book"></i>
+                }
+                else if (feature.FeatureName == "Cover Design")
+                {
+                    <i class="fas fa-palette"></i>
+                }
+                else if (feature.FeatureName == "Audio Book")
+                {
+                    <i class="fas fa-microphone"></i>
+                }
+                else if (feature.FeatureName == "Proofreading")
+                {
+                    <i class="fas fa-spell-check"></i>
+                }
+                else if (feature.FeatureName == "Analytics")
+                {
+                    <i class="fas fa-chart-line"></i>
+                }
+                else if (feature.FeatureName == "Marketing Tools")
+                {
+                    <i class="fas fa-bullhorn"></i>
+                }
+                else
+                {
+                    <i class="fas fa-star"></i>
+                }
+            </div>
+            <h3>@feature.FeatureName</h3>
+            <p>@feature.Description</p>
+            <div class="feature-type">Feature</div>
+            <div class="feature-price">@feature.FeatureRate.ToString("C")</div>
+            @{
+                var isAdded = Model.TempFeatures.Any(tf => tf.FeatureId == feature.FeatureId);
+            }
+            <button class="btn btn-primary add-to-cart" data-feature-id="@feature.FeatureId" @(isAdded ? "disabled" : "")>
+                @if (isAdded)
+                {
+                    <i class="fas fa-check"></i> <span>Added</span>
+                }
+                else
+                {
+                    <i class="fas fa-plus"></i> <span>Add to Cart</span>
+                }
+            </button>
+        </div>
+    }
+</div>
+
+<!-- Feature Detail Modal -->
+<div class="modal fade" id="featureDetailModal" tabindex="-1" role="dialog" aria-labelledby="featureDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="featureDetailModalLabel">Feature Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="feature-detail-content">
+                    <!-- Feature details will be loaded here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="addToCartModalBtn">
+                    <i class="fas fa-cart-plus"></i> Add to Cart
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Antiforgery token for AJAX requests -->
+@Html.AntiForgeryToken()
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Category filtering
+            const categoryButtons = document.querySelectorAll('.category-btn');
+            const featureCards = document.querySelectorAll('.feature-card');
+            
+            categoryButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const category = this.getAttribute('data-category');
+                    
+                    featureCards.forEach(card => {
+                        if (category === 'all' || card.getAttribute('data-category') === category) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+            
+            // Feature card click to show details
+            featureCards.forEach(card => {
+                card.addEventListener('click', function(e) {
+                    // Don't trigger if clicking on add to cart button
+                    if (e.target.classList.contains('add-to-cart') || e.target.closest('.add-to-cart')) {
+                        return;
+                    }
+                    
+                    const featureId = this.getAttribute('data-feature-id');
+                    showFeatureDetails(featureId);
+                });
+            });
+            
+            // Add to cart buttons
+            const addToCartButtons = document.querySelectorAll('.add-to-cart');
+            
+            addToCartButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const featureId = this.getAttribute('data-feature-id');
+                    addToCart(featureId);
+                });
+            });
+            
+            // Add to cart button in modal
+            const addToCartModalBtn = document.getElementById('addToCartModalBtn');
+            if (addToCartModalBtn) {
+                addToCartModalBtn.addEventListener('click', function() {
+                    const featureId = this.getAttribute('data-feature-id');
+                    addToCart(featureId);
+                    $('#featureDetailModal').modal('hide');
+                });
+            }
+            
+            // Function to show feature details in modal
+            function showFeatureDetails(featureId) {
+                fetch(`/Features/Details/${featureId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            const feature = data.feature;
+                            document.getElementById('featureDetailModalLabel').textContent = feature.name;
+                            document.querySelector('.feature-detail-content').innerHTML = `
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <p>${feature.description}</p>
+                                        <div class="mt-3">
+                                            <h5>Benefits:</h5>
+                                            <ul>
+                                                <li>Enhanced eBook quality</li>
+                                                <li>Professional appearance</li>
+                                                <li>Increased reader engagement</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 text-center">
+                                        <div class="feature-price-display">
+                                            <h3>${feature.price.toFixed(2)} ${feature.currency}</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                            document.getElementById('addToCartModalBtn').setAttribute('data-feature-id', featureId);
+                            $('#featureDetailModal').modal('show');
+                        } else {
+                            Swal.fire({
+                                title: 'Error',
+                                text: data.message || 'Failed to load feature details',
+                                icon: 'error'
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching feature details:', error);
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'Failed to load feature details',
+                            icon: 'error'
+                        });
+                    });
+            }
+            
+            // Function to add item to cart
+            function addToCart(featureId) {
+                const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+                
+                fetch('/Features/AddToCart', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': token
+                    },
+                    body: JSON.stringify({
+                        featureId: parseInt(featureId)
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update cart badge
+                        const cartBadge = document.getElementById('cartBadge');
+                        if (cartBadge) {
+                            cartBadge.textContent = data.totalItems;
+                            cartBadge.style.display = data.totalItems > 0 ? 'flex' : 'none';
+                        }
+                        
+                        // Show success message
+                        Swal.fire({
+                            title: 'Added to Cart!',
+                            text: 'Feature has been added to your cart.',
+                            icon: 'success',
+                            timer: 2000,
+                            timerProgressBar: true,
+                            showConfirmButton: false,
+                            toast: true,
+                            position: 'top-end'
+                        });
+                        
+                        // Show plan suggestion if available
+                        if (data.suggestedPlan) {
+                            showSuggestedPlan(data.suggestedPlan);
+                        }
+                        
+                        // Disable the button to prevent duplicate adds
+                        const button = document.querySelector(`.add-to-cart[data-feature-id="${featureId}"]`);
+                        if (button) {
+                            button.disabled = true;
+                            button.innerHTML = '<i class="fas fa-check"></i> Added';
+                        }
+                        
+                        // Also update modal button if it exists
+                        const modalButton = document.getElementById('addToCartModalBtn');
+                        if (modalButton && modalButton.getAttribute('data-feature-id') == featureId) {
+                            modalButton.disabled = true;
+                            modalButton.innerHTML = '<i class="fas fa-check"></i> Added';
+                        }
+                    } else {
+                        Swal.fire({
+                            title: 'Error',
+                            text: data.message || 'Failed to add feature to cart',
+                            icon: 'error'
+                        });
+                    }
+                })
+                .catch(error => {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Failed to add feature to cart',
+                        icon: 'error'
+                    });
+                });
+            }
+            
+            function showSuggestedPlan(plan) {
+                Swal.fire({
+                    title: 'Plan Suggestion',
+                    html: `
+                        <p>Based on your selected features, we recommend the <strong>${plan.name}</strong>.</p>
+                        <p>Price: <strong>$${plan.price.toFixed(2)}</strong></p>
+                    `,
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonColor: '#4a6cf7',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Checkout',
+                    cancelButtonText: 'Continue Shopping'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = `/Payments/Checkout?planId=${plan.id}`;
+                    }
+                });
+            }
+        });
+    </script>
+}

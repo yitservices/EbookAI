@@ -1,0 +1,53 @@
+@model IEnumerable<EBookDashboard.Models.PlanFeatures>
+
+<div class="modal fade" id="featureModal" tabindex="-1" role="dialog" aria-labelledby="featureModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="featureModalLabel">Feature Details</h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        @if (Model != null && Model.Any())
+        {
+          <div class="row">
+            @foreach (var feature in Model)
+            {
+              <div class="col-md-6 mb-3">
+                <div class="card h-100 border-primary">
+                  <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">@feature.FeatureName</h5>
+                    <p class="card-text flex-grow-1">@feature.Description</p>
+                    <div class="d-flex justify-content-between align-items-center mt-auto">
+                      <span class="price h5 mb-0">@feature.FeatureRate.ToString("C")</span>
+                      <button class="btn btn-sm btn-primary add-to-cart-btn" data-feature-id="@feature.FeatureId">
+                        <i class="fas fa-cart-plus"></i> Add to Cart
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        }
+        else
+        {
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> No features found for this category. 
+            <a href="@Url.Action("Index", "Plans")" class="alert-link">View all available plans and features.</a>
+          </div>
+        }
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          <i class="fas fa-times"></i> Close
+        </button>
+        <button type="button" class="btn btn-success" id="checkoutModalBtn">
+          <i class="fas fa-shopping-cart"></i> Proceed to Checkout
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

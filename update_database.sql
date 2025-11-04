@@ -6,6 +6,27 @@ ALTER TABLE `Features` ADD COLUMN IF NOT EXISTS `CreatedAt` datetime(6) NOT NULL
 ALTER TABLE `Plans` ADD COLUMN IF NOT EXISTS `CreateddAt` datetime(6) NOT NULL DEFAULT '2025-01-01 00:00:00';
 
 -- Create missing tables
+CREATE TABLE IF NOT EXISTS `AuthorPlanFeatures` (
+    `AuthorFeaturesId` int NOT NULL AUTO_INCREMENT,
+    `AuthorId` int NOT NULL,
+    `UserId` int NOT NULL,
+    `UserEmail` varchar(145) CHARACTER SET utf8mb4 NULL,
+    `FeatureId` int NULL,
+    `PlanId` int NULL,
+    `FeatureName` varchar(45) CHARACTER SET utf8mb4 NULL,
+    `Description` varchar(245) CHARACTER SET utf8mb4 NULL,
+    `FeatureRate` decimal(10,2) NOT NULL DEFAULT 0.00,
+    `Currency` varchar(12) CHARACTER SET utf8mb4 NULL,
+    `TotalAmount` decimal(10,2) NOT NULL DEFAULT 0.00,
+    `PaymentReference` varchar(255) CHARACTER SET utf8mb4 NULL,
+    `CreatedAt` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+    `CancelledAt` datetime(6) NULL,
+    `CancellationReason` varchar(500) CHARACTER SET utf8mb4 NULL,
+    `Status` varchar(12) CHARACTER SET utf8mb4 NULL,
+    `isActive` int NULL,
+    PRIMARY KEY (`AuthorFeaturesId`)
+) CHARACTER SET=utf8mb4;
+
 CREATE TABLE IF NOT EXISTS `TemporaryFeatures` (
     `Id` int NOT NULL AUTO_INCREMENT,
     `SessionId` varchar(255) CHARACTER SET utf8mb4 NOT NULL,

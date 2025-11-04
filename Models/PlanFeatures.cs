@@ -10,6 +10,7 @@ namespace EBookDashboard.Models
     {
         [Key]
         [Column("FeatureId")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int FeatureId { get; set; }
 
         [Column("PlanId")]
@@ -26,6 +27,9 @@ namespace EBookDashboard.Models
         [Column("FeatureRate", TypeName = "decimal(10,2)")]
         public decimal FeatureRate { get; set; } = 0.00m;
 
+        [NotMapped]
+        public decimal OriginalPrice { get; set; } = 0.00m;
+
         [Column("Currency")]
         [StringLength(12)]
         public string? Currency { get; set; }
@@ -37,7 +41,32 @@ namespace EBookDashboard.Models
         [Column("isActive")]
         public bool? IsActive { get; set; }
 
-        // ✅ Navigation Property (One-to-Many)
-       // public ICollection<AuthorPlanFeatures.AuthorPlanFeatures>? AuthorPlanFeatures { get; set; }
+        [NotMapped]
+        public string? IconClass { get; set; }
+
+        [NotMapped]
+        public string? DeliveryTime { get; set; }
+
+        [NotMapped]
+        public string? Revisions { get; set; }
+
+        // Navigation properties
+        public virtual ICollection<AuthorPlanFeatures>? AuthorPlanFeatures { get; set; }
+
+        // Benefits as a computed property (in a real app, this might come from a separate table)
+        [NotMapped]
+        public List<string> Benefits 
+        { 
+            get 
+            {
+                var benefits = new List<string>();
+                if (!string.IsNullOrEmpty(Description))
+                {
+                    // Simple implementation - in a real app, this would come from a separate benefits table
+                    benefits.Add(Description);
+                }
+                return benefits;
+            } 
+        }
     }
 }

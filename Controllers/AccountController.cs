@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿using EBookDashboard.Interfaces;
+﻿﻿﻿using EBookDashboard.Interfaces;
 using EBookDashboard.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -59,13 +59,14 @@ namespace EBookDashboard.Controllers
                     .FirstOrDefaultAsync();
 
                 // ✅ redirect based on role
-                // ✅ build claims
+                // ✅ build claims - MUST include NameIdentifier for authentication checks
                 var claims = new List<Claim>
-            {
-            new Claim(ClaimTypes.Name, user.FullName),
-            new Claim(ClaimTypes.Email, user.UserEmail),
-            new Claim(ClaimTypes.Role, role ?? "Reader") // default role if null
-            };
+                {
+                    new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()), // Required for User.FindFirst(NameIdentifier)
+                    new Claim(ClaimTypes.Name, user.FullName),
+                    new Claim(ClaimTypes.Email, user.UserEmail),
+                    new Claim(ClaimTypes.Role, role ?? "Reader") // default role if null
+                };
 
                 var claimsIdentity = new ClaimsIdentity(
                     claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -82,17 +83,8 @@ namespace EBookDashboard.Controllers
                     new ClaimsPrincipal(claimsIdentity),
                     authProperties);
 
-                // ✅ redirect based on role
-                if (role == "Admin")
-                    return RedirectToAction("Dashboard", "Admin");
-                else if (role == "Author")
-                    return RedirectToAction("Dashboard", "Author"); // Redirect Authors to Author Dashboard
-                else if (role == "Editor")
-                    return RedirectToAction("Dashboard", "Editor");
-                else if (role == "Reader")
-                    return RedirectToAction("Index", "Dashboard"); // Redirect Readers to Reader Dashboard
-
-                return RedirectToAction("Index", "Dashboard"); // Default redirect to Dashboard
+				// ✅ redirect to AI Writer after successful login
+				return RedirectToAction("AIGenerateBook", "Books");
             }
             else
             {

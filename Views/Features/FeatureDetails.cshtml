@@ -1,0 +1,497 @@
+@model IEnumerable<EBookDashboard.Models.PlanFeatures>
+
+<style>
+    .feature-details-container {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    .features-grid-horizontal {
+        display: flex;
+        flex-direction: row;
+        gap: 20px;
+        overflow-x: auto;
+        padding: 10px 0;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .features-grid-horizontal::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    .features-grid-horizontal::-webkit-scrollbar-track {
+        background: #f1f5f9;
+        border-radius: 4px;
+    }
+
+    .features-grid-horizontal::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+    }
+
+    .features-grid-horizontal::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+    }
+
+    .feature-card-modern {
+        background: white;
+        border-radius: 20px;
+        border: 2px solid #e2e8f0;
+        padding: 0;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow: hidden;
+        position: relative;
+        cursor: pointer;
+        margin-bottom: 24px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        min-width: 280px;
+        max-width: 320px;
+        flex: 0 0 auto;
+    }
+
+    .feature-card-modern:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        border-color: #4a6cf7;
+    }
+
+    .feature-card-modern.selected {
+        border-color: #4a6cf7;
+        background: linear-gradient(135deg, rgba(74, 108, 247, 0.05) 0%, rgba(102, 126, 234, 0.05) 100%);
+        box-shadow: 0 10px 25px rgba(74, 108, 247, 0.2);
+    }
+
+    .feature-header-modern {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 24px;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .feature-header-modern::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 100%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    }
+
+    .feature-icon-wrapper {
+        width: 70px;
+        height: 70px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 16px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .feature-icon-wrapper i {
+        font-size: 2rem;
+        color: white;
+    }
+
+    .feature-title-modern {
+        font-size: 1.5rem;
+        font-weight: 800;
+        margin: 0;
+        position: relative;
+        z-index: 1;
+    }
+
+    .feature-body-modern {
+        padding: 24px;
+    }
+
+    .feature-description {
+        color: #64748b;
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 20px;
+        min-height: 48px;
+    }
+
+    .feature-pricing-modern {
+        display: flex;
+        align-items: baseline;
+        gap: 12px;
+        margin-bottom: 20px;
+        padding: 16px;
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        border-radius: 12px;
+    }
+
+    .feature-price-current {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #10b981;
+        margin: 0;
+    }
+
+    .feature-price-original {
+        font-size: 1.2rem;
+        color: #94a3b8;
+        text-decoration: line-through;
+    }
+
+    .feature-save-badge {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        color: white;
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        margin-left: auto;
+    }
+
+    .feature-details-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .feature-detail-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px;
+        background: #f8fafc;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        color: #475569;
+    }
+
+    .feature-detail-item i {
+        color: #4a6cf7;
+        font-size: 1rem;
+    }
+
+    .feature-checkbox-wrapper {
+        padding: 20px 24px;
+        background: #f8fafc;
+        border-top: 2px solid #e2e8f0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .feature-checkbox-custom {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+    }
+
+    .feature-checkbox-custom input[type="checkbox"] {
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+        accent-color: #4a6cf7;
+    }
+
+    .feature-checkbox-custom label {
+        font-weight: 600;
+        color: #1e293b;
+        cursor: pointer;
+        margin: 0;
+        font-size: 1rem;
+    }
+
+    .feature-checkbox-custom input[type="checkbox"]:checked ~ label::after {
+        content: ' ✓ Selected';
+        color: #10b981;
+        font-weight: 700;
+    }
+
+    .features-total-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 24px 32px;
+        border-radius: 16px;
+        margin-top: 32px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+    }
+
+    .features-total-text {
+        color: white;
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .features-total-amount {
+        color: white;
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin: 0;
+    }
+
+    .btn-add-cart-modern {
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        border: none;
+        padding: 16px 32px;
+        border-radius: 12px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 14px 0 rgba(16, 185, 129, 0.4);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .btn-add-cart-modern:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px 0 rgba(16, 185, 129, 0.5);
+        background: linear-gradient(135deg, #059669, #047857);
+    }
+
+    .btn-add-cart-modern:active {
+        transform: translateY(0);
+    }
+
+    .feature-card-modern.selected .feature-header-modern {
+        background: linear-gradient(135deg, #4a6cf7 0%, #667eea 100%);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        background: white;
+        border-radius: 20px;
+        border: 2px dashed #cbd5e1;
+    }
+
+    .empty-state i {
+        font-size: 4rem;
+        color: #cbd5e1;
+        margin-bottom: 20px;
+    }
+
+    .empty-state h3 {
+        color: #64748b;
+        font-weight: 600;
+        margin-bottom: 12px;
+    }
+
+    .empty-state p {
+        color: #94a3b8;
+    }
+
+    @@media (max-width: 768px) {
+        .features-grid-horizontal {
+            gap: 16px;
+        }
+        
+        .feature-card-modern {
+            min-width: 260px;
+            max-width: 300px;
+        }
+
+        .feature-details-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .features-total-section {
+            flex-direction: column;
+            gap: 16px;
+            text-align: center;
+        }
+        
+        .feature-price-current {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+
+<div class="feature-details-container">
+    @if (Model != null && Model.Any())
+    {
+        <form id="featureSelectionForm">
+            <div class="features-grid-horizontal">
+                @foreach (var feature in Model)
+                {
+                    <div class="feature-card-modern" data-feature-id="@feature.FeatureId" data-feature-price="@feature.FeatureRate">
+                        <div class="feature-header-modern">
+                            <div class="feature-icon-wrapper">
+                                <i class="@(feature.IconClass ?? "fas fa-star")"></i>
+                            </div>
+                            <h5 class="feature-title-modern">@feature.FeatureName</h5>
+                        </div>
+                        
+                        <div class="feature-body-modern">
+                            <p class="feature-description">@feature.Description</p>
+                            
+                            <div class="feature-pricing-modern">
+                                <h4 class="feature-price-current" data-price="@feature.FeatureRate">@feature.FeatureRate.ToString("C")</h4>
+                                @if (feature.OriginalPrice > feature.FeatureRate)
+                                {
+                                    <span class="feature-price-original">@feature.OriginalPrice.ToString("C")</span>
+                                    <span class="feature-save-badge">
+                                        Save @((feature.OriginalPrice - feature.FeatureRate).ToString("C"))
+                                    </span>
+                                }
+                            </div>
+
+                            <div class="feature-details-grid">
+                                <div class="feature-detail-item">
+                                    <i class="fas fa-clock"></i>
+                                    <span><strong>Delivery:</strong> @(feature.DeliveryTime ?? "Standard")</span>
+                                </div>
+                                <div class="feature-detail-item">
+                                    <i class="fas fa-sync-alt"></i>
+                                    <span><strong>Revisions:</strong> @(feature.Revisions ?? "As needed")</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="feature-checkbox-wrapper">
+                            <div class="feature-checkbox-custom">
+                                <input class="feature-checkbox" type="checkbox" value="@feature.FeatureId" id="feature_@feature.FeatureId" data-price="@feature.FeatureRate">
+                                <label for="feature_@feature.FeatureId">Select this feature</label>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </form>
+        
+        <div class="features-total-section">
+            <div>
+                <p class="features-total-text">Total Selected Features</p>
+            </div>
+            <div>
+                <h2 class="features-total-amount" id="totalAmount">$0.00</h2>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 24px;">
+            <button class="btn-add-cart-modern" id="addToCartBtn" type="button">
+                <i class="fas fa-cart-plus"></i>
+                Add Selected Features to Cart
+                <span style="margin-left:8px; font-weight:700;">(<span id="buttonTotalAmount">$0.00</span>)</span>
+            </button>
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+            <i class="fas fa-info-circle"></i>
+            <h3>No Features Available</h3>
+            <p>No features found for this category. Please check back later or contact support.</p>
+        </div>
+    }
+</div>
+
+<script>
+    // Add interactive effects to feature cards
+    document.addEventListener('DOMContentLoaded', function() {
+        // Toggle selected state on card click
+        document.querySelectorAll('.feature-card-modern').forEach(card => {
+            card.addEventListener('click', function(e) {
+                // Don't toggle if clicking on checkbox directly
+                if (e.target.type !== 'checkbox' && !e.target.closest('.feature-checkbox-custom')) {
+                    const checkbox = this.querySelector('.feature-checkbox');
+                    if (checkbox) {
+                        checkbox.checked = !checkbox.checked;
+                        toggleCardSelection(this, checkbox.checked);
+                        // Trigger change event to update total
+                        if (typeof $ !== 'undefined') {
+                            $(checkbox).trigger('change');
+                        } else {
+                            checkbox.dispatchEvent(new Event('change'));
+                        }
+                        // Calculate total when checkbox changes
+                        calculateTotal();
+                    }
+                }
+            });
+        });
+
+        // Update card appearance when checkbox changes
+        document.querySelectorAll('.feature-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const card = this.closest('.feature-card-modern');
+                toggleCardSelection(card, this.checked);
+                // Calculate total when checkbox changes
+                calculateTotal();
+            });
+        });
+
+        // Initial total calculation
+        calculateTotal();
+    });
+
+    function toggleCardSelection(card, isSelected) {
+        if (isSelected) {
+            card.classList.add('selected');
+        } else {
+            card.classList.remove('selected');
+        }
+    }
+
+    // Calculate total amount for selected features
+    function calculateTotal() {
+        let total = 0;
+        const selectedCheckboxes = document.querySelectorAll('.feature-checkbox:checked');
+        
+        console.log('calculateTotal: Found', selectedCheckboxes.length, 'checked checkboxes');
+        
+        selectedCheckboxes.forEach(function(checkbox) {
+            // Skip features with negative IDs (future features that aren't in database yet)
+            const featureId = parseInt(checkbox.value || checkbox.getAttribute('value')) || 0;
+            const price = parseFloat(checkbox.getAttribute('data-price')) || 0;
+            
+            console.log('calculateTotal: Processing feature', featureId, 'with price', price);
+            
+            if (featureId > 0 && price > 0) {
+                total += price;
+            } else {
+                console.warn('calculateTotal: Skipping feature', featureId, 'with invalid price', price);
+            }
+        });
+        
+        console.log('calculateTotal: Total =', total);
+        
+        // Update total in feature details view and button
+        const totalAmountEl = document.getElementById('totalAmount');
+        if (totalAmountEl) {
+            totalAmountEl.textContent = '$' + total.toFixed(2);
+        }
+        const buttonTotalEl = document.getElementById('buttonTotalAmount');
+        if (buttonTotalEl) {
+            buttonTotalEl.textContent = '$' + total.toFixed(2);
+        }
+        
+        // Update total in modal footer
+        const modalTotalAmountEl = document.getElementById('modalTotalAmount');
+        if (modalTotalAmountEl) {
+            modalTotalAmountEl.textContent = '$' + total.toFixed(2);
+        }
+        
+        // Show/hide checkout button in modal based on selection
+        const checkoutModalBtn = document.getElementById('checkoutModalBtn');
+        const addToCartModalBtn = document.getElementById('addToCartModalBtn');
+        if (total > 0) {
+            if (checkoutModalBtn) checkoutModalBtn.style.display = 'inline-flex';
+            if (addToCartModalBtn) addToCartModalBtn.style.display = 'inline-flex';
+        } else {
+            if (checkoutModalBtn) checkoutModalBtn.style.display = 'none';
+        }
+    }
+
+    // Make calculateTotal available globally
+    window.calculateTotal = calculateTotal;
+</script>

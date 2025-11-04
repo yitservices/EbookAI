@@ -14,9 +14,10 @@ namespace EBookDashboard.Models
         public DbSet<BookPrice> BookPrices { get; set; }
         public DbSet<BookVersion> BookVersions { get; set; }
         public DbSet<Chapters> Chapters { get; set; }
+
         // Add this new DbSet for raw responses
         public DbSet<APIRawResponse> APIRawResponse { get; set; }
-
+       
         // ✍️ Author-related
         public DbSet<Authors> Authors { get; set; }
         public DbSet<AuthorPlans> AuthorPlans { get; set; }
@@ -100,11 +101,18 @@ namespace EBookDashboard.Models
                 .OnDelete(DeleteBehavior.Cascade);
                 
             // Configure relationships for feature tables
+            // Explicitly configure the relationship without creating join tables
             modelBuilder.Entity<AuthorPlanFeatures>()
                 .HasOne(apf => apf.PlanFeature)
-                .WithMany()
+                .WithMany(pf => pf.AuthorPlanFeatures)
                 .HasForeignKey(apf => apf.FeatureId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasPrincipalKey(pf => pf.FeatureId)
+                .OnDelete(DeleteBehavior.SetNull);
+            
+            // Ensure the foreign key is properly mapped (not a join table)
+            modelBuilder.Entity<AuthorPlanFeatures>()
+                .Property(apf => apf.FeatureId)
+                .HasColumnName("FeatureId");
         }
     }
 }

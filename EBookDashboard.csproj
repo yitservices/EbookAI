@@ -20,4 +20,17 @@
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- Exclude other project folders and their Program.cs files -->
+    <Compile Remove="CreateTableApp/**" />
+    <Compile Remove="TestInsertApp/**" />
+    <Compile Remove="CheckTableApp/**" />
+    <Content Remove="CreateTableApp/**" />
+    <Content Remove="TestInsertApp/**" />
+    <Content Remove="CheckTableApp/**" />
+    <None Remove="CreateTableApp/**" />
+    <None Remove="TestInsertApp/**" />
+    <None Remove="CheckTableApp/**" />
+  </ItemGroup>
+
 </Project>
