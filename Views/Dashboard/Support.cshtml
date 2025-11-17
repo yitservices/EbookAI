@@ -1,0 +1,234 @@
+@{
+    ViewData["Title"] = "Support & Resources";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<style>
+    :root {
+        --primary: #7c3aed;
+        --secondary: #06b6d4;
+        --surface: #ffffff;
+        --background: #f8fafc;
+        --text-primary: #1e293b;
+        --border: #e2e8f0;
+        --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        --radius: 16px;
+    }
+
+    .page-container {
+        width: 100%;
+        padding: 30px;
+        background: var(--background);
+        min-height: 100vh;
+    }
+
+    .page-header h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 10px;
+    }
+
+    .card {
+        background: var(--surface);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border);
+        padding: 30px;
+        margin-bottom: 24px;
+    }
+
+    .card-header {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: var(--text-primary);
+        border-bottom: 2px solid var(--border);
+        padding-bottom: 12px;
+    }
+
+    .contact-info {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .contact-item {
+        padding: 16px;
+        background: #f9fafb;
+        border-radius: 8px;
+        border-left: 4px solid var(--primary);
+    }
+
+    .contact-item strong {
+        display: block;
+        margin-bottom: 4px;
+        color: var(--text-primary);
+    }
+
+    .btn {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: white;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .faq-item {
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        margin-bottom: 12px;
+        overflow: hidden;
+    }
+
+    .faq-question {
+        padding: 16px;
+        background: #f9fafb;
+        cursor: pointer;
+        font-weight: 600;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .faq-question:hover {
+        background: #f1f5f9;
+    }
+
+    .faq-answer {
+        padding: 16px;
+        display: none;
+        color: #64748b;
+    }
+
+    .faq-item.active .faq-answer {
+        display: block;
+    }
+</style>
+
+<div class="page-container">
+    <div class="page-header">
+        <h1><i class="fas fa-life-ring"></i> Support & Resources</h1>
+        <p>Get help and access resources</p>
+    </div>
+
+    <!-- Contact Support -->
+    <div class="card">
+        <div class="card-header">Contact Support</div>
+        <div class="form-group">
+            <button class="btn" onclick="openLiveChat()">
+                <i class="fas fa-comments"></i> Live Chat
+            </button>
+        </div>
+        <div class="contact-info">
+            <div class="contact-item">
+                <strong><i class="fas fa-envelope"></i> Email</strong>
+                <span>support@ebookai.com</span>
+            </div>
+            <div class="contact-item">
+                <strong><i class="fas fa-phone"></i> Phone</strong>
+                <span>+1 (555) 123-4567</span>
+            </div>
+            <div class="contact-item">
+                <strong><i class="fas fa-clock"></i> Support Hours</strong>
+                <span>Monday - Friday: 9:00 AM - 6:00 PM EST</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQs - Database Connected -->
+    <div class="card">
+        <div class="card-header">Frequently Asked Questions</div>
+        <div id="faqList">
+            @if (ViewBag.FAQs != null && ((IEnumerable<dynamic>)ViewBag.FAQs).Any())
+            {
+                @foreach (var faq in ViewBag.FAQs)
+                {
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <span>@faq.Key.Replace("faq:", "")</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">@faq.Value</div>
+                    </div>
+                }
+            }
+            else
+            {
+                <!-- Default FAQs if none in database -->
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>How do I create a book?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">Use the Book Creation screen to upload your manuscript or generate content using AI Writer.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>What file formats are supported?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">We support .docx, .pdf, and .txt files for manuscript uploads.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>How do I publish my book?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">Navigate to My Books, select your book, and click Publish. This is a premium feature.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>Can I customize the book style?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">Yes! Use the Styling screen to customize fonts, colors, and layout. This requires a premium subscription.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>What output formats are available?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">You can generate EPUB for eBooks and PDF for print versions.</div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleFaq(element) {
+        const faqItem = element.closest('.faq-item');
+        const isActive = faqItem.classList.contains('active');
+        
+        // Close all FAQs
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        
+        // Open clicked FAQ if it wasn't active
+        if (!isActive) {
+            faqItem.classList.add('active');
+        }
+    }
+
+    function openLiveChat() {
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                title: 'Live Chat',
+                text: 'Chat widget would open here. In production, integrate a live chat service.',
+                icon: 'info'
+            });
+        } else {
+            alert('Chat widget would open here.');
+        }
+    }
+</script>
+
