@@ -1,167 +1,564 @@
-﻿@model EBookDashboard.Models.AuthorPlans
-@{
-    ViewData["Title"] = "Checkout";
-    Layout = "~/Views/Shared/_Layout.cshtml"; // adjust if your dashboard layout is different
+﻿@{
+    ViewData["Title"] = "Complete Your Purchase";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
 }
-<style>
-    .spinner {
-        animation: spin 1s linear infinite;
-    }
-
-    @@keyframes spin {
-        from {
-            transform: rotate(0deg);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Your Purchase</title>
+    <script src="https://js.stripe.com/v3/"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --success: #4cc9f0;
+            --light-bg: #f8f9fa;
+            --dark-text: #2b2d42;
+            --light-text: #8d99ae;
+            --border-radius: 12px;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
         }
 
-        to {
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark-text);
+            line-height: 1.6;
+        }
+
+        .checkout-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 15px;
+        }
+
+        .checkout-card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .checkout-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 2.5rem 2rem;
+            text-align: center;
+        }
+
+            .checkout-header h1 {
+                font-size: 2.2rem;
+                font-weight: 700;
+                margin-bottom: 0.5rem;
+            }
+
+            .checkout-header p {
+                font-size: 1.1rem;
+                opacity: 0.9;
+                margin-bottom: 0;
+            }
+
+        .checkout-body {
+            padding: 2.5rem;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--dark-text);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+            .section-title i {
+                color: var(--primary);
+                font-size: 1.2rem;
+            }
+
+        .divider {
+            height: 1px;
+            background: #eaeaea;
+            margin: 2rem 0;
+        }
+
+        .plan-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .plan-info {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .plan-name {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .plan-description {
+            color: var(--light-text);
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .plan-duration {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #f0f7ff;
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .plan-price {
+            text-align: right;
+        }
+
+        .price {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            line-height: 1;
+        }
+
+        .price-note {
+            font-size: 0.9rem;
+            color: var(--light-text);
+            margin-top: 0.5rem;
+        }
+
+        .features {
+            margin: 1.5rem 0;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+            .feature i {
+                color: #2ecc71;
+                margin-right: 12px;
+                font-size: 1rem;
+            }
+
+        .payment-container {
+            background: var(--light-bg);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        #payment-element {
+            margin-bottom: 1.5rem;
+        }
+
+        #payment-message {
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            display: none;
+        }
+
+        .btn-pay {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            padding: 1.2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 1rem;
+        }
+
+            .btn-pay:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 7px 15px rgba(67, 97, 238, 0.3);
+            }
+
+            .btn-pay:disabled {
+                background: #bdc3c7;
+                cursor: not-allowed;
+                transform: none;
+                box-shadow: none;
+            }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--light-text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            margin-top: 1.5rem;
+        }
+
+            .btn-back:hover {
+                color: var(--primary);
+            }
+
+        .secure-checkout {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 1.5rem;
+            color: var(--light-text);
+            font-size: 0.9rem;
+        }
+
+            .secure-checkout i {
+                color: #2ecc71;
+            }
+
+        .summary-card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .summary-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .plan-summary {
+            background: var(--light-bg);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .plan-summary-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .plan-summary-desc {
+            color: var(--light-text);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .price-breakdown {
+            margin-bottom: 1.5rem;
+        }
+
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px dashed #eaeaea;
+        }
+
+            .price-item:last-child {
+                font-weight: 600;
+                font-size: 1.1rem;
+                color: var(--dark-text);
+                padding-top: 0.8rem;
+                border-top: 1px solid #eaeaea;
+                border-bottom: none;
+            }
+
+        .guarantee {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #f0f7ff;
+            padding: 1.2rem;
+            border-radius: var(--border-radius);
+            margin-top: 1.5rem;
+        }
+
+            .guarantee i {
+                color: var(--primary);
+                font-size: 1.2rem;
+            }
+
+        .guarantee-text {
+            font-size: 0.9rem;
+            color: var(--dark-text);
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @@keyframes spin {
+            to
+
+        {
             transform: rotate(360deg);
         }
-    }
-</style>
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
 
-            <div class="card shadow-lg border-0 rounded-3">
-                <div class="card-header bg-primary text-white text-center">
-                    <h3 class="mb-0">Confirm Your Plan</h3>
-                </div>
-                <div class="card-body">
-                    @Html.AntiForgeryToken()
-                    <h4 class="text-center mb-4 text-success">
-                        @Model.PlanDescription
-                    </h4>
+        }
 
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-striped">
-                            <tbody>
-                                <tr>
-                                    <th scope="row">Plan ID</th>
-                                    <td>@Model.PlanId</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Rate</th>
-                                    <td>@Model.PlanRate.ToString("C")</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Duration</th>
-                                    <td>@Model.PlanDays days</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Max E-Books Allowed</th>
-                                    <td>@Model.MaxEBooks</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Start Date</th>
-                                    <td>@Model.StartDate.ToShortDateString()</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">End Date</th>
-                                    <td>@Model.EndDate.ToShortDateString()</td>
-                                </tr>
-                            </tbody>
-                        </table>
+        @@media (max-width: 768px) {
+            .checkout-body
+
+        {
+            padding: 1.5rem;
+        }
+
+        .plan-details {
+            flex-direction: column;
+        }
+
+        .plan-price {
+            text-align: left;
+        }
+
+        }
+    </style>
+</head>
+<body>
+    <div class="checkout-container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="checkout-card">
+                    <div class="checkout-header">
+                        <h1>Complete Your Purchase</h1>
+                        <p>Finalize your subscription with secure payment</p>
                     </div>
 
-                    <!-- Remove <form> wrapper -->
-                    <input type="hidden" id="authorPlanId" value="@Model.AuthorPlanId" />
+                    <div class="checkout-body">
+                        <div class="section-title">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>Order Summary</span>
+                        </div>
 
+                        <div class="plan-details">
+                            <div class="plan-info">
+                                <div class="plan-name">@Model.PlanName</div>
+                                <div class="plan-description">@Model.PlanDescription</div>
+                                @if (Model.StartDate != Model.EndDate)
+                                {
+                                    <div class="plan-duration">
+                                        <i class="far fa-calendar-alt"></i> @Model.PlanDays days duration
+                                    </div>
+                                }
+                            </div>
+                            <div class="plan-price">
+                                <div class="price">$@Model.PlanRate.ToString("F2")</div>
+                                <div class="price-note">One-time payment</div>
+                            </div>
+                        </div>
 
-                    @*  <form asp-controller="Payments" asp-action="ProcessPayment" method="post">
-                        <input type="hidden" name="authorPlanId" value="@Model.AuthorPlanId" />
+                        <div class="features">
+                            <div class="feature">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Advanced publishing tools</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Detailed reader analytics</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Priority customer support</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Customizable author page</span>
+                            </div>
+                        </div>
 
+                        <div class="divider"></div>
 
-                       
-                    </form> *@
-                    <div class="d-flex justify-content-between mt-4">
-                        <a asp-controller="Dashboard" asp-action="Index" class="btn btn-outline-secondary">
-                            <i class="bi bi-arrow-left-circle"></i> Cancel
-                        </a>
-                        <button type="button" id="checkoutButton" class="btn btn-primary">
-                            Confirm & Pay
-                        </button>
+                        <div class="section-title">
+                            <i class="fas fa-credit-card"></i>
+                            <span>Payment Details</span>
+                        </div>
+
+                        <div class="payment-container">
+                            <div id="payment-element">
+                                <!-- Stripe Elements will be inserted here -->
+                            </div>
+
+                            <div id="payment-message" class="alert alert-info mt-3" style="display: none;">
+                                <!-- Payment messages will appear here -->
+                            </div>
+
+                            <button id="submit-button" class="btn-pay" disabled>
+                                <i class="fas fa-lock"></i>
+                                <span id="button-text">Pay $@Model.PlanRate.ToString("F2") Now</span>
+                                <div id="button-spinner" class="loading-spinner" style="display: none;"></div>
+                            </button>
+
+                            <div class="secure-checkout">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>Secure checkout powered by Stripe</span>
+                            </div>
+
+                            <a href="@Url.Action("Index", "Payments")" class="btn-back">
+                                <i class="fas fa-arrow-left"></i>
+                                Back to Plans
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
 
+            <div class="col-lg-4">
+                <div class="summary-card">
+                    <div class="summary-title">Order Summary</div>
+
+                    <div class="plan-summary">
+                        <div class="plan-summary-name">@Model.PlanName</div>
+                        <div class="plan-summary-desc">
+                            @Model.PlanDescription
+                        </div>
+                        <div class="price-breakdown">
+                            <div class="price-item">
+                                <span>Plan fee</span>
+                                <span>$@Model.PlanRate.ToString("F2")</span>
+                            </div>
+                            <div class="price-item">
+                                <span>Tax</span>
+                                <span>$0.00</span>
+                            </div>
+                            <div class="price-item">
+                                <span>Discount</span>
+                                <span>$0.00</span>
+                            </div>
+                            <div class="price-item">
+                                <span>Total</span>
+                                <span>$@Model.PlanRate.ToString("F2")</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="guarantee">
+                        <i class="fas fa-award"></i>
+                        <div class="guarantee-text">
+                            <strong>30-day money-back guarantee</strong><br>
+                            If you're not satisfied, we'll refund your payment.
+                        </div>
+                    </div>
+
+                    <div class="guarantee">
+                        <i class="fas fa-headset"></i>
+                        <div class="guarantee-text">
+                            <strong>24/7 Customer Support</strong><br>
+                            Get help anytime via chat or email.
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-<script src="https://js.stripe.com/v3/"></script>
-<script>
-    document.getElementById("checkoutButton").addEventListener("click", async () => {
-        const button = document.getElementById("checkoutButton");
-        const originalText = button.innerHTML;
 
-        try {
-            // Show loading state
-            button.innerHTML = '<i class="bi bi-arrow-repeat spinner"></i> Processing...';
-            button.disabled = true;
+    <script>
+        document.addEventListener('DOMContentLoaded', async function () {
+            try {
+                // Get Stripe publishable key
+                const response = await fetch('/Checkout/GetPublishableKey');
+                const { publishableKey } = await response.json();
 
-            // Debug: Check what values we're sending
-            console.log("Sending to Stripe:");
-            console.log("Product Name:", "@Model.PlanName");
-            console.log("Amount:", @((long)(Model.PlanRate * 100)));
+                // Initialize Stripe
+                const stripe = Stripe(publishableKey);
 
-            // 1. Get publishable key
-            const keyResponse = await fetch("/Checkout/GetPublishableKey");
-            if (!keyResponse.ok) {
-                throw new Error(`Failed to get publishable key: ${keyResponse.status}`);
+                // Create checkout session
+                const sessionResponse = await fetch('/Checkout/CreateSession', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        productName: '@Model.PlanName',
+                        productDescription: '@Model.PlanDescription',
+                        amount: @((long)(Model.PlanRate * 100)), // Convert to cents
+                        currency: 'usd',
+                        authorPlanId: @Model.AuthorPlanId
+                    })
+                });
+
+                const { sessionId } = await sessionResponse.json();
+
+                // Enable the submit button
+                document.getElementById('submit-button').disabled = false;
+
+                // Handle the payment button click
+                document.getElementById('submit-button').addEventListener('click', async function () {
+                    const button = this;
+                    const buttonText = document.getElementById('button-text');
+                    const buttonSpinner = document.getElementById('button-spinner');
+
+                    // Show loading state
+                    button.disabled = true;
+                    buttonText.style.display = 'none';
+                    buttonSpinner.style.display = 'block';
+
+                    // Redirect to Stripe Checkout
+                    const { error } = await stripe.redirectToCheckout({
+                        sessionId: sessionId
+                    });
+
+                    if (error) {
+                        // Reset button state
+                        button.disabled = false;
+                        buttonText.style.display = 'block';
+                        buttonSpinner.style.display = 'none';
+
+                        showMessage(error.message, 'error');
+                    }
+                });
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('An error occurred. Please try again.', 'error');
             }
-            const keyData = await keyResponse.json();
-            const stripe = Stripe(keyData.publishableKey);
+        });
 
-            // Prepare product data with validation
-            const productName = "@Model.PlanName".trim() || "Author Publishing Plan";
-            const productDescription = "@Model.PlanDescription".trim() || "E-Book publishing plan subscription";
-            const amount = @((long)(Model.PlanRate * 100));
-
-            console.log("Final product data:", {
-                productName: productName,
-                productDescription: productDescription,
-                amount: amount
-            });
-
-            // 2. Create Stripe session
-            const response = await fetch("/Checkout/CreateSession", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "RequestVerificationToken": document.querySelector('input[name="__RequestVerificationToken"]')?.value
-                },
-                body: JSON.stringify({
-                    productName: productName,
-                    productDescription: productDescription,
-                    amount: amount,
-                    currency: "usd",
-                    authorPlanId: @Model.AuthorPlanId
-                })
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || "Error creating Stripe session");
-            }
-
-            const data = await response.json();
-            console.log("Stripe session created:", data);
-
-            // 3. Redirect to Stripe Checkout
-            const result = await stripe.redirectToCheckout({
-                sessionId: data.sessionId
-            });
-
-            if (result.error) {
-                throw new Error(result.error.message);
-            }
-
-        } catch (error) {
-            console.error("Checkout error:", error);
-            alert("Checkout failed: " + error.message);
-
-            // Reset button
-            button.innerHTML = originalText;
-            button.disabled = false;
+        // Show message to the user
+        function showMessage(message, type) {
+            const messageContainer = document.getElementById('payment-message');
+            messageContainer.textContent = message;
+            messageContainer.style.display = 'block';
+            messageContainer.className = `alert alert-${type === 'success' ? 'success' : 'danger'} mt-3`;
         }
-    });
-</script>
+    </script>
+</body>
+</html>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Advanced Editing &amp; Formatting - Workspace</title>
+    <title>Advanced Editing &amp; Formatting </title>
     <meta name="color-scheme" content="dark light" />
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
@@ -17,6 +17,9 @@
     class="min-h-screen bg-slate-50 text-slate-900 antialiased [font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,'Apple Color Emoji','Segoe UI Emoji']"
   >
     <main class="mx-auto max-w-[120rem] px-4 sm:px-6 lg:px-8 py-8">
+      <form id="editorAntiForgery" method="post" style="display:none;">
+        @Html.AntiForgeryToken()
+      </form>
       <!-- Actions -->
       <section class="mb-6">
         <div class="flex flex-wrap items-center gap-3">
@@ -26,6 +29,28 @@
           >
             <i data-lucide="save"></i>
             Save Format
+          </button>
+          <button
+            id="finalizeChapterBtn"
+            class="inline-flex items-center gap-2 rounded-md bg-slate-800 hover:bg-slate-700 px-4 py-2.5 text-sm font-semibold tracking-tight text-slate-100 ring-1 ring-inset ring-white/10 transition-colors"
+          >
+            <i data-lucide="lock"></i>
+            Finalize Chapter
+          </button>
+          <label
+            for="audioInput"
+            class="inline-flex items-center gap-2 rounded-md bg-slate-800 hover:bg-slate-700 px-4 py-2.5 text-sm font-semibold tracking-tight text-slate-100 ring-1 ring-inset ring-white/10 transition-colors cursor-pointer"
+          >
+            <i data-lucide="mic"></i>
+            Audio
+            <input id="audioInput" type="file" accept="audio/*" style="display:none;" />
+          </label>
+          <button
+            id="sendAudioBtn"
+            class="inline-flex items-center gap-2 rounded-md bg-indigo-500/90 hover:bg-indigo-500 text-white px-4 py-2.5 text-sm font-semibold tracking-tight shadow-sm ring-1 ring-inset ring-white/10 transition-colors"
+          >
+            <i data-lucide="send"></i>
+            Send
           </button>
           <button
             id="previewBtn"
@@ -696,6 +721,15 @@
                     Smart
                   </span>
                 </div>
+                            <button class="btn btn-primary" onclick="window.location.href='/Books/AIGenerateBook'">
+                                Generate Book
+                            </button>
+                          @*   <li class="nav-item">
+                                <a class="nav-link" href="@Url.Action("Index", "BookProcessing")">
+                                    <i class="bi bi-gear"></i> Process Responses
+                                </a>
+                            </li> *@
+
                 <p class="mt-2 text-xs text-slate-400">
                   Get suggestions and improvements for your content.
                 </p>
@@ -1247,6 +1281,64 @@
       function bindPrimaryActions() {
         document.getElementById('saveFormatBtn')?.addEventListener('click', () => {
           showToast('Format settings saved', 'success');
+        });
+        document.getElementById('finalizeChapterBtn')?.addEventListener('click', async () => {
+          try {
+            const { value: vals } = await Swal.fire({
+              title: 'Finalize Chapter',
+              html: '<input id="swalBookId" class="swal2-input" placeholder="Book ID">'+
+                    '<input id="swalChapterId" class="swal2-input" placeholder="Chapter ID">',
+              showCancelButton: true,
+              preConfirm: () => [
+                document.getElementById('swalBookId').value,
+                document.getElementById('swalChapterId').value
+              ]
+            });
+            if (!vals) return;
+            const [bookId, chapterId] = vals;
+            const token = (document.querySelector('#editorAntiForgery input[name="__RequestVerificationToken"]')||{}).value || '';
+            const res = await fetch('/BookProcessing/FinalizeChapter', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'RequestVerificationToken': token },
+              body: JSON.stringify({ bookId: Number(bookId), chapterId: Number(chapterId), userId: '' })
+            });
+            const data = await res.json();
+            if (!data || !data.success) throw new Error((data && data.message) || 'Failed');
+            document.getElementById('chapterContent')?.setAttribute('contenteditable','false');
+            showToast('Chapter finalized', 'success');
+          } catch (e) {
+            showToast(e.message || 'Failed to finalize', 'error');
+          }
+        });
+        document.getElementById('sendAudioBtn')?.addEventListener('click', async () => {
+          const file = document.getElementById('audioInput')?.files?.[0];
+          if (!file) { showToast('Select an audio file first', 'warn'); return; }
+          const { value: vals } = await Swal.fire({
+            title: 'Audio → Chapter',
+            html: '<input id="swalBookId2" class="swal2-input" placeholder="Book ID">'+
+                  '<input id="swalUserId2" class="swal2-input" placeholder="User ID">',
+            showCancelButton: true,
+            preConfirm: () => [
+              document.getElementById('swalBookId2').value,
+              document.getElementById('swalUserId2').value
+            ]
+          });
+          if (!vals) return;
+          const [bookId, userId] = vals;
+          try {
+            const form = new FormData();
+            form.append('bookId', bookId);
+            form.append('userId', userId);
+            form.append('audio', file);
+            const res = await fetch('/BookProcessing/CreateChapterFromAudio', { method: 'POST', body: form });
+            if (!res.ok) throw new Error('Audio processing failed');
+            const data = await res.json();
+            const content = (data && (data.Data?.content || data.data?.content)) || JSON.stringify(data).slice(0, 2000);
+            document.getElementById('chapterContent').innerHTML += '<p>'+ (content || '') +'</p>';
+            showToast('Chapter created from audio', 'success');
+          } catch (e) {
+            showToast(e.message || 'Failed to create chapter from audio', 'error');
+          }
         });
         document.getElementById('previewBtn')?.addEventListener('click', () => {
           openPreview(document.getElementById('previewText').outerHTML);

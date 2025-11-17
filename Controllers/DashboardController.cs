@@ -38,11 +38,65 @@ namespace EBookDashboard.Controllers
             }
             */
 
-            ViewBag.UserName = User.Identity?.Name ?? "User";
-            ViewBag.UserEmail = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? "";
-            ViewBag.AuthorName = User.FindFirst("AuthorName")?.Value ?? "";
-            ViewBag.Genre = User.FindFirst("Genre")?.Value ?? "";
-            return View();
+            // Get user information
+            var userEmail = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? "";
+            var user = await _context.Users
+                .Include(u => u.Role)
+                .FirstOrDefaultAsync(u => u.UserEmail == userEmail);
+
+            if (user == null)
+            {
+                ViewBag.UserName = User.Identity?.Name ?? "User";
+                ViewBag.UserEmail = userEmail;
+                ViewBag.AuthorName = User.FindFirst("AuthorName")?.Value ?? "";
+                ViewBag.Genre = User.FindFirst("Genre")?.Value ?? "";
+                return View();
+            }
+
+            // Get author information
+            var author = await _context.Authors
+                .FirstOrDefaultAsync(a => a.AuthorCode == user.UserId.ToString());
+
+            // Get user's books
+            var books = await _context.Books
+                .Where(b => b.UserId == user.UserId)
+                .ToListAsync();
+
+            // Create view model
+            var viewModel = new DashboardIndexViewModel
+            {
+                UserName = user.FullName,
+                UserEmail = user.UserEmail,
+                TotalBooksPublished = books.Count(b => b.Status == "Published"),
+                MonthlyRevenue = 2847, // This would come from a service in a real implementation
+                TotalDownloads = 1234, // This would come from a service in a real implementation
+                AverageRating = 4.8m, // This would come from a service in a real implementation
+                CurrentProjects = books.Select(b => new ProjectViewModel
+                {
+                    BookId = b.BookId,
+                    Title = b.Title,
+                    Status = b.Status,
+                    ProgressPercentage = b.Status == "Published" ? 100 : b.Status == "Draft" ? 30 : 75,
+                    ProgressText = b.Status == "Published" ? "Complete" : b.Status == "Draft" ? $"Chapter 2 of 8" : $"Chapter 8 of 10"
+                }).ToList(),
+                RecentActivities = new List<ActivityViewModel>
+                {
+                    new ActivityViewModel { Title = "Chapter 5 of \"The Art of Digital Publishing\" was updated", Description = "Your latest changes have been saved successfully", TimeAgo = "2 hours ago", IconClass = "fas fa-book" },
+                    new ActivityViewModel { Title = "New order for \"Modern Web Development\" received", Description = "Customer purchased 3 copies of your book", TimeAgo = "5 hours ago", IconClass = "fas fa-shopping-cart" },
+                    new ActivityViewModel { Title = "New review for \"AI in Everyday Life\"", Description = "Received 5-star rating with positive feedback", TimeAgo = "1 day ago", IconClass = "fas fa-comment" },
+                    new ActivityViewModel { Title = "New manuscript uploaded for \"Creative Writing Techniques\"", Description = "File processed and ready for editing", TimeAgo = "2 days ago", IconClass = "fas fa-file-alt" }
+                },
+                CurrentWorkingBook = books.Any() ? new BookViewModel
+                {
+                    BookId = books.First().BookId,
+                    Title = books.First().Title,
+                    BookIdText = $"ID: {books.First().BookId}",
+                    ProgressPercentage = books.First().Status == "Published" ? 100 : books.First().Status == "Draft" ? 30 : 75,
+                    ProgressText = books.First().Status == "Published" ? "Complete" : books.First().Status == "Draft" ? $"Chapter 2 of 8" : $"Chapter 8 of 10"
+                } : new BookViewModel()
+            };
+
+            return View(viewModel);
         }
 
         [Route("EBook")]
@@ -67,9 +121,18 @@ namespace EBookDashboard.Controllers
         }
 
         [Route("EditingFormatting")]
-        public IActionResult EditingFormatting()
+        public async Task<IActionResult> EditingFormatting()
         {
             ViewBag.UserName = User.Identity?.Name ?? "User";
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (!string.IsNullOrEmpty(userId))
+            {
+                var hasActivePlan = await _featureCartService.HasActivePlanAsync(userId);
+                if (!hasActivePlan)
+                {
+                    return RedirectToAction("Index", "Features");
+                }
+            }
             return View();
         }
 
@@ -116,10 +179,83 @@ namespace EBookDashboard.Controllers
         }
 
         [Route("Profile")]
-        public IActionResult Profile()
+        public async Task<IActionResult> Profile()
         {
-            ViewBag.UserName = User.Identity?.Name ?? "User";
-            return View();
+            // Get user information
+            var userEmail = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? "";
+            var user = await _context.Users
+                .Include(u => u.Role)
+                .FirstOrDefaultAsync(u => u.UserEmail == userEmail);
+
+            if (user == null)
+            {
+                ViewBag.UserName = User.Identity?.Name ?? "User";
+                return View();
+            }
+
+            // Get author information
+            var author = await _context.Authors
+                .FirstOrDefaultAsync(a => a.AuthorCode == user.UserId.ToString());
+
+            // Get user's active plan (project only required fields to avoid selecting missing columns)
+            var activePlanData = await _context.AuthorPlans
+                .Where(ap => ap.AuthorId == user.UserId && ap.IsActive && ap.EndDate > DateTime.UtcNow)
+                .OrderByDescending(ap => ap.EndDate)
+                .Select(ap => new
+                {
+                    ap.PlanId,
+                    ap.EndDate,
+                    PlanName = ap.Plan.PlanName,
+                    PlanRate = ap.Plan.PlanRate
+                })
+                .FirstOrDefaultAsync();
+
+            // Get plan features
+            var planFeatures = new List<PlanFeatureViewModel>();
+            if (activePlanData != null)
+            {
+                // Get features for this plan
+                var features = await _context.PlanFeatures
+                    .Where(pf => pf.PlanId == activePlanData.PlanId)
+                    .ToListAsync();
+
+                planFeatures = features.Select(f => new PlanFeatureViewModel
+                {
+                    Name = f.FeatureName ?? "",
+                    IsIncluded = f.IsActive == true
+                }).ToList();
+            }
+
+            // Compute profile metrics from DB where possible
+            var userBooks = await _context.Books.Where(b => b.UserId == user.UserId).ToListAsync();
+            var totalBooks = userBooks.Count;
+            var booksRead = userBooks.Count(b => b.Status == "Published");
+            var booksReading = userBooks.Count(b => b.Status != "Published");
+
+            // Create view model
+            var viewModel = new DashboardProfileViewModel
+            {
+                UserName = user.FullName,
+                UserEmail = user.UserEmail,
+                UserRole = user.Role?.RoleName ?? "Reader",
+                MemberSince = user.CreatedAt,
+                Country = "United States",
+                TotalBooks = totalBooks,
+                BooksReading = booksReading,
+                Reviews = 0,
+                BooksRead = booksRead,
+                ReadingHours = 0,
+                PagesRead = 0,
+                ReadingStreak = 0,
+                PlanName = activePlanData?.PlanName ?? "Basic Plan",
+                PlanPrice = activePlanData?.PlanRate ?? 0m,
+                NextBillingDate = activePlanData?.EndDate ?? DateTime.UtcNow.AddDays(30),
+                BillingCycle = "Monthly",
+                PaymentMethod = "**** 4242",
+                PlanFeatures = planFeatures
+            };
+
+            return View(viewModel);
         }
 
         // New actions for the dashboard overhaul
@@ -135,6 +271,79 @@ namespace EBookDashboard.Controllers
         {
             ViewBag.UserName = User.Identity?.Name ?? "User";
             return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("UpdateProfile")]
+        public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileRequest request)
+        {
+            try
+            {
+                var userEmail = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? "";
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.UserEmail == userEmail);
+                if (user == null)
+                {
+                    return Json(new { success = false, message = "User not found" });
+                }
+
+                if (!string.IsNullOrWhiteSpace(request.FullName))
+                {
+                    user.FullName = request.FullName.Trim();
+                }
+
+                if (!string.IsNullOrWhiteSpace(request.Email))
+                {
+                    user.UserEmail = request.Email.Trim();
+                }
+
+                await _context.SaveChangesAsync();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("UpdatePassword")]
+        public async Task<IActionResult> UpdatePassword([FromBody] UpdatePasswordRequest request)
+        {
+            try
+            {
+                var userEmail = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? "";
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.UserEmail == userEmail);
+                if (user == null)
+                {
+                    return Json(new { success = false, message = "User not found" });
+                }
+
+                if (string.IsNullOrWhiteSpace(request.CurrentPassword) || user.Password != request.CurrentPassword)
+                {
+                    return Json(new { success = false, message = "Current password is incorrect" });
+                }
+
+                if (string.IsNullOrWhiteSpace(request.NewPassword) || request.NewPassword.Length < 6)
+                {
+                    return Json(new { success = false, message = "New password must be at least 6 characters" });
+                }
+
+                if (request.NewPassword != request.ConfirmPassword)
+                {
+                    return Json(new { success = false, message = "New passwords do not match" });
+                }
+
+                user.Password = request.NewPassword;
+                user.ConfirmPassword = request.NewPassword;
+                await _context.SaveChangesAsync();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
         }
 
         [Route("PlanConfirmation")]
@@ -172,4 +381,17 @@ namespace EBookDashboard.Controllers
             return View();
         }
     }
+}
+
+public class UpdateProfileRequest
+{
+    public string FullName { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+}
+
+public class UpdatePasswordRequest
+{
+    public string CurrentPassword { get; set; } = string.Empty;
+    public string NewPassword { get; set; } = string.Empty;
+    public string ConfirmPassword { get; set; } = string.Empty;
 }

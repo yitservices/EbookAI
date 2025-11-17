@@ -8,8 +8,8 @@ namespace EBookDashboard.Models
     public class AuthorPlanFeatures
     {
         [Key]
-        [Column("Id")]
-        public int Id { get; set; }
+        [Column("AuthorFeaturesId")]
+        public int AuthorFeaturesId { get; set; }
 
         [Column("AuthorId")]
         public int AuthorId { get; set; }

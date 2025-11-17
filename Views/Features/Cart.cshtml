@@ -1,0 +1,163 @@
+@model IEnumerable<EBookDashboard.Models.AuthorPlanFeatures>
+
+@{
+    ViewData["Title"] = "Feature Cart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Your Feature Cart</h2>
+            <hr />
+        </div>
+    </div>
+    
+    @if (Model != null && Model.Any())
+    {
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Selected Features</h4>
+                    </div>
+                    <div class="card-body">
+                        @foreach (var feature in Model)
+                        {
+                            <div class="row mb-3 pb-3 border-bottom">
+                                <div class="col-md-9">
+                                    <h5>@feature.FeatureName</h5>
+                                    <p>@feature.Description</p>
+                                </div>
+                                <div class="col-md-3 text-right">
+                                    <h5>$@feature.FeatureRate.ToString("F2")</h5>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Order Summary</h4>
+                    </div>
+                    <div class="card-body">
+                        @{
+                            var total = Model.Sum(f => f.FeatureRate);
+                        }
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Subtotal:</span>
+                            <span>$@total.ToString("F2")</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Tax:</span>
+                            <span>$0.00</span>
+                        </div>
+                        <hr />
+                        <div class="d-flex justify-content-between font-weight-bold">
+                            <span>Total:</span>
+                            <span class="text-primary">$@total.ToString("F2")</span>
+                        </div>
+                        
+                        <a href="@Url.Action("CheckoutCart", "Payments")" class="btn btn-primary btn-lg btn-block mt-4">
+                            Proceed to Checkout
+                        </a>
+                        
+                        <a href="@Url.Action("Index", "Payments")" class="btn btn-secondary btn-block mt-2">
+                            Continue Shopping
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <div class="alert alert-info">
+                    <h4>Your cart is empty</h4>
+                    <p>You haven't added any features to your cart yet.</p>
+                    <a href="@Url.Action("Index", "Payments")" class="btn btn-primary">Browse Features</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="~/js/checkout.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Handle "Proceed to Checkout" button for feature cart
+            const checkoutButton = document.getElementById('checkout-cart-button');
+            if (checkoutButton) {
+                checkoutButton.addEventListener('click', handleCartCheckout);
+            }
+        });
+
+        async function handleCartCheckout() {
+            try {
+                // Show loading state
+                const button = document.getElementById('checkout-cart-button');
+                const originalText = button.innerHTML;
+                button.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...';
+                button.disabled = true;
+
+                // Redirect to the checkout cart page
+                window.location.href = '/Payments/CheckoutCart';
+            } catch (error) {
+                console.error('Checkout error:', error);
+                showToast('Failed to proceed to checkout. Please try again.', 'error');
+                
+                // Restore button
+                const button = document.getElementById('checkout-cart-button');
+                button.innerHTML = 'Proceed to Checkout';
+                button.disabled = false;
+            }
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'info') {
+            // Create toast container if it doesn't exist
+            let toastContainer = document.getElementById('toast-container');
+            if (!toastContainer) {
+                toastContainer = document.createElement('div');
+                toastContainer.id = 'toast-container';
+                toastContainer.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    z-index: 9999;
+                `;
+                document.body.appendChild(toastContainer);
+            }
+
+            // Create toast element
+            const toast = document.createElement('div');
+            toast.className = `alert alert-${type} alert-dismissible fade show`;
+            toast.role = 'alert';
+            toast.style.cssText = `
+                min-width: 300px;
+                margin-bottom: 10px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            `;
+            
+            toast.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            `;
+
+            toastContainer.appendChild(toast);
+
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.parentNode.removeChild(toast);
+                }
+            }, 5000);
+        }
+    </script>
+}

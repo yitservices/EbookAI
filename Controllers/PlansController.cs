@@ -51,21 +51,40 @@ namespace EBookDashboard.Controllers
         }
         //-------- added on 09-10-2025
         [HttpGet]
-        public IActionResult GetPlans()
+        public async Task<IActionResult> GetPlans()
         {
-            var plans = _context.Plans
-                .Select(p => new
-                {
-                    p.PlanId,
-                    p.PlanName,
-                    p.PlanRate,
-                    p.Currency,
-                    p.PlanDays,
-                    p.MaxEBooks,
-                    p.PlanDescription
-                }).ToList();
+            try
+            {
+                var plans = await _context.Plans
+                    .Where(p => p.IsActive == true) // Only get active plans
+                    .Select(p => new
+                    {
+                        p.PlanId,
+                        p.PlanName,
+                        p.PlanRate,
+                        p.Currency,
+                        p.PlanDays,
+                        p.MaxEBooks,
+                        p.PlanDescription
+                    })
+                    .ToListAsync();
 
-            return Json(plans);
+                // If no plans found, return empty array
+                if (!plans.Any())
+                {
+                    return Json(new List<object>());
+                }
+
+                return Json(plans);
+            }
+            catch (Exception ex)
+            {
+                // Log error (in production, use proper logging)
+                Console.WriteLine($"Error fetching plans: {ex.Message}");
+                
+                // Return empty array on error to prevent frontend crash
+                return Json(new List<object>());
+            }
         }
 
     }

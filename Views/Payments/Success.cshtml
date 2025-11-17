@@ -1,0 +1,36 @@
+@{
+    ViewData["Title"] = "Payment Successful";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-success">
+                <div class="card-header bg-success text-white">
+                    <h3 class="mb-0"><i class="fas fa-check-circle"></i> Payment Successful!</h3>
+                </div>
+                <div class="card-body text-center">
+                    <div class="mb-4">
+                        <i class="fas fa-check-circle text-success" style="font-size: 5rem;"></i>
+                    </div>
+                    <h4 class="card-title">Thank You for Your Purchase!</h4>
+                    <p class="card-text">
+                        Your payment has been processed successfully. Your selected features are now active and ready to use.
+                    </p>
+                    <div class="alert alert-info">
+                        <h5><i class="fas fa-info-circle"></i> Next Steps</h5>
+                        <ul class="text-left">
+                            <li>Your premium features are now available in your dashboard</li>
+                            <li>A confirmation email has been sent to your registered email address</li>
+                            <li>You can view your purchase history in your account settings</li>
+                        </ul>
+                    </div>
+                    <a href="@Url.Action("Index", "Dashboard")" class="btn btn-primary btn-lg">
+                        <i class="fas fa-tachometer-alt"></i> Go to Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

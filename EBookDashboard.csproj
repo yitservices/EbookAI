@@ -15,8 +15,22 @@
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="9.0.9" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
+    <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
     <PackageReference Include="Stripe.net" Version="49.0.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Exclude other project folders and their Program.cs files -->
+    <Compile Remove="CreateTableApp/**" />
+    <Compile Remove="TestInsertApp/**" />
+    <Compile Remove="CheckTableApp/**" />
+    <Content Remove="CreateTableApp/**" />
+    <Content Remove="TestInsertApp/**" />
+    <Content Remove="CheckTableApp/**" />
+    <None Remove="CreateTableApp/**" />
+    <None Remove="TestInsertApp/**" />
+    <None Remove="CheckTableApp/**" />
   </ItemGroup>
 
 </Project>

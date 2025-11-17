@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "yrwV1T6CWNc=",
+  "dgSpecHash": "5PhRPZem+jI=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Hp\\EbookAI\\EBookDashboard.csproj",
+  "projectFilePath": "C:\\Users\\Hp\\Desktop\\authordash\\eBookProjectGit25 (2)\\eBookProjectGit25\\eBookProjectGit25\\eBookProjectGit25\\EBookDashboard.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Hp\\.nuget\\packages\\humanizer\\2.14.1\\humanizer.2.14.1.nupkg.sha512",
     "C:\\Users\\Hp\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
@@ -120,6 +120,7 @@
     "C:\\Users\\Hp\\.nuget\\packages\\nuget.protocol\\6.11.0\\nuget.protocol.6.11.0.nupkg.sha512",
     "C:\\Users\\Hp\\.nuget\\packages\\nuget.versioning\\6.11.0\\nuget.versioning.6.11.0.nupkg.sha512",
     "C:\\Users\\Hp\\.nuget\\packages\\pomelo.entityframeworkcore.mysql\\9.0.0\\pomelo.entityframeworkcore.mysql.9.0.0.nupkg.sha512",
+    "C:\\Users\\Hp\\.nuget\\packages\\portable.bouncycastle\\1.9.0\\portable.bouncycastle.1.9.0.nupkg.sha512",
     "C:\\Users\\Hp\\.nuget\\packages\\stripe.net\\49.0.0\\stripe.net.49.0.0.nupkg.sha512",
     "C:\\Users\\Hp\\.nuget\\packages\\system.codedom\\6.0.0\\system.codedom.6.0.0.nupkg.sha512",
     "C:\\Users\\Hp\\.nuget\\packages\\system.collections.immutable\\8.0.0\\system.collections.immutable.8.0.0.nupkg.sha512",

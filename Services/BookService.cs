@@ -91,5 +91,6 @@ namespace EBookDashboard.Services
             return await _context.BookVersions
                                  .FirstOrDefaultAsync(v => v.BookVersionId == versionId);
         }
+
     }
 }
