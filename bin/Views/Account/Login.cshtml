@@ -1,0 +1,621 @@
+@{
+    ViewData["Title"] = "Sign In - eBook Publisher";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .auth-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+            padding: 50px;
+            width: 100%;
+            max-width: 480px;
+            animation: slideUp 0.8s ease-out;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        @@keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo i {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo h1 {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 15px 0 5px;
+        }
+
+        .logo p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .form-title {
+            text-align: center;
+            color: #333;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #667eea;
+            font-size: 1.1rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 18px 20px 18px 55px;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            font-size: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .remember-me input {
+            width: auto;
+            margin: 0;
+        }
+
+        .remember-me label {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .forgot-link {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .forgot-link:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-google, .btn-facebook {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 2px solid rgba(0,0,0,0.08);
+            background: #fff;
+            color: #111827;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            text-decoration: none;
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+        .btn-google:hover, .btn-facebook:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(0,0,0,.08);
+        }
+        .btn-google i { color: #DB4437; }
+        .btn-facebook i { color: #1877F2; }
+
+        .divider {
+            text-align: center;
+            margin: 30px 0;
+            position: relative;
+            color: #666;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .divider span {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 0 20px;
+            position: relative;
+        }
+
+        .auth-footer {
+            text-align: center;
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .auth-footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .auth-footer a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            font-weight: 500;
+            border: 1px solid;
+        }
+
+        .alert-success {
+            background: rgba(34, 197, 94, 0.1);
+            color: #16a34a;
+            border-color: rgba(34, 197, 94, 0.2);
+        }
+
+        .alert-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+            border-color: rgba(239, 68, 68, 0.2);
+        }
+
+        /* Mobile Responsive */
+        @@media (max-width: 768px) {
+            .auth-container {
+                padding: 30px 25px;
+                margin: 10px;
+            }
+
+            .logo h1 {
+                font-size: 2rem;
+            }
+
+            .form-title {
+                font-size: 1.5rem;
+            }
+
+            .form-control {
+                padding: 15px 18px 15px 50px;
+            }
+
+            .btn {
+                padding: 15px;
+                font-size: 1rem;
+            }
+        }
+
+        @@media (max-width: 480px) {
+            .auth-container {
+                padding: 25px 20px;
+            }
+
+            .logo h1 {
+                font-size: 1.8rem;
+            }
+
+            .form-options {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid transparent;
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @@keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container" data-aos="fade-up">
+        <div class="logo">
+            <i class="fas fa-book-open"></i>
+            <h1>eBook Publisher</h1>
+            <p>Welcome back to your publishing journey</p>
+        </div>
+
+        <h2 class="form-title">Sign In to Your Account</h2>
+
+        @if (!string.IsNullOrEmpty(ViewBag.Success as string))
+        {
+            <div class="alert alert-success">
+                <i class="fas fa-check-circle"></i> @ViewBag.Success
+            </div>
+        }
+
+        @if (!string.IsNullOrEmpty(ViewBag.Error as string))
+        {
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-circle"></i> @ViewBag.Error
+            </div>
+        }
+
+        @* Auto-fill Reader Details Section *@
+        @if (ViewBag.ReaderEmail != null)
+        {
+            <div class="alert alert-info" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; border-color: rgba(59, 130, 246, 0.2); margin-bottom: 20px;" data-aos="fade-up">
+                <i class="fas fa-info-circle"></i> 
+                <strong>Reader Account Available:</strong> 
+                <span id="readerInfo">@ViewBag.ReaderName (@ViewBag.ReaderEmail)</span>
+                <button type="button" class="btn-auto-fill" onclick="autoFillReader()" 
+                        style="margin-left: 10px; padding: 5px 15px; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">
+                    <i class="fas fa-magic"></i> Auto Fill
+                </button>
+            </div>
+        }
+
+        <form method="post" id="loginForm">
+            <div class="form-group" data-aos="fade-up" data-aos-delay="100">
+                <label for="UserEmail">Email Address</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="UserEmail" name="UserEmail" class="form-control" 
+                           value="@ViewBag.ReaderEmail"
+                           placeholder="Enter your email address" required>
+                </div>
+            </div>
+
+            <div class="form-group" data-aos="fade-up" data-aos-delay="200">
+                <label for="Password">Password</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="Password" name="Password" class="form-control" 
+                           value="@ViewBag.ReaderPassword"
+                           placeholder="Enter your password" required>
+                </div>
+            </div>
+
+            <div class="form-options" data-aos="fade-up" data-aos-delay="300">
+                <div class="remember-me">
+                    <input type="checkbox" id="RememberMe" name="RememberMe">
+                    <label for="RememberMe">Remember me</label>
+                </div>
+                <a href="/Account/ForgotPassword" class="forgot-link">
+                    Forgot password?
+                </a>
+            </div>
+
+            <button type="submit" class="btn btn-primary" data-aos="fade-up" data-aos-delay="400">
+                <i class="fas fa-sign-in-alt"></i>
+                <span>Sign In</span>
+            </button>
+        </form>
+
+        <div class="divider" data-aos="fade-up" data-aos-delay="500">
+            <span>Don't have an account?</span>
+        </div>
+
+        <div class="divider" data-aos="fade-up" data-aos-delay="520">
+            <span>or continue with</span>
+        </div>
+
+        <div class="form-group" data-aos="fade-up" data-aos-delay="560">
+            <a href="/Account/ExternalLogin?provider=Google" class="btn-google">
+                <i class="fab fa-google"></i> Continue with Google
+            </a>
+        </div>
+        <div class="form-group" data-aos="fade-up" data-aos-delay="600">
+            <a href="/Account/ExternalLogin?provider=Facebook" class="btn-facebook">
+                <i class="fab fa-facebook"></i> Continue with Facebook
+            </a>
+        </div>
+
+        <p class="auth-footer" style="margin-top:12px" data-aos="fade-up" data-aos-delay="620">
+            We never post on your behalf.
+        </p>
+
+        <div class="auth-footer" data-aos="fade-up" data-aos-delay="600">
+            <a href="/Account/Registration">Create your account</a> and start publishing today!
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 600,
+            easing: 'ease-out',
+            once: true
+        });
+
+        // Form submission with loading state
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const btnText = submitBtn.querySelector('span');
+            
+            submitBtn.classList.add('loading');
+            btnText.textContent = 'Signing In...';
+            
+            // Show loading toast
+            Swal.fire({
+                title: 'Signing In',
+                text: 'Please wait while we verify your credentials...',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+        });
+
+        // Input focus animations
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.closest('.form-group').style.transform = 'scale(1.02)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.closest('.form-group').style.transform = 'scale(1)';
+            });
+        });
+
+        // Form validation
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('loginForm');
+            const inputs = form.querySelectorAll('.form-control');
+            
+            inputs.forEach(input => {
+                input.addEventListener('blur', validateField);
+                input.addEventListener('input', clearErrors);
+            });
+        });
+
+        function validateField(e) {
+            const field = e.target;
+            const value = field.value.trim();
+            
+            // Remove existing error styles
+            field.style.borderColor = '';
+            
+            if (field.type === 'email' && value) {
+                const emailRegex = /^[^\\s@@]+@@[^\\s@@]+\\.[^\\s@@]+$/;
+                if (!emailRegex.test(value)) {
+                    field.style.borderColor = '#ef4444';
+                    showFieldError(field, 'Please enter a valid email address');
+                }
+            }
+            
+            if (field.type === 'password' && value) {
+                if (value.length < 6) {
+                    field.style.borderColor = '#ef4444';
+                    showFieldError(field, 'Password must be at least 6 characters');
+                }
+            }
+        }
+
+        function clearErrors(e) {
+            const field = e.target;
+            field.style.borderColor = '';
+            // Remove any error messages
+        }
+
+        function showFieldError(field, message) {
+            // You can implement custom error display here
+            console.log(`Field error: ${message}`);
+        }
+
+        // Auto-fill reader details function
+        function autoFillReader() {
+            const readerEmail = '@ViewBag.ReaderEmail';
+            const readerPassword = '@ViewBag.ReaderPassword';
+            
+            if (readerEmail && readerPassword) {
+                document.getElementById('UserEmail').value = readerEmail;
+                document.getElementById('Password').value = readerPassword;
+                
+                // Show success message
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Auto-filled!',
+                    text: 'Reader credentials have been filled automatically.',
+                    timer: 1500,
+                    showConfirmButton: false,
+                    toast: true,
+                    position: 'top-end'
+                });
+            }
+        }
+
+        // Auto-fill on page load if reader details are available
+        @if (ViewBag.ReaderEmail != null && ViewBag.ReaderPassword != null)
+        {
+            <text>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Auto-fill after a short delay for better UX
+                setTimeout(function() {
+                    autoFillReader();
+                }, 500);
+            });
+            </text>
+        }
+
+        // Handle signup prompt from external login flow
+        (function () {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('signupPrompt') === '1') {
+                Swal.fire({
+                    icon: 'info',
+                    title: "You don't have an account yet.",
+                    text: "Please sign up first.",
+                    confirmButtonText: 'Continue',
+                    confirmButtonColor: '#667eea'
+                }).then(() => {
+                    window.location.href = '/Books/AIGenerateBook';
+                });
+            }
+
+            const oauthMissing = params.get('oauthMissing');
+            if (oauthMissing) {
+                const origin = window.location.origin;
+                const path = oauthMissing.toLowerCase() === 'google' ? '/signin-google' : '/signin-facebook';
+                Swal.fire({
+                    icon: 'error',
+                    title: `${oauthMissing} login isn't configured`,
+                    html: `Please set your ${oauthMissing} credentials in appsettings.json and add the redirect URI:<br><code>${origin}${path}</code>`,
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#667eea'
+                });
+            }
+        })();
+    </script>
+</body>
+</html>

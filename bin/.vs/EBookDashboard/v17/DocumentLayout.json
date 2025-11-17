@@ -1,0 +1,664 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\controllers\\dashboardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:controllers\\dashboardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\views\\dashboard\\home.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:views\\dashboard\\home.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\views\\dashboard\\ebook.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:views\\dashboard\\ebook.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\views\\books\\aigeneratebook2.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:views\\books\\aigeneratebook2.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\views\\admin\\contentmanagement.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:views\\admin\\contentmanagement.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\views\\admin\\settings.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:views\\admin\\settings.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\controllers\\paymentscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:controllers\\paymentscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\views\\shared\\_adminlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:views\\shared\\_adminlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\views\\admin\\helpfeedback.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:views\\admin\\helpfeedback.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\views\\dashboard\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:views\\dashboard\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\controllers\\featurescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:controllers\\featurescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\views\\admin\\roles.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:views\\admin\\roles.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\views\\admin\\progresstracker.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:views\\admin\\progresstracker.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\views\\admin\\users.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:views\\admin\\users.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\views\\admin\\planfeatures.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:views\\admin\\planfeatures.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\views\\admin\\subscriptions.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:views\\admin\\subscriptions.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\views\\dashboard\\editingformatting.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:views\\dashboard\\editingformatting.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\controllers\\authorplanfeaturescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:controllers\\authorplanfeaturescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\build.log||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:build.log||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\views\\admin\\dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:views\\admin\\dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\models\\authorbills.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:models\\authorbills.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\models\\authorplans.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:models\\authorplans.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\controllers\\bookscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:controllers\\bookscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\views\\payments\\paymentsummary.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:views\\payments\\paymentsummary.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\views\\books\\createbook.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:views\\books\\createbook.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\views\\dashboard\\profile.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:views\\dashboard\\profile.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\models\\authorplanfeatures.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:models\\authorplanfeatures.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\services\\planfeaturesservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:services\\planfeaturesservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\wwwroot\\css\\book-styles.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:wwwroot\\css\\book-styles.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\services\\authorplansservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:services\\authorplansservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\services\\authorbillsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:services\\authorbillsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\services\\bookservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:services\\bookservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\interfaces\\ibookservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:interfaces\\ibookservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\models\\books.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:models\\books.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|c:\\users\\hp\\downloads\\14-11-2025\\ebookprojectgit25\\ebookprojectgit25\\models\\apirawresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A6D79364-0F6E-7306-DC68-4E53A06A341B}|EBookDashboard.csproj|solutionrelative:models\\apirawresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 185,
+          "SelectedChildIndex": 7,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "_AdminLayout.cshtml",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Views\\Shared\\_AdminLayout.cshtml",
+              "RelativeDocumentMoniker": "Views\\Shared\\_AdminLayout.cshtml",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Views\\Shared\\_AdminLayout.cshtml",
+              "RelativeToolTip": "Views\\Shared\\_AdminLayout.cshtml",
+              "ViewState": "AgIAALsHAAAAAAAAAAAiwM0HAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-11-13T20:53:41.972Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "PaymentsController.cs",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Controllers\\PaymentsController.cs",
+              "RelativeDocumentMoniker": "Controllers\\PaymentsController.cs",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Controllers\\PaymentsController.cs",
+              "RelativeToolTip": "Controllers\\PaymentsController.cs",
+              "ViewState": "AgIAAJ0BAAAAAAAAAAAiwKQBAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-03T17:37:39.679Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "EBook.cshtml",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Views\\Dashboard\\EBook.cshtml",
+              "RelativeDocumentMoniker": "Views\\Dashboard\\EBook.cshtml",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Views\\Dashboard\\EBook.cshtml",
+              "RelativeToolTip": "Views\\Dashboard\\EBook.cshtml",
+              "ViewState": "AgIAAMoGAAAAAAAAAAAYwOAGAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-11-13T23:44:09.262Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AIGenerateBook2.cshtml",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Views\\Books\\AIGenerateBook2.cshtml",
+              "RelativeDocumentMoniker": "Views\\Books\\AIGenerateBook2.cshtml",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Views\\Books\\AIGenerateBook2.cshtml",
+              "RelativeToolTip": "Views\\Books\\AIGenerateBook2.cshtml",
+              "ViewState": "AgIAAJgHAAAAAAAAAADwv6QHAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-11-03T10:56:56.885Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ContentManagement.cshtml",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Views\\Admin\\ContentManagement.cshtml",
+              "RelativeDocumentMoniker": "Views\\Admin\\ContentManagement.cshtml",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Views\\Admin\\ContentManagement.cshtml",
+              "RelativeToolTip": "Views\\Admin\\ContentManagement.cshtml",
+              "ViewState": "AgIAAO0DAAAAAAAAAAAgwP8DAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-11-13T22:09:56.562Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "FeaturesController.cs",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Controllers\\FeaturesController.cs",
+              "RelativeDocumentMoniker": "Controllers\\FeaturesController.cs",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Controllers\\FeaturesController.cs",
+              "RelativeToolTip": "Controllers\\FeaturesController.cs",
+              "ViewState": "AgIAANAAAAAAAAAAAADwv9YAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-04T20:49:23.251Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Views\\Dashboard\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\Dashboard\\Index.cshtml",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Views\\Dashboard\\Index.cshtml",
+              "RelativeToolTip": "Views\\Dashboard\\Index.cshtml",
+              "ViewState": "AgIAAGQEAAAAAAAAAAAAAHIEAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-11-04T20:35:52.678Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "DashboardController.cs",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Controllers\\DashboardController.cs",
+              "RelativeDocumentMoniker": "Controllers\\DashboardController.cs",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Controllers\\DashboardController.cs",
+              "RelativeToolTip": "Controllers\\DashboardController.cs",
+              "ViewState": "AgIAAEMCAAAAAAAAAAAjwEgCAABXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-04T20:27:27.299Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Settings.cshtml",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Views\\Admin\\Settings.cshtml",
+              "RelativeDocumentMoniker": "Views\\Admin\\Settings.cshtml",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Views\\Admin\\Settings.cshtml",
+              "RelativeToolTip": "Views\\Admin\\Settings.cshtml",
+              "ViewState": "AgIAAL8DAAAAAAAAAAAAAKUDAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-11-13T20:55:59.709Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "HelpFeedback.cshtml",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Views\\Admin\\HelpFeedback.cshtml",
+              "RelativeDocumentMoniker": "Views\\Admin\\HelpFeedback.cshtml",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Views\\Admin\\HelpFeedback.cshtml",
+              "RelativeToolTip": "Views\\Admin\\HelpFeedback.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAKYAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-11-13T21:17:30.224Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Roles.cshtml",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Views\\Admin\\Roles.cshtml",
+              "RelativeDocumentMoniker": "Views\\Admin\\Roles.cshtml",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Views\\Admin\\Roles.cshtml",
+              "RelativeToolTip": "Views\\Admin\\Roles.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-11-13T22:09:47.93Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Home.cshtml",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Views\\Dashboard\\Home.cshtml",
+              "RelativeDocumentMoniker": "Views\\Dashboard\\Home.cshtml",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Views\\Dashboard\\Home.cshtml",
+              "RelativeToolTip": "Views\\Dashboard\\Home.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-11-14T20:28:11.772Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "Users.cshtml",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Views\\Admin\\Users.cshtml",
+              "RelativeDocumentMoniker": "Views\\Admin\\Users.cshtml",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Views\\Admin\\Users.cshtml",
+              "RelativeToolTip": "Views\\Admin\\Users.cshtml",
+              "ViewState": "AgIAAN0EAAAAAAAAAAAkwPgEAABLAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-11-13T22:12:41.96Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "ProgressTracker.cshtml",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Views\\Admin\\ProgressTracker.cshtml",
+              "RelativeDocumentMoniker": "Views\\Admin\\ProgressTracker.cshtml",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Views\\Admin\\ProgressTracker.cshtml",
+              "RelativeToolTip": "Views\\Admin\\ProgressTracker.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-11-13T22:10:21.788Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-11-03T19:19:00.401Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "PlanFeatures.cshtml",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Views\\Admin\\PlanFeatures.cshtml",
+              "RelativeDocumentMoniker": "Views\\Admin\\PlanFeatures.cshtml",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Views\\Admin\\PlanFeatures.cshtml",
+              "RelativeToolTip": "Views\\Admin\\PlanFeatures.cshtml",
+              "ViewState": "AgIAAD8AAAAAAAAAAAAAAD4AAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-11-13T22:10:14.874Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "Subscriptions.cshtml",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Views\\Admin\\Subscriptions.cshtml",
+              "RelativeDocumentMoniker": "Views\\Admin\\Subscriptions.cshtml",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Views\\Admin\\Subscriptions.cshtml",
+              "RelativeToolTip": "Views\\Admin\\Subscriptions.cshtml",
+              "ViewState": "AgIAAJQKAAAAAAAAAAAiwKsKAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-11-13T22:10:09.314Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "EditingFormatting.cshtml",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Views\\Dashboard\\EditingFormatting.cshtml",
+              "RelativeDocumentMoniker": "Views\\Dashboard\\EditingFormatting.cshtml",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Views\\Dashboard\\EditingFormatting.cshtml",
+              "RelativeToolTip": "Views\\Dashboard\\EditingFormatting.cshtml",
+              "ViewState": "AgIAAGsFAAAAAAAAAAAkwHoFAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-11-13T23:44:10.106Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "AuthorBills.cs",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Models\\AuthorBills.cs",
+              "RelativeDocumentMoniker": "Models\\AuthorBills.cs",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Models\\AuthorBills.cs",
+              "RelativeToolTip": "Models\\AuthorBills.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAuwCUAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-03T18:03:52.039Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "Dashboard.cshtml",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Views\\Admin\\Dashboard.cshtml",
+              "RelativeDocumentMoniker": "Views\\Admin\\Dashboard.cshtml",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Views\\Admin\\Dashboard.cshtml",
+              "RelativeToolTip": "Views\\Admin\\Dashboard.cshtml",
+              "ViewState": "AgIAAHwEAAAAAAAAAAAiwI0EAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-11-11T12:33:58.26Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "AuthorPlanFeaturesController.cs",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Controllers\\AuthorPlanFeaturesController.cs",
+              "RelativeDocumentMoniker": "Controllers\\AuthorPlanFeaturesController.cs",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Controllers\\AuthorPlanFeaturesController.cs",
+              "RelativeToolTip": "Controllers\\AuthorPlanFeaturesController.cs",
+              "ViewState": "AgIAAGEAAAAAAAAAAAAgwIEAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-03T17:37:39.67Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "AdminController.cs",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Controllers\\AdminController.cs",
+              "RelativeDocumentMoniker": "Controllers\\AdminController.cs",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Controllers\\AdminController.cs",
+              "RelativeToolTip": "Controllers\\AdminController.cs",
+              "ViewState": "AgIAACQGAAAAAAAAAAAwwDYGAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-13T18:56:23.514Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "Properties\\launchSettings.json",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Properties\\launchSettings.json",
+              "RelativeToolTip": "Properties\\launchSettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-11-13T20:34:42.397Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "build.log",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\build.log",
+              "RelativeDocumentMoniker": "build.log",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\build.log",
+              "RelativeToolTip": "build.log",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-11-13T21:12:05.173Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAIQAAAAAAAAAAAAAAI4AAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-03T17:37:42.387Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "AuthorPlans.cs",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Models\\AuthorPlans.cs",
+              "RelativeDocumentMoniker": "Models\\AuthorPlans.cs",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Models\\AuthorPlans.cs",
+              "RelativeToolTip": "Models\\AuthorPlans.cs",
+              "ViewState": "AgIAACAAAAAAAAAAAAAQwEQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-03T22:18:58.016Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "BooksController.cs",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Controllers\\BooksController.cs",
+              "RelativeDocumentMoniker": "Controllers\\BooksController.cs",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Controllers\\BooksController.cs",
+              "RelativeToolTip": "Controllers\\BooksController.cs",
+              "ViewState": "AgIAAA0EAAAAAAAAAAAiwC8EAAA8AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-03T11:02:22.18Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "PaymentSummary.cshtml",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Views\\Payments\\PaymentSummary.cshtml",
+              "RelativeDocumentMoniker": "Views\\Payments\\PaymentSummary.cshtml",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Views\\Payments\\PaymentSummary.cshtml",
+              "RelativeToolTip": "Views\\Payments\\PaymentSummary.cshtml",
+              "ViewState": "AgIAAAsCAAAAAAAAAAAiwDgCAAA8AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-11-05T17:33:57.346Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "Profile.cshtml",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Views\\Dashboard\\Profile.cshtml",
+              "RelativeDocumentMoniker": "Views\\Dashboard\\Profile.cshtml",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Views\\Dashboard\\Profile.cshtml",
+              "RelativeToolTip": "Views\\Dashboard\\Profile.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-11-04T20:24:44.478Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "CreateBook.cshtml",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Views\\Books\\CreateBook.cshtml",
+              "RelativeDocumentMoniker": "Views\\Books\\CreateBook.cshtml",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Views\\Books\\CreateBook.cshtml",
+              "RelativeToolTip": "Views\\Books\\CreateBook.cshtml",
+              "ViewState": "AgIAAKwCAAAAAAAAAAAmwNYCAAA+AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-11-03T12:08:36.051Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "AuthorPlanFeatures.cs",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Models\\AuthorPlanFeatures.cs",
+              "RelativeDocumentMoniker": "Models\\AuthorPlanFeatures.cs",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Models\\AuthorPlanFeatures.cs",
+              "RelativeToolTip": "Models\\AuthorPlanFeatures.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-03T18:01:07.441Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "PlanFeaturesService.cs",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Services\\PlanFeaturesService.cs",
+              "RelativeDocumentMoniker": "Services\\PlanFeaturesService.cs",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Services\\PlanFeaturesService.cs",
+              "RelativeToolTip": "Services\\PlanFeaturesService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAHMAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-03T17:54:25.239Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "book-styles.css",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\wwwroot\\css\\book-styles.css",
+              "RelativeDocumentMoniker": "wwwroot\\css\\book-styles.css",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\wwwroot\\css\\book-styles.css",
+              "RelativeToolTip": "wwwroot\\css\\book-styles.css",
+              "ViewState": "AgIAAEoAAAAAAAAAAAAowEsAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-11-03T15:46:34.71Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "AuthorPlansService.cs",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Services\\AuthorPlansService.cs",
+              "RelativeDocumentMoniker": "Services\\AuthorPlansService.cs",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Services\\AuthorPlansService.cs",
+              "RelativeToolTip": "Services\\AuthorPlansService.cs",
+              "ViewState": "AgIAACcAAAAAAAAAAAAowAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-03T17:37:39.69Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "AuthorBillsService.cs",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Services\\AuthorBillsService.cs",
+              "RelativeDocumentMoniker": "Services\\AuthorBillsService.cs",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Services\\AuthorBillsService.cs",
+              "RelativeToolTip": "Services\\AuthorBillsService.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAwBEAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-03T17:54:10.69Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 37,
+              "Title": "Books.cs",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Models\\Books.cs",
+              "RelativeDocumentMoniker": "Models\\Books.cs",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Models\\Books.cs",
+              "RelativeToolTip": "Models\\Books.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAAACwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-03T11:34:15.909Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 39,
+              "Title": "APIRawResponse.cs",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Models\\APIRawResponse.cs",
+              "RelativeDocumentMoniker": "Models\\APIRawResponse.cs",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Models\\APIRawResponse.cs",
+              "RelativeToolTip": "Models\\APIRawResponse.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAQwCEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-03T10:59:32.921Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
+              "Title": "BookService.cs",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Services\\BookService.cs",
+              "RelativeDocumentMoniker": "Services\\BookService.cs",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Services\\BookService.cs",
+              "RelativeToolTip": "Services\\BookService.cs",
+              "ViewState": "AgIAAHgAAAAAAAAAAAAqwIYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-03T13:35:50.711Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 36,
+              "Title": "IBookService.cs",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Interfaces\\IBookService.cs",
+              "RelativeDocumentMoniker": "Interfaces\\IBookService.cs",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Interfaces\\IBookService.cs",
+              "RelativeToolTip": "Interfaces\\IBookService.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAywA8AAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-03T13:40:45.36Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 38,
+              "Title": "ApplicationDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Data\\ApplicationDbContext.cs",
+              "RelativeDocumentMoniker": "Data\\ApplicationDbContext.cs",
+              "ToolTip": "C:\\Users\\Hp\\Downloads\\14-11-2025\\eBookProjectGit25\\eBookProjectGit25\\Data\\ApplicationDbContext.cs",
+              "RelativeToolTip": "Data\\ApplicationDbContext.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAowAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-03T12:10:09.333Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

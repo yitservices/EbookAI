@@ -1,0 +1,7 @@
+C:\Users\shahm\Videos\ebook-dashboard\EBookDashboard\obj\Release\net9.0\PubTmp\Out\EBookDashboard.exe
+C:\Users\shahm\Videos\ebook-dashboard\EBookDashboard\obj\Release\net9.0\PubTmp\Out\appsettings.Development.json
+C:\Users\shahm\Videos\ebook-dashboard\EBookDashboard\obj\Release\net9.0\PubTmp\Out\appsettings.json
+C:\Users\shahm\Videos\ebook-dashboard\EBookDashboard\obj\Release\net9.0\PubTmp\Out\EBookDashboard.dll
+C:\Users\shahm\Videos\ebook-dashboard\EBookDashboard\obj\Release\net9.0\PubTmp\Out\EBookDashboard.deps.json
+C:\Users\shahm\Videos\ebook-dashboard\EBookDashboard\obj\Release\net9.0\PubTmp\Out\EBookDashboard.runtimeconfig.json
+C:\Users\shahm\Videos\ebook-dashboard\EBookDashboard\obj\Release\net9.0\PubTmp\Out\EBookDashboard.pdb
