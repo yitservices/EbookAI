@@ -10,8 +10,11 @@ namespace EBookDashboard.Models
 
         [Required]
         public int BookId { get; set; }
+        public int SrNo { get; set; }
+        public int ChapterNumber { get; set; }
         [Required]
         [MaxLength(200)]
+
         public string Title { get; set; } = string.Empty;
         public string SubTitle { get; set; } = string.Empty;
 
