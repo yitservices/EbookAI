@@ -2,7 +2,9 @@
 {
     public class ChapterDto
     {
+        public int ResponseId { get; set; }
         public int ChapterNumber { get; set; }
+        public string? RequestData { get; set; } = string.Empty;
         public string? Title { get; set; } = string.Empty;
         public string? Content { get; set; } = string.Empty;
         public string? StatusCode { get; set; } = string.Empty;

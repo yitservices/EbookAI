@@ -53,7 +53,7 @@ namespace EBookDashboard.Models
         [Column("ExpiryDate")]
         public DateTime? ExpiryDate { get; set; } = new DateTime(1980, 1, 1);
 
-
+        public string? UsageLimit { get; set; } = "";
         [Column("Status")]
         [StringLength(12)]
         public string? Status { get; set; }="Pending";

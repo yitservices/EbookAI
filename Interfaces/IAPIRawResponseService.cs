@@ -17,5 +17,6 @@ namespace EBookDashboard.Interfaces
         Task<bool> RawResponsesExistAsync(int userId, int bookId);
         Task<int> GetRawResponseCountAsync(int userId, int bookId);
         Task<int?> GetLatestResponseIdAsync(int userId, int bookId);
+        Task<int> SaveRawResponseEditAsync(AIBookRequestEdit request, string responseData, string endpoint, string statusCode, string? errorMessage = null);
     }
 }

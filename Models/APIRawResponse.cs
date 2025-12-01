@@ -15,7 +15,7 @@ namespace EBookDashboard.Models
         public int Chapter { get; set; } = 0;
         [Required]
         public string? Title { get; set; } = string.Empty;
-
+        public string? ChapterNames { get; set; } = string.Empty;
         [Required]
         public string? RequestData { get; set; } = string.Empty;
 

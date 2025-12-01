@@ -26,7 +26,7 @@ namespace EBookDashboard.Interfaces
         Task<IEnumerable<BookVersion>> GetVersionsByBookIdAsync(int bookId);
         Task<BookVersion> AddBookVersionAsync(BookVersion version);
         Task<BookVersion?> GetVersionByIdAsync(int versionId);
-        Task<BookDetailsDto?> GetBookDetailsAsync(int userId, int bookId, int responseId);
+        
         Task<BookDetailsDto?> GetBookDetailsFromRawDataAsync(int userId, int bookId);
         // -------- - User Books with Chapters -----
         Task<UserBooksViewModel> GetUserBooksWithChaptersAsync(int userId);
@@ -42,6 +42,13 @@ namespace EBookDashboard.Interfaces
         Task<IEnumerable<ChapterDto>> GetSavedBooksChaptersAsync(int userId, int bookId);
         Task<int?> GetLatestBookIdAsync(int userId);
         Task<SavedBookDto?> GetLatestBookAsync(int userId);
-
+        Task<(bool success, string data, string message)> GetBookApiResponseAsync(int userId, int bookId);
+        Task<APIRawResponse?> GetSelectedBookResponseAsync(int userId, int bookId, int chapterNo);
+        // Chapter Number Generation
+        Task<int> GetNextChapterNumberAsync(int userId, int bookId);
+        Task<BookDetailsResponseDto?> GetBookDetailsAsync(int userId, int bookId);
+        Task<BookDetailsResponseDto?> GetBookDetailsAsync2(int userId, int bookId, int chapterNo);
+        Task<bool> SetRecordReadOnlyAsync(FinalizeChapters finalize);
+        Task<int> GetLastChapterAsync(int userId, int bookId);
     }
 }
