@@ -2,16 +2,405 @@
     ViewData["Title"] = "Settings Management";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System Settings</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<div class="settings-container">
+    <!-- Header Section -->
+    <div class="settings-header">
+        <h1><i class="fas fa-cog me-2"></i>System Settings</h1>
+        <p>Manage your platform configuration and preferences</p>
+    </div>
+
+    <!-- Tabs Navigation -->
+    <div class="settings-tabs">
+        <ul class="nav nav-tabs" id="settingsTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="general-tab" data-bs-toggle="tab" data-bs-target="#general" type="button" role="tab">
+                    <i class="fas fa-sliders-h me-2"></i>General
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="payment-tab" data-bs-toggle="tab" data-bs-target="#payment" type="button" role="tab">
+                    <i class="fas fa-credit-card me-2"></i>Payment
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="email-tab" data-bs-toggle="tab" data-bs-target="#email" type="button" role="tab">
+                    <i class="fas fa-envelope me-2"></i>Email
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="security-tab" data-bs-toggle="tab" data-bs-target="#security" type="button" role="tab">
+                    <i class="fas fa-shield-alt me-2"></i>Security
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="settingsTabContent">
+            <!-- General Settings -->
+            <div class="tab-pane fade show active" id="general" role="tabpanel">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="settings-card">
+                            <div class="card-header">
+                                <i class="fas fa-cog me-2"></i>General Settings
+                            </div>
+                            <div class="card-body">
+                                <form id="generalForm">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="siteName" class="form-label">Site Name</label>
+                                            <input type="text" class="form-control" id="siteName" value="eBook Publisher">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="adminEmail" class="form-label">Admin Email</label>
+                                            <input type="email" class="form-control" id="adminEmail" value="admin@ebookpublisher.com">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="siteDescription" class="form-label">Site Description</label>
+                                        <textarea class="form-control" id="siteDescription" rows="3">The ultimate platform for authors to publish and readers to discover amazing books.</textarea>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="supportEmail" class="form-label">Support Email</label>
+                                            <input type="email" class="form-control" id="supportEmail" value="support@ebookpublisher.com">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="timezone" class="form-label">Timezone</label>
+                                            <select class="form-select" id="timezone">
+                                                <option value="UTC" selected>UTC</option>
+                                                <option value="EST">Eastern Time</option>
+                                                <option value="PST">Pacific Time</option>
+                                                <option value="GMT">GMT</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="maintenanceMode">
+                                            <label class="form-check-label" for="maintenanceMode">Enable maintenance mode</label>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="sidebar-card">
+                            <h5><i class="fas fa-image me-2"></i>Site Logo</h5>
+                            <div class="logo-preview">
+                                <img src="https://via.placeholder.com/200x60/6c63ff/ffffff?text=eBook+Publisher" alt="Site Logo">
+                            </div>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-outline-primary"><i class="fas fa-upload me-2"></i>Upload New Logo</button>
+                                <button class="btn btn-outline-danger"><i class="fas fa-trash me-2"></i>Remove Logo</button>
+                            </div>
+                        </div>
+
+                        <div class="sidebar-card">
+                            <h5><i class="fas fa-info-circle me-2"></i>System Status</h5>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Website Status:</span>
+                                <span><span class="status-indicator status-active"></span>Online</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Database:</span>
+                                <span><span class="status-indicator status-active"></span>Connected</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>SSL Certificate:</span>
+                                <span><span class="status-indicator status-active"></span>Active</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span>Maintenance Mode:</span>
+                                <span><span class="status-indicator status-inactive"></span>Disabled</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Settings -->
+            <div class="tab-pane fade" id="payment" role="tabpanel">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="settings-card">
+                            <div class="card-header">
+                                <i class="fas fa-credit-card me-2"></i>Payment Settings
+                            </div>
+                            <div class="card-body">
+                                <form id="paymentForm">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="currency" class="form-label">Default Currency</label>
+                                            <select class="form-select" id="currency">
+                                                <option value="USD" selected>USD - US Dollar</option>
+                                                <option value="EUR">EUR - Euro</option>
+                                                <option value="GBP">GBP - British Pound</option>
+                                                <option value="CAD">CAD - Canadian Dollar</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="paymentGateway" class="form-label">Payment Gateway</label>
+                                            <select class="form-select" id="paymentGateway">
+                                                <option value="stripe" selected>Stripe</option>
+                                                <option value="paypal">PayPal</option>
+                                                <option value="both">Both Stripe and PayPal</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="taxRate" class="form-label">Tax Rate (%)</label>
+                                        <input type="number" class="form-control" id="taxRate" value="0" min="0" max="100" step="0.1">
+                                    </div>
+                                    <h6 class="mt-4 mb-3">Stripe Configuration</h6>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="stripeKey" class="form-label">Stripe Publishable Key</label>
+                                            <input type="text" class="form-control" id="stripeKey" placeholder="pk_live_...">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="stripeSecret" class="form-label">Stripe Secret Key</label>
+                                            <input type="password" class="form-control" id="stripeSecret" placeholder="sk_live_...">
+                                        </div>
+                                    </div>
+                                    <h6 class="mt-4 mb-3">PayPal Configuration</h6>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="paypalClientId" class="form-label">PayPal Client ID</label>
+                                            <input type="text" class="form-control" id="paypalClientId" placeholder="Client ID">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="paypalSecret" class="form-label">PayPal Secret</label>
+                                            <input type="password" class="form-control" id="paypalSecret" placeholder="Secret">
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Save Payment Settings</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="sidebar-card">
+                            <h5><i class="fas fa-vial me-2"></i>Payment Test</h5>
+                            <p class="text-muted">Test your payment configuration to ensure everything is working correctly.</p>
+                            <div class="d-grid">
+                                <button class="test-btn" id="testPaymentBtn"><i class="fas fa-play-circle me-2"></i>Test Payment</button>
+                            </div>
+                        </div>
+
+                        <div class="sidebar-card">
+                            <h5><i class="fas fa-chart-line me-2"></i>Payment Statistics</h5>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Successful Payments:</span>
+                                <span class="fw-bold">1,248</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Failed Payments:</span>
+                                <span class="fw-bold text-danger">12</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Total Revenue:</span>
+                                <span class="fw-bold text-success">$24,580.50</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span>Avg. Transaction:</span>
+                                <span class="fw-bold">$19.68</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Email Settings -->
+            <div class="tab-pane fade" id="email" role="tabpanel">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="settings-card">
+                            <div class="card-header">
+                                <i class="fas fa-envelope me-2"></i>Email Settings
+                            </div>
+                            <div class="card-body">
+                                <form id="emailForm">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="smtpHost" class="form-label">SMTP Host</label>
+                                            <input type="text" class="form-control" id="smtpHost" placeholder="smtp.example.com">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="smtpPort" class="form-label">SMTP Port</label>
+                                            <input type="number" class="form-control" id="smtpPort" value="587">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="smtpUsername" class="form-label">SMTP Username</label>
+                                            <input type="text" class="form-control" id="smtpUsername" placeholder="username@example.com">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="smtpPassword" class="form-label">SMTP Password</label>
+                                            <input type="password" class="form-control" id="smtpPassword" placeholder="Password">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="emailFrom" class="form-label">From Email Address</label>
+                                            <input type="email" class="form-control" id="emailFrom" value="noreply@ebookpublisher.com">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="emailFromName" class="form-label">From Name</label>
+                                            <input type="text" class="form-control" id="emailFromName" value="eBook Publisher">
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Save Email Settings</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="sidebar-card">
+                            <h5><i class="fas fa-paper-plane me-2"></i>Test Email</h5>
+                            <div class="mb-3">
+                                <label for="testEmail" class="form-label">Send Test To</label>
+                                <input type="email" class="form-control" id="testEmail" placeholder="test@example.com">
+                            </div>
+                            <div class="d-grid">
+                                <button class="test-btn" id="testEmailBtn"><i class="fas fa-paper-plane me-2"></i>Send Test Email</button>
+                            </div>
+                        </div>
+
+                        <div class="sidebar-card">
+                            <h5><i class="fas fa-history me-2"></i>Recent Activity</h5>
+                            <div class="mb-2">
+                                <div class="d-flex justify-content-between">
+                                    <span class="fw-medium">Welcome Email</span>
+                                    <small class="text-muted">2 min ago</small>
+                                </div>
+                                <small class="text-success">Sent successfully</small>
+                            </div>
+                            <div class="mb-2">
+                                <div class="d-flex justify-content-between">
+                                    <span class="fw-medium">Password Reset</span>
+                                    <small class="text-muted">15 min ago</small>
+                                </div>
+                                <small class="text-success">Sent successfully</small>
+                            </div>
+                            <div>
+                                <div class="d-flex justify-content-between">
+                                    <span class="fw-medium">Newsletter</span>
+                                    <small class="text-muted">1 hour ago</small>
+                                </div>
+                                <small class="text-success">Sent to 1,248 users</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Settings -->
+            <div class="tab-pane fade" id="security" role="tabpanel">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="settings-card">
+                            <div class="card-header">
+                                <i class="fas fa-shield-alt me-2"></i>Security Settings
+                            </div>
+                            <div class="card-body">
+                                <form id="securityForm">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="passwordMinLength" class="form-label">Minimum Password Length</label>
+                                            <input type="number" class="form-control" id="passwordMinLength" value="8" min="6" max="50">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="sessionTimeout" class="form-label">Session Timeout (minutes)</label>
+                                            <input type="number" class="form-control" id="sessionTimeout" value="30" min="5" max="1440">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Password Requirements</label>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="checkbox" id="requireUppercase" checked>
+                                                    <label class="form-check-label" for="requireUppercase">Require uppercase letters</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="requireLowercase" checked>
+                                                    <label class="form-check-label" for="requireLowercase">Require lowercase letters</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="checkbox" id="requireNumbers" checked>
+                                                    <label class="form-check-label" for="requireNumbers">Require numbers</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="requireSpecialChars">
+                                                    <label class="form-check-label" for="requireSpecialChars">Require special characters</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="maxLoginAttempts" class="form-label">Max Login Attempts</label>
+                                            <input type="number" class="form-control" id="maxLoginAttempts" value="5" min="1" max="20">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="lockoutDuration" class="form-label">Lockout Duration (minutes)</label>
+                                            <input type="number" class="form-control" id="lockoutDuration" value="15" min="1" max="1440">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="twoFactorAuth">
+                                            <label class="form-check-label" for="twoFactorAuth">Enable Two-Factor Authentication for admin users</label>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Save Security Settings</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="sidebar-card">
+                            <h5><i class="fas fa-user-shield me-2"></i>Security Actions</h5>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-outline-warning security-btn" id="resetSessionsBtn"><i class="fas fa-sync-alt me-2"></i>Reset All Sessions</button>
+                                <button class="btn btn-outline-danger security-btn" id="clearLoginAttemptsBtn"><i class="fas fa-ban me-2"></i>Clear Login Attempts</button>
+                                <button class="btn btn-outline-info security-btn" id="generateReportBtn"><i class="fas fa-file-alt me-2"></i>Generate Security Report</button>
+                            </div>
+                        </div>
+
+                        <div class="sidebar-card">
+                            <h5><i class="fas fa-lock me-2"></i>Security Status</h5>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Last Security Scan:</span>
+                                <span class="fw-medium">2 hours ago</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Failed Logins (24h):</span>
+                                <span class="fw-medium text-warning">8</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Active Sessions:</span>
+                                <span class="fw-medium">42</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span>Last Password Change:</span>
+                                <span class="fw-medium">15 days ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
     <style>
         :root {
             --primary: #6c63ff;
@@ -27,15 +416,6 @@
             --border-radius: 12px;
             --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
             --transition: all 0.3s ease;
-        }
-
-        * {
-            font-family: 'Poppins', sans-serif;
-        }
-
-        body {
-            background-color: #f5f7fb;
-            color: var(--dark);
         }
 
         .settings-container {
@@ -291,480 +671,77 @@
 
         /* Responsive Styles */
         @@media (max-width: 768px) {
-            .settings-container
-
-        {
-            padding: 15px;
-        }
-
-        .settings-header {
-            padding: 20px;
-        }
-
-            .settings-header h1 {
-                font-size: 1.7rem;
+            .settings-container {
+                padding: 15px;
             }
 
-        .card-body {
-            padding: 20px;
-        }
+            .settings-header {
+                padding: 20px;
+            }
 
-        .tab-pane {
-            padding: 20px;
-        }
+                .settings-header h1 {
+                    font-size: 1.7rem;
+                }
 
-        .nav-tabs .nav-link {
-            padding: 12px 15px;
-            font-size: 0.9rem;
-        }
+            .card-body {
+                padding: 20px;
+            }
 
+            .tab-pane {
+                padding: 20px;
+            }
+
+            .nav-tabs .nav-link {
+                padding: 12px 15px;
+                font-size: 0.9rem;
+            }
         }
 
         @@media (max-width: 576px) {
-            .settings-container
-
-        {
-            padding: 10px;
-        }
-
-        .settings-header {
-            padding: 15px;
-            text-align: center;
-        }
-
-            .settings-header h1 {
-                font-size: 1.5rem;
+            .settings-container {
+                padding: 10px;
             }
 
-        .card-body {
-            padding: 15px;
-        }
-
-        .tab-pane {
-            padding: 15px;
-        }
-
-        .nav-tabs {
-            flex-direction: column;
-        }
-
-            .nav-tabs .nav-link {
-                width: 100%;
+            .settings-header {
+                padding: 15px;
                 text-align: center;
-                border-bottom: 1px solid #eaeaea;
             }
 
-                .nav-tabs .nav-link.active::after {
-                    display: none;
+                .settings-header h1 {
+                    font-size: 1.5rem;
                 }
 
-        .btn-primary, .btn-outline-primary {
-            width: 100%;
-            margin-bottom: 10px;
-        }
+            .card-body {
+                padding: 15px;
+            }
 
+            .tab-pane {
+                padding: 15px;
+            }
+
+            .nav-tabs {
+                flex-direction: column;
+            }
+
+                .nav-tabs .nav-link {
+                    width: 100%;
+                    text-align: center;
+                    border-bottom: 1px solid #eaeaea;
+                }
+
+                    .nav-tabs .nav-link.active::after {
+                        display: none;
+                    }
+
+            .btn-primary, .btn-outline-primary {
+                width: 100%;
+                margin-bottom: 10px;
+            }
         }
     </style>
-</head>
-<body>
-    <div class="settings-container">
-        <!-- Header Section -->
-        <div class="settings-header">
-            <h1><i class="fas fa-cog me-2"></i>System Settings</h1>
-            <p>Manage your platform configuration and preferences</p>
-        </div>
+}
 
-        <!-- Tabs Navigation -->
-        <div class="settings-tabs">
-            <ul class="nav nav-tabs" id="settingsTabs" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="general-tab" data-bs-toggle="tab" data-bs-target="#general" type="button" role="tab">
-                        <i class="fas fa-sliders-h me-2"></i>General
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="payment-tab" data-bs-toggle="tab" data-bs-target="#payment" type="button" role="tab">
-                        <i class="fas fa-credit-card me-2"></i>Payment
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="email-tab" data-bs-toggle="tab" data-bs-target="#email" type="button" role="tab">
-                        <i class="fas fa-envelope me-2"></i>Email
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="security-tab" data-bs-toggle="tab" data-bs-target="#security" type="button" role="tab">
-                        <i class="fas fa-shield-alt me-2"></i>Security
-                    </button>
-                </li>
-            </ul>
-
-            <div class="tab-content" id="settingsTabContent">
-                <!-- General Settings -->
-                <div class="tab-pane fade show active" id="general" role="tabpanel">
-                    <div class="row">
-                        <div class="col-lg-8">
-                            <div class="settings-card">
-                                <div class="card-header">
-                                    <i class="fas fa-cog me-2"></i>General Settings
-                                </div>
-                                <div class="card-body">
-                                    <form id="generalForm">
-                                        <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                                <label for="siteName" class="form-label">Site Name</label>
-                                                <input type="text" class="form-control" id="siteName" value="eBook Publisher">
-                                            </div>
-                                            <div class="col-md-6 mb-3">
-                                                <label for="adminEmail" class="form-label">Admin Email</label>
-                                                <input type="email" class="form-control" id="adminEmail" value="admin@ebookpublisher.com">
-                                            </div>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="siteDescription" class="form-label">Site Description</label>
-                                            <textarea class="form-control" id="siteDescription" rows="3">The ultimate platform for authors to publish and readers to discover amazing books.</textarea>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                                <label for="supportEmail" class="form-label">Support Email</label>
-                                                <input type="email" class="form-control" id="supportEmail" value="support@ebookpublisher.com">
-                                            </div>
-                                            <div class="col-md-6 mb-3">
-                                                <label for="timezone" class="form-label">Timezone</label>
-                                                <select class="form-select" id="timezone">
-                                                    <option value="UTC" selected>UTC</option>
-                                                    <option value="EST">Eastern Time</option>
-                                                    <option value="PST">Pacific Time</option>
-                                                    <option value="GMT">GMT</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="mb-3">
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" id="maintenanceMode">
-                                                <label class="form-check-label" for="maintenanceMode">Enable maintenance mode</label>
-                                            </div>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary">Save Changes</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="sidebar-card">
-                                <h5><i class="fas fa-image me-2"></i>Site Logo</h5>
-                                <div class="logo-preview">
-                                    <img src="https://via.placeholder.com/200x60/6c63ff/ffffff?text=eBook+Publisher" alt="Site Logo">
-                                </div>
-                                <div class="d-grid gap-2">
-                                    <button class="btn btn-outline-primary"><i class="fas fa-upload me-2"></i>Upload New Logo</button>
-                                    <button class="btn btn-outline-danger"><i class="fas fa-trash me-2"></i>Remove Logo</button>
-                                </div>
-                            </div>
-
-                            <div class="sidebar-card">
-                                <h5><i class="fas fa-info-circle me-2"></i>System Status</h5>
-                                <div class="d-flex justify-content-between mb-2">
-                                    <span>Website Status:</span>
-                                    <span><span class="status-indicator status-active"></span>Online</span>
-                                </div>
-                                <div class="d-flex justify-content-between mb-2">
-                                    <span>Database:</span>
-                                    <span><span class="status-indicator status-active"></span>Connected</span>
-                                </div>
-                                <div class="d-flex justify-content-between mb-2">
-                                    <span>SSL Certificate:</span>
-                                    <span><span class="status-indicator status-active"></span>Active</span>
-                                </div>
-                                <div class="d-flex justify-content-between">
-                                    <span>Maintenance Mode:</span>
-                                    <span><span class="status-indicator status-inactive"></span>Disabled</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Payment Settings -->
-                <div class="tab-pane fade" id="payment" role="tabpanel">
-                    <div class="row">
-                        <div class="col-lg-8">
-                            <div class="settings-card">
-                                <div class="card-header">
-                                    <i class="fas fa-credit-card me-2"></i>Payment Settings
-                                </div>
-                                <div class="card-body">
-                                    <form id="paymentForm">
-                                        <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                                <label for="currency" class="form-label">Default Currency</label>
-                                                <select class="form-select" id="currency">
-                                                    <option value="USD" selected>USD - US Dollar</option>
-                                                    <option value="EUR">EUR - Euro</option>
-                                                    <option value="GBP">GBP - British Pound</option>
-                                                    <option value="CAD">CAD - Canadian Dollar</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-6 mb-3">
-                                                <label for="paymentGateway" class="form-label">Payment Gateway</label>
-                                                <select class="form-select" id="paymentGateway">
-                                                    <option value="stripe" selected>Stripe</option>
-                                                    <option value="paypal">PayPal</option>
-                                                    <option value="both">Both Stripe and PayPal</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="taxRate" class="form-label">Tax Rate (%)</label>
-                                            <input type="number" class="form-control" id="taxRate" value="0" min="0" max="100" step="0.1">
-                                        </div>
-                                        <h6 class="mt-4 mb-3">Stripe Configuration</h6>
-                                        <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                                <label for="stripeKey" class="form-label">Stripe Publishable Key</label>
-                                                <input type="text" class="form-control" id="stripeKey" placeholder="pk_live_...">
-                                            </div>
-                                            <div class="col-md-6 mb-3">
-                                                <label for="stripeSecret" class="form-label">Stripe Secret Key</label>
-                                                <input type="password" class="form-control" id="stripeSecret" placeholder="sk_live_...">
-                                            </div>
-                                        </div>
-                                        <h6 class="mt-4 mb-3">PayPal Configuration</h6>
-                                        <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                                <label for="paypalClientId" class="form-label">PayPal Client ID</label>
-                                                <input type="text" class="form-control" id="paypalClientId" placeholder="Client ID">
-                                            </div>
-                                            <div class="col-md-6 mb-3">
-                                                <label for="paypalSecret" class="form-label">PayPal Secret</label>
-                                                <input type="password" class="form-control" id="paypalSecret" placeholder="Secret">
-                                            </div>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary">Save Payment Settings</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="sidebar-card">
-                                <h5><i class="fas fa-vial me-2"></i>Payment Test</h5>
-                                <p class="text-muted">Test your payment configuration to ensure everything is working correctly.</p>
-                                <div class="d-grid">
-                                    <button class="test-btn" id="testPaymentBtn"><i class="fas fa-play-circle me-2"></i>Test Payment</button>
-                                </div>
-                            </div>
-
-                            <div class="sidebar-card">
-                                <h5><i class="fas fa-chart-line me-2"></i>Payment Statistics</h5>
-                                <div class="d-flex justify-content-between mb-2">
-                                    <span>Successful Payments:</span>
-                                    <span class="fw-bold">1,248</span>
-                                </div>
-                                <div class="d-flex justify-content-between mb-2">
-                                    <span>Failed Payments:</span>
-                                    <span class="fw-bold text-danger">12</span>
-                                </div>
-                                <div class="d-flex justify-content-between mb-2">
-                                    <span>Total Revenue:</span>
-                                    <span class="fw-bold text-success">$24,580.50</span>
-                                </div>
-                                <div class="d-flex justify-content-between">
-                                    <span>Avg. Transaction:</span>
-                                    <span class="fw-bold">$19.68</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Email Settings -->
-                <div class="tab-pane fade" id="email" role="tabpanel">
-                    <div class="row">
-                        <div class="col-lg-8">
-                            <div class="settings-card">
-                                <div class="card-header">
-                                    <i class="fas fa-envelope me-2"></i>Email Settings
-                                </div>
-                                <div class="card-body">
-                                    <form id="emailForm">
-                                        <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                                <label for="smtpHost" class="form-label">SMTP Host</label>
-                                                <input type="text" class="form-control" id="smtpHost" placeholder="smtp.example.com">
-                                            </div>
-                                            <div class="col-md-6 mb-3">
-                                                <label for="smtpPort" class="form-label">SMTP Port</label>
-                                                <input type="number" class="form-control" id="smtpPort" value="587">
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                                <label for="smtpUsername" class="form-label">SMTP Username</label>
-                                                <input type="text" class="form-control" id="smtpUsername" placeholder="username@example.com">
-                                            </div>
-                                            <div class="col-md-6 mb-3">
-                                                <label for="smtpPassword" class="form-label">SMTP Password</label>
-                                                <input type="password" class="form-control" id="smtpPassword" placeholder="Password">
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                                <label for="emailFrom" class="form-label">From Email Address</label>
-                                                <input type="email" class="form-control" id="emailFrom" value="noreply@ebookpublisher.com">
-                                            </div>
-                                            <div class="col-md-6 mb-3">
-                                                <label for="emailFromName" class="form-label">From Name</label>
-                                                <input type="text" class="form-control" id="emailFromName" value="eBook Publisher">
-                                            </div>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary">Save Email Settings</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="sidebar-card">
-                                <h5><i class="fas fa-paper-plane me-2"></i>Test Email</h5>
-                                <div class="mb-3">
-                                    <label for="testEmail" class="form-label">Send Test To</label>
-                                    <input type="email" class="form-control" id="testEmail" placeholder="test@example.com">
-                                </div>
-                                <div class="d-grid">
-                                    <button class="test-btn" id="testEmailBtn"><i class="fas fa-paper-plane me-2"></i>Send Test Email</button>
-                                </div>
-                            </div>
-
-                            <div class="sidebar-card">
-                                <h5><i class="fas fa-history me-2"></i>Recent Activity</h5>
-                                <div class="mb-2">
-                                    <div class="d-flex justify-content-between">
-                                        <span class="fw-medium">Welcome Email</span>
-                                        <small class="text-muted">2 min ago</small>
-                                    </div>
-                                    <small class="text-success">Sent successfully</small>
-                                </div>
-                                <div class="mb-2">
-                                    <div class="d-flex justify-content-between">
-                                        <span class="fw-medium">Password Reset</span>
-                                        <small class="text-muted">15 min ago</small>
-                                    </div>
-                                    <small class="text-success">Sent successfully</small>
-                                </div>
-                                <div>
-                                    <div class="d-flex justify-content-between">
-                                        <span class="fw-medium">Newsletter</span>
-                                        <small class="text-muted">1 hour ago</small>
-                                    </div>
-                                    <small class="text-success">Sent to 1,248 users</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Security Settings -->
-                <div class="tab-pane fade" id="security" role="tabpanel">
-                    <div class="row">
-                        <div class="col-lg-8">
-                            <div class="settings-card">
-                                <div class="card-header">
-                                    <i class="fas fa-shield-alt me-2"></i>Security Settings
-                                </div>
-                                <div class="card-body">
-                                    <form id="securityForm">
-                                        <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                                <label for="passwordMinLength" class="form-label">Minimum Password Length</label>
-                                                <input type="number" class="form-control" id="passwordMinLength" value="8" min="6" max="50">
-                                            </div>
-                                            <div class="col-md-6 mb-3">
-                                                <label for="sessionTimeout" class="form-label">Session Timeout (minutes)</label>
-                                                <input type="number" class="form-control" id="sessionTimeout" value="30" min="5" max="1440">
-                                            </div>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Password Requirements</label>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-check mb-2">
-                                                        <input class="form-check-input" type="checkbox" id="requireUppercase" checked>
-                                                        <label class="form-check-label" for="requireUppercase">Require uppercase letters</label>
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" id="requireLowercase" checked>
-                                                        <label class="form-check-label" for="requireLowercase">Require lowercase letters</label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-check mb-2">
-                                                        <input class="form-check-input" type="checkbox" id="requireNumbers" checked>
-                                                        <label class="form-check-label" for="requireNumbers">Require numbers</label>
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" id="requireSpecialChars">
-                                                        <label class="form-check-label" for="requireSpecialChars">Require special characters</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                                <label for="maxLoginAttempts" class="form-label">Max Login Attempts</label>
-                                                <input type="number" class="form-control" id="maxLoginAttempts" value="5" min="1" max="20">
-                                            </div>
-                                            <div class="col-md-6 mb-3">
-                                                <label for="lockoutDuration" class="form-label">Lockout Duration (minutes)</label>
-                                                <input type="number" class="form-control" id="lockoutDuration" value="15" min="1" max="1440">
-                                            </div>
-                                        </div>
-                                        <div class="mb-3">
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" id="twoFactorAuth">
-                                                <label class="form-check-label" for="twoFactorAuth">Enable Two-Factor Authentication for admin users</label>
-                                            </div>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary">Save Security Settings</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="sidebar-card">
-                                <h5><i class="fas fa-user-shield me-2"></i>Security Actions</h5>
-                                <div class="d-grid gap-2">
-                                    <button class="btn btn-outline-warning security-btn" id="resetSessionsBtn"><i class="fas fa-sync-alt me-2"></i>Reset All Sessions</button>
-                                    <button class="btn btn-outline-danger security-btn" id="clearLoginAttemptsBtn"><i class="fas fa-ban me-2"></i>Clear Login Attempts</button>
-                                    <button class="btn btn-outline-info security-btn" id="generateReportBtn"><i class="fas fa-file-alt me-2"></i>Generate Security Report</button>
-                                </div>
-                            </div>
-
-                            <div class="sidebar-card">
-                                <h5><i class="fas fa-lock me-2"></i>Security Status</h5>
-                                <div class="d-flex justify-content-between mb-2">
-                                    <span>Last Security Scan:</span>
-                                    <span class="fw-medium">2 hours ago</span>
-                                </div>
-                                <div class="d-flex justify-content-between mb-2">
-                                    <span>Failed Logins (24h):</span>
-                                    <span class="fw-medium text-warning">8</span>
-                                </div>
-                                <div class="d-flex justify-content-between mb-2">
-                                    <span>Active Sessions:</span>
-                                    <span class="fw-medium">42</span>
-                                </div>
-                                <div class="d-flex justify-content-between">
-                                    <span>Last Password Change:</span>
-                                    <span class="fw-medium">15 days ago</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+@section Scripts {
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Form submission handlers
@@ -772,83 +749,18 @@
             forms.forEach(form => {
                 form.addEventListener('submit', function(e) {
                     e.preventDefault();
-
-                    // Show loading state
-                    const submitBtn = form.querySelector('button[type="submit"]');
-                    const originalText = submitBtn.innerHTML;
-                    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...';
-                    submitBtn.disabled = true;
-
-                    // Simulate API call
-                    setTimeout(() => {
-                        // Show success message
-                        Swal.fire({
-                            title: 'Settings Saved!',
-                            text: 'Your changes have been saved successfully.',
-                            icon: 'success',
-                            timer: 2000,
-                            showConfirmButton: false
-                        });
-
-                        // Reset button
-                        submitBtn.innerHTML = originalText;
-                        submitBtn.disabled = false;
-                    }, 1500);
+                    handleFormSubmit(this);
                 });
             });
 
             // Test payment functionality
             document.getElementById('testPaymentBtn').addEventListener('click', function() {
-                Swal.fire({
-                    title: 'Testing Payment',
-                    text: 'Simulating payment test...',
-                    allowOutsideClick: false,
-                    showConfirmButton: false,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
-
-                setTimeout(() => {
-                    Swal.fire({
-                        title: 'Test Successful!',
-                        text: 'Payment configuration is working correctly.',
-                        icon: 'success',
-                        confirmButtonColor: '#6c63ff'
-                    });
-                }, 1500);
+                testPaymentConfiguration();
             });
 
             // Test email functionality
             document.getElementById('testEmailBtn').addEventListener('click', function() {
-                const testEmail = document.getElementById('testEmail');
-                if (testEmail && testEmail.value) {
-                    Swal.fire({
-                        title: 'Sending Test Email',
-                        text: 'Sending test email to ' + testEmail.value + '...',
-                        allowOutsideClick: false,
-                        showConfirmButton: false,
-                        didOpen: () => {
-                            Swal.showLoading();
-                        }
-                    });
-
-                    setTimeout(() => {
-                        Swal.fire({
-                            title: 'Email Sent!',
-                            text: 'Test email successfully sent to ' + testEmail.value + '.',
-                            icon: 'success',
-                            confirmButtonColor: '#6c63ff'
-                        });
-                    }, 1500);
-                } else {
-                    Swal.fire({
-                        title: 'Email Required',
-                        text: 'Please enter an email address to send the test to.',
-                        icon: 'warning',
-                        confirmButtonColor: '#6c63ff'
-                    });
-                }
+                testEmailConfiguration();
             });
 
             // Security actions
@@ -856,39 +768,217 @@
             securityButtons.forEach(button => {
                 button.addEventListener('click', function() {
                     const action = this.textContent.trim();
-                    Swal.fire({
-                        title: 'Confirm Action',
-                        text: 'Are you sure you want to ' + action.toLowerCase() + '?',
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#6c63ff',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes, proceed!'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            Swal.fire({
-                                title: 'Processing...',
-                                text: action + ' in progress...',
-                                allowOutsideClick: false,
-                                showConfirmButton: false,
-                                didOpen: () => {
-                                    Swal.showLoading();
-                                }
-                            });
-
-                            setTimeout(() => {
-                                Swal.fire({
-                                    title: 'Success!',
-                                    text: action + ' completed successfully.',
-                                    icon: 'success',
-                                    confirmButtonColor: '#6c63ff'
-                                });
-                            }, 1500);
-                        }
-                    });
+                    performSecurityAction(action);
                 });
             });
         });
+
+        async function handleFormSubmit(form) {
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+
+            // Show loading state
+            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...';
+            submitBtn.disabled = true;
+
+            try {
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData);
+
+                let endpoint = '';
+                if (form.id === 'generalForm') {
+                    endpoint = '@Url.Action("SaveGeneralSettings", "Admin")';
+                } else if (form.id === 'paymentForm') {
+                    endpoint = '@Url.Action("SavePaymentSettings", "Admin")';
+                } else if (form.id === 'emailForm') {
+                    endpoint = '@Url.Action("SaveEmailSettings", "Admin")';
+                } else if (form.id === 'securityForm') {
+                    endpoint = '@Url.Action("SaveSecuritySettings", "Admin")';
+                }
+
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    Swal.fire({
+                        title: 'Settings Saved!',
+                        text: result.message,
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                } else {
+                    throw new Error(result.message);
+                }
+            } catch (error) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: error.message || 'Failed to save settings',
+                    icon: 'error',
+                    confirmButtonColor: '#6c63ff'
+                });
+            } finally {
+                // Reset button
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        }
+
+        async function testPaymentConfiguration() {
+            Swal.fire({
+                title: 'Testing Payment',
+                text: 'Simulating payment test...',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            try {
+                const response = await fetch('@Url.Action("TestPaymentConfiguration", "Admin")', {
+                    method: 'POST',
+                    headers: {
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    }
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    Swal.fire({
+                        title: 'Test Successful!',
+                        text: result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#6c63ff'
+                    });
+                } else {
+                    throw new Error(result.message);
+                }
+            } catch (error) {
+                Swal.fire({
+                    title: 'Test Failed!',
+                    text: error.message || 'Payment test failed',
+                    icon: 'error',
+                    confirmButtonColor: '#6c63ff'
+                });
+            }
+        }
+
+        async function testEmailConfiguration() {
+            const testEmail = document.getElementById('testEmail');
+            if (testEmail && testEmail.value) {
+                Swal.fire({
+                    title: 'Sending Test Email',
+                    text: 'Sending test email to ' + testEmail.value + '...',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                try {
+                    const response = await fetch('@Url.Action("TestEmailConfiguration", "Admin")', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                        },
+                        body: JSON.stringify({ emailAddress: testEmail.value })
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        Swal.fire({
+                            title: 'Email Sent!',
+                            text: result.message,
+                            icon: 'success',
+                            confirmButtonColor: '#6c63ff'
+                        });
+                    } else {
+                        throw new Error(result.message);
+                    }
+                } catch (error) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: error.message || 'Failed to send test email',
+                        icon: 'error',
+                        confirmButtonColor: '#6c63ff'
+                    });
+                }
+            } else {
+                Swal.fire({
+                    title: 'Email Required',
+                    text: 'Please enter an email address to send the test to.',
+                    icon: 'warning',
+                    confirmButtonColor: '#6c63ff'
+                });
+            }
+        }
+
+        async function performSecurityAction(action) {
+            Swal.fire({
+                title: 'Confirm Action',
+                text: 'Are you sure you want to ' + action.toLowerCase() + '?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#6c63ff',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, proceed!'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Processing...',
+                        text: action + ' in progress...',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    try {
+                        const response = await fetch('@Url.Action("PerformSecurityAction", "Admin")', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                            },
+                            body: JSON.stringify({ actionName: action })
+                        });
+
+                        const result = await response.json();
+
+                        if (result.success) {
+                            Swal.fire({
+                                title: 'Success!',
+                                text: result.message,
+                                icon: 'success',
+                                confirmButtonColor: '#6c63ff'
+                            });
+                        } else {
+                            throw new Error(result.message);
+                        }
+                    } catch (error) {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: error.message || 'Failed to perform security action',
+                            icon: 'error',
+                            confirmButtonColor: '#6c63ff'
+                        });
+                    }
+                }
+            });
+        }
     </script>
-</body>
-</html>
+}

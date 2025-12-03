@@ -1,1118 +1,1291 @@
+@model List<EBookDashboard.Models.UserManagementViewModel>
 @{
+    ViewData["Title"] = "User / Author Management";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
-    ViewData["Title"] = "User Management";
 }
 
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="~/js/admin-animations.js"></script>
+
 <style>
-    /* Outstanding User Management Styles */
-    .user-management-container {
-        animation: fadeIn 0.8s ease-out;
+    :root {
+        --white: #FFFFFF;
+        --light-gray: #F5F5F5;
+        --warm-gray: #E8E8E8;
+        --text-primary: #2C2C2C;
+        --text-secondary: #6B6B6B;
+        --text-muted: #9B9B9B;
+        --border-light: #E5E5E5;
+        --shadow-soft: rgba(0, 0, 0, 0.05);
+        --primary: #7c3aed;
+        --success: #10b981;
+        --danger: #ef4444;
+        --warning: #f59e0b;
     }
 
-    @@keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
+    .users-container {
+        padding: 0;
     }
 
-    /* Header with Gradient Animation */
-    .user-management-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border-radius: 20px;
-        padding: 30px;
-        color: white;
-        margin-bottom: 30px;
-        box-shadow: 0 15px 35px rgba(102, 126, 234, 0.2);
-        position: relative;
-        overflow: hidden;
-        border: none;
-        animation: slideInDown 0.6s ease-out;
-    }
-
-    .user-management-header::before {
-        content: "";
-        position: absolute;
-        top: -50%;
-        right: -50%;
-        width: 100%;
-        height: 100%;
-        background: rgba(255, 255, 255, 0.1);
-        transform: rotate(30deg);
-        animation: shimmer 3s infinite;
-    }
-
-    @@keyframes shimmer {
-        0% { transform: rotate(30deg) translateX(-20%); }
-        50% { transform: rotate(30deg) translateX(20%); }
-        100% { transform: rotate(30deg) translateX(-20%); }
-    }
-
-    .user-management-header h1 {
-        font-weight: 800;
-        margin-bottom: 10px;
-        font-size: 2.5rem;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        animation: textGlow 2s infinite alternate;
-    }
-
-    @@keyframes textGlow {
-        from { text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); }
-        to { text-shadow: 0 2px 10px rgba(255, 255, 255, 0.4); }
-    }
-
-    .user-management-header p {
-        opacity: 0.9;
-        margin-bottom: 0;
-        font-size: 1.1rem;
-        max-width: 600px;
-    }
-
-    /* Stats Cards with Outstanding Design */
-    .stats-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 25px;
-        margin-bottom: 35px;
-    }
-
-    .stat-card {
-        background: linear-gradient(145deg, #ffffff, #f8f9fa);
-        border-radius: 20px;
-        padding: 30px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    /* Header Section */
+    .page-header {
+        background: var(--white);
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 24px;
+        box-shadow: 0 2px 8px var(--shadow-soft);
+        border: 1px solid var(--border-light);
         display: flex;
-        flex-direction: column;
+        justify-content: space-between;
         align-items: center;
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-        border: none;
-        animation: floatIn 0.6s ease-out;
-        animation-fill-mode: both;
+        flex-wrap: wrap;
+        gap: 16px;
     }
 
-    .stat-card::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 5px;
-        background: linear-gradient(90deg, #667eea, #764ba2);
-        transform: scaleX(0);
-        transform-origin: left;
-        transition: transform 0.5s ease;
-    }
-
-    .stat-card:hover {
-        transform: translateY(-10px) scale(1.02);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-    }
-
-    .stat-card:hover::before {
-        transform: scaleX(1);
-    }
-
-    .stat-icon {
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 20px;
-        font-size: 2rem;
-        transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        animation: pulseIcon 3s infinite;
-    }
-
-    @@keyframes pulseIcon {
-        0% { transform: scale(1); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); }
-        50% { transform: scale(1.1); box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15); }
-        100% { transform: scale(1); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); }
-    }
-
-    .stat-card:hover .stat-icon {
-        transform: scale(1.2) rotate(10deg);
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-    }
-
-    .stat-card.admin .stat-icon {
-        background: linear-gradient(135deg, #ff6b6b, #ee5a52);
-        color: white;
-    }
-
-    .stat-card.author .stat-icon {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        color: white;
-    }
-
-    .stat-card.reader .stat-icon {
-        background: linear-gradient(135deg, #4ecdc4, #44a08d);
-        color: white;
-    }
-
-    .stat-card.total .stat-icon {
-        background: linear-gradient(135deg, #ffd166, #ffb347);
-        color: white;
-    }
-
-    .stat-value {
-        font-size: 2.8rem;
-        font-weight: 800;
-        margin-bottom: 10px;
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        transition: all 0.3s ease;
-    }
-
-    .stat-card:hover .stat-value {
-        transform: scale(1.1);
-    }
-
-    .stat-label {
-        font-size: 1rem;
-        color: #6c757d;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-
-    /* Search Section with Outstanding Design */
-    .search-section {
-        background: linear-gradient(145deg, #ffffff, #f8f9fa);
-        padding: 30px;
-        border-radius: 20px;
-        margin-bottom: 35px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        transition: all 0.4s ease;
-        border: none;
-        animation: slideInUp 0.6s ease-out;
-    }
-
-    .search-section:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-    }
-
-    .section-title {
-        font-size: 1.5rem;
+    .page-title {
+        font-size: 24px;
         font-weight: 700;
-        margin-bottom: 25px;
-        color: #333;
+        color: var(--text-primary);
+    }
+
+    .header-actions {
         display: flex;
-        align-items: center;
         gap: 12px;
-        position: relative;
-        padding-bottom: 15px;
-    }
-
-    .section-title::after {
-        content: "";
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 60px;
-        height: 4px;
-        background: linear-gradient(90deg, #667eea, #764ba2);
-        border-radius: 2px;
-    }
-
-    .section-title i {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        font-size: 1.3rem;
-    }
-
-    .search-controls {
-        display: flex;
-        gap: 20px;
-        align-items: center;
         flex-wrap: wrap;
     }
 
-    .search-input, .filter-select {
-        padding: 15px 20px;
-        border: 2px solid #e9ecef;
-        border-radius: 15px;
-        font-size: 1rem;
+    .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 10px;
+        font-weight: 500;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
         transition: all 0.3s ease;
-        background: white;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-    }
-
-    .search-input:focus, .filter-select:focus {
-        outline: none;
-        border-color: #667eea;
-        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
-        transform: translateY(-2px);
-    }
-
-    .search-input {
-        flex: 1;
-        min-width: 300px;
-        background: linear-gradient(145deg, #ffffff, #f8f9fa);
-    }
-
-    .search-input::placeholder {
-        color: #adb5bd;
+        font-size: 14px;
     }
 
     .btn-primary {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        border: none;
-        padding: 15px 25px;
-        border-radius: 15px;
-        font-weight: 600;
-        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        background: var(--primary);
+        color: white;
     }
 
     .btn-primary:hover {
-        transform: translateY(-5px) scale(1.05);
-        box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
-    }
-
-    .btn-primary:active {
+        background: #6d28d9;
         transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
     }
 
-    /* Users Table with Outstanding Design */
-    .users-table-container {
-        background: linear-gradient(145deg, #ffffff, #f8f9fa);
-        border-radius: 20px;
-        overflow: hidden;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        margin-bottom: 35px;
-        border: none;
-        animation: fadeIn 0.8s ease-out;
+    .btn-secondary {
+        background: var(--light-gray);
+        color: var(--text-primary);
+        border: 1px solid var(--border-light);
     }
 
-    .table-responsive {
-        border-radius: 20px;
-        overflow: hidden;
+    .btn-secondary:hover {
+        background: var(--warm-gray);
     }
 
-    .table {
-        margin-bottom: 0;
+    /* Filters Section */
+    .filters-section {
+        background: var(--white);
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 24px;
+        box-shadow: 0 2px 8px var(--shadow-soft);
+        border: 1px solid var(--border-light);
     }
 
-    .table thead th {
-        background: linear-gradient(90deg, #667eea, #764ba2);
-        color: white;
-        border: none;
-        font-weight: 600;
-        padding: 20px 15px;
+    .filters-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        align-items: end;
+    }
+
+    .filter-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .filter-label {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--text-secondary);
         text-transform: uppercase;
         letter-spacing: 0.5px;
-        font-size: 0.9rem;
     }
 
-    .table tbody td {
-        padding: 20px 15px;
-        vertical-align: middle;
-        border-bottom: 1px solid #e9ecef;
+    .filter-input,
+    .filter-select {
+        padding: 10px 14px;
+        border: 1px solid var(--border-light);
+        border-radius: 10px;
+        font-size: 14px;
+        background: var(--white);
+        color: var(--text-primary);
         transition: all 0.3s ease;
     }
 
-    .table tbody tr {
+    .filter-input:focus,
+    .filter-select:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+    }
+
+    .search-bar {
+        position: relative;
+    }
+
+    .search-bar input {
+        padding-left: 40px;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted);
+    }
+
+    /* Table Section */
+    .table-container {
+        background: var(--white);
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 2px 8px var(--shadow-soft);
+        border: 1px solid var(--border-light);
+        overflow-x: auto;
+    }
+
+    .users-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table-header {
+        background: var(--light-gray);
+        border-radius: 10px;
+    }
+
+    .table-header th {
+        padding: 16px;
+        text-align: left;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 2px solid var(--border-light);
+    }
+
+    .table-header th:first-child {
+        width: 40px;
+    }
+
+    .table-row {
+        border-bottom: 1px solid var(--border-light);
         transition: all 0.3s ease;
     }
 
-    .table tbody tr:hover {
-        background-color: rgba(102, 126, 234, 0.05);
-        transform: scale(1.01);
+    .table-row:hover {
+        background: var(--light-gray);
+    }
+
+    .table-row.highlighted {
+        background: #FFF8DC;
+    }
+
+    .table-cell {
+        padding: 16px;
+        font-size: 14px;
+        color: var(--text-primary);
+    }
+
+    .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary) 0%, #FFD700 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+        font-size: 14px;
     }
 
     .user-info {
         display: flex;
-        align-items: center;
-        gap: 15px;
+        flex-direction: column;
+        gap: 4px;
     }
 
-    .user-avatar {
-        width: 55px;
-        height: 55px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+    .user-name {
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    .user-email {
+        font-size: 12px;
+        color: var(--text-muted);
+    }
+
+    .status-badge {
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 500;
+        text-transform: uppercase;
+        display: inline-block;
+    }
+
+    .badge-active {
+        background: rgba(16, 185, 129, 0.1);
+        color: var(--success);
+    }
+
+    .badge-suspended {
+        background: rgba(245, 158, 11, 0.1);
+        color: var(--warning);
+    }
+
+    .badge-deleted {
+        background: rgba(239, 68, 68, 0.1);
+        color: var(--danger);
+    }
+
+    .progress-bar-mini {
+        width: 80px;
+        height: 6px;
+        background: var(--warm-gray);
+        border-radius: 3px;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: var(--success);
+        border-radius: 3px;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 8px;
+    }
+
+    .btn-icon {
+        width: 32px;
+        height: 32px;
+        padding: 0;
         display: flex;
         align-items: center;
         justify-content: center;
+        border-radius: 8px;
+        background: var(--light-gray);
+        color: var(--text-primary);
+        border: 1px solid var(--border-light);
+    }
+
+    .btn-icon:hover {
+        background: var(--primary);
         color: white;
-        font-weight: 700;
-        font-size: 1.3rem;
-        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
-        transition: all 0.3s ease;
-        animation: bounce 4s infinite;
+        border-color: var(--primary);
     }
 
-    @@keyframes bounce {
-        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-        40% { transform: translateY(-10px); }
-        60% { transform: translateY(-5px); }
+    .dropdown-menu {
+        position: relative;
     }
 
-    .table tbody tr:hover .user-avatar {
-        transform: scale(1.1) rotate(5deg);
-        box-shadow: 0 12px 25px rgba(102, 126, 234, 0.4);
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 100%;
+        background: var(--white);
+        border: 1px solid var(--border-light);
+        border-radius: 10px;
+        box-shadow: 0 4px 12px var(--shadow-soft);
+        z-index: 100;
+        min-width: 160px;
+        margin-top: 4px;
     }
 
-    .role-badge, .status-badge {
-        padding: 8px 16px;
-        border-radius: 25px;
-        font-size: 0.85rem;
-        font-weight: 600;
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    .dropdown-menu:hover .dropdown-content {
+        display: block;
     }
 
-    .role-badge:hover, .status-badge:hover {
-        transform: scale(1.05);
-        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+    .dropdown-item {
+        padding: 10px 16px;
+        font-size: 14px;
+        color: var(--text-primary);
+        text-decoration: none;
+        display: block;
+        transition: all 0.2s ease;
     }
 
-    .role-badge.admin, .role-badge.Admin {
-        background: linear-gradient(135deg, rgba(255, 107, 107, 0.2), rgba(238, 90, 82, 0.2));
-        color: #ff6b6b;
+    .dropdown-item:hover {
+        background: var(--light-gray);
     }
 
-    .role-badge.author, .role-badge.Author {
-        background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
-        color: #667eea;
+    .dropdown-item.danger {
+        color: var(--danger);
     }
 
-    .role-badge.reader, .role-badge.Reader {
-        background: linear-gradient(135deg, rgba(78, 205, 196, 0.2), rgba(68, 160, 141, 0.2));
-        color: #4ecdc4;
-    }
-
-    .status-badge.active {
-        background: linear-gradient(135deg, rgba(76, 209, 55, 0.2), rgba(56, 173, 169, 0.2));
-        color: #4cd137;
-    }
-
-    .status-badge.inactive {
-        background: linear-gradient(135deg, rgba(108, 117, 125, 0.2), rgba(73, 80, 87, 0.2));
-        color: #6c757d;
-    }
-
-    .btn-action {
-        padding: 10px 15px;
+    /* Floating Action Button */
+    .fab {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: var(--primary);
+        color: white;
         border: none;
-        border-radius: 12px;
-        margin: 0 5px;
+        font-size: 24px;
         cursor: pointer;
-        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        background: rgba(102, 126, 234, 0.1);
-        color: #667eea;
-        font-size: 1rem;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-    }
-
-    .btn-action:hover {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        color: white;
-        transform: translateY(-3px) scale(1.1);
-        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
-    }
-
-    .btn-action.delete {
-        background: rgba(255, 107, 107, 0.1);
-        color: #ff6b6b;
-    }
-
-    .btn-action.delete:hover {
-        background: linear-gradient(135deg, #ff6b6b, #ee5a52);
-        color: white;
-        transform: translateY(-3px) scale(1.1);
-        box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
-    }
-
-    /* Modal Styles with Outstanding Design */
-    .modal-content {
-        border: none;
-        border-radius: 20px;
-        overflow: hidden;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
-        animation: modalSlideIn 0.4s ease-out;
-    }
-
-    @@keyframes modalSlideIn {
-        from { opacity: 0; transform: translateY(-50px) scale(0.9); }
-        to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-
-    .modal-header {
-        background: linear-gradient(90deg, #667eea, #764ba2);
-        color: white;
-        border: none;
-        padding: 25px;
-    }
-
-    .modal-body {
-        padding: 30px;
-    }
-
-    .modal-footer {
-        padding: 25px;
-        border: none;
-        background: #f8f9fa;
-    }
-
-    .form-label {
-        font-weight: 600;
-        color: #333;
-        margin-bottom: 10px;
-        font-size: 1.1rem;
-    }
-
-    .form-control, .form-select {
-        border-radius: 15px;
-        padding: 15px 20px;
-        border: 2px solid #e9ecef;
+        box-shadow: 0 4px 16px rgba(124, 58, 237, 0.4);
         transition: all 0.3s ease;
-        background: #ffffff;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-    }
-
-    .form-control:focus, .form-select:focus {
-        border-color: #667eea;
-        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
-        transform: translateY(-2px);
-    }
-
-    .btn-secondary {
-        background: #6c757d;
-        border: none;
-        border-radius: 15px;
-        padding: 12px 25px;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        box-shadow: 0 5px 15px rgba(108, 117, 125, 0.2);
-    }
-
-    .btn-secondary:hover {
-        background: #5a6268;
-        transform: translateY(-3px);
-        box-shadow: 0 8px 20px rgba(108, 117, 125, 0.3);
-    }
-
-    /* Pagination with Outstanding Design */
-    .pagination-container {
+        z-index: 999;
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        padding: 25px;
-        background: linear-gradient(145deg, #ffffff, #f8f9fa);
-        border-radius: 20px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        margin-bottom: 30px;
-        border: none;
-        animation: fadeIn 0.8s ease-out;
+        justify-content: center;
     }
 
-    .pagination-info {
-        color: #6c757d;
-        font-size: 1rem;
-        font-weight: 500;
+    .fab:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5);
     }
 
-    .pagination .page-link {
-        border-radius: 12px;
-        margin: 0 5px;
-        border: 2px solid #e9ecef;
-        color: #333;
-        padding: 12px 18px;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        background: white;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-    }
-
-    .pagination .page-link:hover {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        color: white;
-        border-color: #667eea;
-        transform: translateY(-3px);
-        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
-    }
-
-    .pagination .page-item.active .page-link {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        border-color: #667eea;
-        color: white;
-        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
-    }
-
-    /* Animations */
-    @@keyframes slideInDown {
-        from { opacity: 0; transform: translateY(-50px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    @@keyframes slideInUp {
-        from { opacity: 0; transform: translateY(50px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    @@keyframes floatIn {
-        from { opacity: 0; transform: translateY(30px) scale(0.95); }
-        to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-
-    /* Responsive Design */
+    /* Responsive */
     @@media (max-width: 768px) {
-        .user-management-container {
-            padding: 15px;
-        }
-
-        .user-management-header {
-            padding: 25px 20px;
-        }
-
-        .user-management-header h1 {
-            font-size: 2rem;
-        }
-
-        .search-controls {
-            flex-direction: column;
-            align-items: stretch;
-        }
-
-        .search-input, .filter-select {
-            width: 100%;
-            margin-bottom: 15px;
-        }
-
-        .table-responsive {
-            font-size: 0.9rem;
-        }
-
-        .user-info {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 10px;
-        }
-
-        .stats-container {
-            grid-template-columns: 1fr 1fr;
-        }
-
-        .stat-value {
-            font-size: 2.2rem;
-        }
-
-        .pagination-container {
-            flex-direction: column;
-            gap: 20px;
-            text-align: center;
-        }
-    }
-
-    @@media (max-width: 576px) {
-        .user-management-container {
-            padding: 10px;
-        }
-
-        .user-management-header {
-            padding: 20px 15px;
-            text-align: center;
-        }
-
-        .user-management-header h1 {
-            font-size: 1.7rem;
-        }
-
-        .stats-container {
+        .filters-row {
             grid-template-columns: 1fr;
         }
 
-        .stat-value {
-            font-size: 2rem;
+        .table-container {
+            overflow-x: auto;
         }
 
-        .btn-action {
-            margin: 5px 2px;
-            padding: 8px 12px;
-            font-size: 0.9rem;
+        .users-table {
+            min-width: 800px;
         }
     }
 </style>
 
-<div class="user-management-container">
-    <!-- Header Section -->
-    <div class="user-management-header">
-        <div class="row align-items-center">
-            <div class="col-lg-8">
-                <h1><i class="fas fa-users-cog me-3"></i>User Management</h1>
-                <p>Manage all users, roles, and permissions in one place with advanced filtering and search capabilities</p>
-            </div>
-            <div class="col-lg-4 text-lg-end">
-                <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#userModal">
-                    <i class="fas fa-user-plus me-2"></i>Add New User
-                </button>
-            </div>
+<div class="users-container">
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1 class="page-title">User / Author Management</h1>
+        <div class="header-actions">
+			<button class="btn btn-secondary" id="exportUsersBtn">
+                <i class="fas fa-download"></i> Export
+            </button>
+            <a href="#" class="btn btn-primary" id="addUserBtn">
+                <i class="fas fa-plus"></i> Add User
+            </a>
         </div>
     </div>
 
-    <!-- Stats Section -->
-    <div class="stats-container">
-        <div class="stat-card admin" data-aos="fade-up" data-aos-delay="100">
-            <div class="stat-icon admin">
-                <i class="fas fa-user-shield"></i>
+    <!-- Filters -->
+    <div class="filters-section">
+        <form method="get" action="@Url.Action("Users", "Admin")">
+            <div class="filters-row">
+                <div class="filter-group search-bar">
+                    <label class="filter-label">Search</label>
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" name="searchTerm" class="filter-input" placeholder="Search by name or email..." value="@ViewBag.SearchTerm" />
             </div>
-            <div class="stat-value">5</div>
-            <div class="stat-label">Admin Users</div>
-        </div>
-
-        <div class="stat-card author" data-aos="fade-up" data-aos-delay="200">
-            <div class="stat-icon author">
-                <i class="fas fa-pen-fancy"></i>
-            </div>
-            <div class="stat-value">42</div>
-            <div class="stat-label">Authors</div>
-        </div>
-
-        <div class="stat-card reader" data-aos="fade-up" data-aos-delay="300">
-            <div class="stat-icon reader">
-                <i class="fas fa-book-reader"></i>
-            </div>
-            <div class="stat-value">1,201</div>
-            <div class="stat-label">Readers</div>
-        </div>
-
-        <div class="stat-card total" data-aos="fade-up" data-aos-delay="400">
-            <div class="stat-icon total">
-                <i class="fas fa-users"></i>
-            </div>
-            <div class="stat-value">1,248</div>
-            <div class="stat-label">Total Users</div>
-        </div>
-    </div>
-
-    <!-- Search Section -->
-    <div class="search-section">
-        <h3 class="section-title">
-            <i class="fas fa-search"></i>
-            User Search & Filter
-        </h3>
-        <div class="search-controls">
-            <input type="text" id="searchUsers" class="search-input" placeholder="Search users by name or email...">
-            <select id="roleFilter" class="filter-select">
-                <option value="">All Roles</option>
-                <option value="admin">Admin</option>
-                <option value="author">Author</option>
-                <option value="reader">Reader</option>
-            </select>
-            <select id="statusFilter" class="filter-select">
-                <option value="">All Status</option>
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-            </select>
-            <button class="btn btn-primary" id="exportUsersBtn">
-                <i class="fas fa-file-export me-2"></i>Export Users
+                <div class="filter-group">
+                    <label class="filter-label">Role</label>
+                <select name="roleFilter" class="filter-select">
+                    <option value="">All Roles</option>
+                        @foreach (var role in ViewBag.Roles as List<string> ?? new List<string>())
+                        {
+                            <option value="@role" selected="@(ViewBag.RoleFilter == role)">@role</option>
+                    }
+                </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Status</label>
+                <select name="statusFilter" class="filter-select">
+                    <option value="">All Status</option>
+                    <option value="Active" selected="@(ViewBag.StatusFilter == "Active")">Active</option>
+                        <option value="Suspended" selected="@(ViewBag.StatusFilter == "Suspended")">Suspended</option>
+                        <option value="Deleted" selected="@(ViewBag.StatusFilter == "Deleted")">Deleted</option>
+                </select>
+                </div>
+                <div class="filter-group">
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        <i class="fas fa-filter"></i> Apply Filters
             </button>
         </div>
+            </div>
+        </form>
     </div>
 
     <!-- Users Table -->
-    <div class="users-table-container">
-        <div class="table-responsive">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>User</th>
+    <div class="table-container">
+        <table class="users-table">
+            <thead class="table-header">
+                <tr>
+                    <th><input type="checkbox" id="selectAll" /></th>
+                    <th>Name</th>
                         <th>Email</th>
                         <th>Role</th>
-                        <th>Status</th>
+                    <th>Signup Method</th>
+                    <th>Profile Completion</th>
+                    <th>Books Created</th>
                         <th>Last Login</th>
+                    <th>Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr data-role="admin" data-status="active">
-                        <td>
-                            <div class="user-info">
-                                <div class="user-avatar">JD</div>
-                                <div>
-                                    <strong>John Doe</strong>
-                                    <div class="text-muted">ID: USR-001</div>
+                    @foreach (var user in Model)
+                    {
+                    <tr class="table-row">
+                        <td class="table-cell">
+                            <input type="checkbox" class="user-checkbox" value="@user.UserId" />
+                        </td>
+                        <td class="table-cell">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div class="user-avatar">
+                                    @(user.FullName?.Substring(0, 1).ToUpper() ?? "U")
+                                </div>
+                                <div class="user-info">
+                                    <div class="user-name">@user.FullName</div>
+                                    </div>
+                                </div>
+                            </td>
+                        <td class="table-cell">@user.UserEmail</td>
+                        <td class="table-cell">@user.RoleName</td>
+                        <td class="table-cell">@user.SignupMethod</td>
+                        <td class="table-cell">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <div class="progress-bar-mini">
+                                    <div class="progress-fill" style="width: @user.ProfileCompletionPercentage%"></div>
+                                </div>
+                                <span style="font-size: 12px; color: var(--text-muted);">@user.ProfileCompletionPercentage%</span>
+                            </div>
+                            </td>
+                        <td class="table-cell">@user.BooksCreated</td>
+                        <td class="table-cell">
+                            @(user.LastLoginAt?.ToString("MMM dd, yyyy") ?? "Never")
+                        </td>
+                        <td class="table-cell">
+                            <span class="status-badge @(user.Status == "Active" ? "badge-active" : user.Status == "Suspended" ? "badge-suspended" : "badge-deleted")">
+                                @user.Status
+                                </span>
+                            </td>
+                        <td class="table-cell">
+                            <div class="action-buttons">
+								<button class="btn-icon" data-action="view" data-user-id="@user.UserId" title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+								<button class="btn-icon" data-action="edit" data-user-id="@user.UserId" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <button class="btn-icon" title="More Options">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                                    <div class="dropdown-content">
+										<a href="#" class="dropdown-item" data-action="suspend" data-user-id="@user.UserId">
+                                            <i class="fas fa-ban"></i> Suspend
+                                        </a>
+										<a href="#" class="dropdown-item" data-action="deactivate" data-user-id="@user.UserId">
+                                            <i class="fas fa-user-slash"></i> Deactivate
+                                        </a>
+										<a href="#" class="dropdown-item danger" data-action="delete" data-user-id="@user.UserId">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
-                        </td>
-                        <td>john.doe@example.com</td>
-                        <td>
-                            <span class="role-badge admin"><i class="fas fa-user-shield me-1"></i>Admin</span>
-                        </td>
-                        <td><span class="status-badge active"><i class="fas fa-circle me-1"></i>Active</span></td>
-                        <td>Oct 15, 2023</td>
-                        <td>
-                            <button class="btn-action" title="Edit User">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="btn-action delete" title="Delete User">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr data-role="author" data-status="active">
-                        <td>
-                            <div class="user-info">
-                                <div class="user-avatar">SJ</div>
-                                <div>
-                                    <strong>Sarah Johnson</strong>
-                                    <div class="text-muted">ID: USR-002</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>sarah.j@example.com</td>
-                        <td>
-                            <span class="role-badge author"><i class="fas fa-pen-fancy me-1"></i>Author</span>
-                        </td>
-                        <td><span class="status-badge active"><i class="fas fa-circle me-1"></i>Active</span></td>
-                        <td>Oct 14, 2023</td>
-                        <td>
-                            <button class="btn-action" title="Edit User">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="btn-action delete" title="Delete User">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr data-role="reader" data-status="active">
-                        <td>
-                            <div class="user-info">
-                                <div class="user-avatar">MB</div>
-                                <div>
-                                    <strong>Michael Brown</strong>
-                                    <div class="text-muted">ID: USR-003</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>michael.b@example.com</td>
-                        <td>
-                            <span class="role-badge reader"><i class="fas fa-book-reader me-1"></i>Reader</span>
-                        </td>
-                        <td><span class="status-badge active"><i class="fas fa-circle me-1"></i>Active</span></td>
-                        <td>Oct 12, 2023</td>
-                        <td>
-                            <button class="btn-action" title="Edit User">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="btn-action delete" title="Delete User">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr data-role="author" data-status="active">
-                        <td>
-                            <div class="user-info">
-                                <div class="user-avatar">ED</div>
-                                <div>
-                                    <strong>Emily Davis</strong>
-                                    <div class="text-muted">ID: USR-004</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>emily.d@example.com</td>
-                        <td>
-                            <span class="role-badge author"><i class="fas fa-pen-fancy me-1"></i>Author</span>
-                        </td>
-                        <td><span class="status-badge active"><i class="fas fa-circle me-1"></i>Active</span></td>
-                        <td>Oct 10, 2023</td>
-                        <td>
-                            <button class="btn-action" title="Edit User">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="btn-action delete" title="Delete User">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr data-role="reader" data-status="inactive">
-                        <td>
-                            <div class="user-info">
-                                <div class="user-avatar">DW</div>
-                                <div>
-                                    <strong>David Wilson</strong>
-                                    <div class="text-muted">ID: USR-005</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>david.w@example.com</td>
-                        <td>
-                            <span class="role-badge reader"><i class="fas fa-book-reader me-1"></i>Reader</span>
-                        </td>
-                        <td><span class="status-badge inactive"><i class="fas fa-circle me-1"></i>Inactive</span></td>
-                        <td>Sep 28, 2023</td>
-                        <td>
-                            <button class="btn-action" title="Edit User">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="btn-action delete" title="Delete User">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>
     </div>
 
-    <!-- Pagination -->
-    <div class="pagination-container">
-        <div class="pagination-info">
-            Showing 1 to 5 of 1,248 users
-        </div>
-        <nav aria-label="User pagination">
-            <ul class="pagination justify-content-center mb-0">
-                <li class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true"><i class="fas fa-chevron-left"></i></a>
-                </li>
-                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a>
-                </li>
-            </ul>
-        </nav>
-    </div>
-</div>
+<!-- Floating Action Button is handled by AdminLayout -->
 
-<!-- User Modal -->
-<div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="userModalLabel">Add New User</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="userForm">
-                    <input type="hidden" id="userId">
-                    <div class="mb-4">
-                        <label for="fullName" class="form-label">Full Name</label>
-                        <input type="text" class="form-control" id="fullName" required placeholder="Enter full name">
-                    </div>
-                    <div class="mb-4">
-                        <label for="userEmail" class="form-label">Email Address</label>
-                        <input type="email" class="form-control" id="userEmail" required placeholder="Enter email address">
-                    </div>
-                    <div class="mb-4">
-                        <label for="userRole" class="form-label">Role</label>
-                        <select class="form-select" id="userRole" required>
-                            <option value="">Select Role</option>
-                            <option value="1">Admin</option>
-                            <option value="2">Author</option>
-                            <option value="3">Reader</option>
-                        </select>
-                    </div>
-                    <div class="mb-4">
-                        <label for="userStatus" class="form-label">Status</label>
-                        <select class="form-select" id="userStatus" required>
-                            <option value="Active">Active</option>
-                            <option value="Inactive">Inactive</option>
-                        </select>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="saveUserBtn">Save User</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-@section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Add entrance animations
-            const elements = document.querySelectorAll('.stat-card, .search-section, .users-table-container, .pagination-container');
-            elements.forEach((el, index) => {
-                el.style.opacity = '0';
-                el.style.transform = 'translateY(30px)';
-                setTimeout(() => {
-                    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-                    el.style.opacity = '1';
-                    el.style.transform = 'translateY(0)';
-                }, 150 * index);
+    // Ensure SweetAlert is loaded
+    if (typeof Swal === 'undefined') {
+        console.warn('SweetAlert2 is not loaded. Loading now...');
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
+        document.head.appendChild(script);
+    }
+
+    // Initialize dropdown menus
+    document.addEventListener('DOMContentLoaded', function() {
+		// Export button listener
+		const exportBtn = document.getElementById('exportUsersBtn');
+		if (exportBtn) {
+			exportBtn.addEventListener('click', function(e) {
+				e.preventDefault();
+				exportUsers();
+			});
+		}
+
+		// Live search debounce and filter handling
+		const searchInput = document.querySelector('input[name="searchTerm"]');
+		const roleSelect = document.querySelector('select[name="roleFilter"]');
+		const statusSelect = document.querySelector('select[name="statusFilter"]');
+
+		function buildUsersUrl() {
+			const params = new URLSearchParams();
+			const s = searchInput?.value?.trim() || '';
+			const r = roleSelect?.value || '';
+			const st = statusSelect?.value || '';
+			if (s) params.set('searchTerm', s);
+			if (r) params.set('roleFilter', r);
+			if (st) params.set('statusFilter', st);
+			const base = '@Url.Action("Users", "Admin")';
+			const qs = params.toString();
+			return qs ? `${base}?${qs}` : base;
+		}
+
+		let debounceTimer;
+		if (searchInput) {
+			searchInput.addEventListener('input', function() {
+				clearTimeout(debounceTimer);
+				debounceTimer = setTimeout(() => {
+					window.location.href = buildUsersUrl();
+				}, 500);
+			});
+		}
+		if (roleSelect) roleSelect.addEventListener('change', () => window.location.href = buildUsersUrl());
+		if (statusSelect) statusSelect.addEventListener('change', () => window.location.href = buildUsersUrl());
+
+        // Select All Checkbox
+        const selectAll = document.getElementById('selectAll');
+        if (selectAll) {
+            selectAll.addEventListener('change', function() {
+                const checkboxes = document.querySelectorAll('.user-checkbox');
+                checkboxes.forEach(cb => cb.checked = this.checked);
             });
+        }
 
-            // Search functionality
-            document.getElementById('searchUsers').addEventListener('input', function() {
-                filterUsers();
-            });
-
-            // Role filter
-            document.getElementById('roleFilter').addEventListener('change', function() {
-                filterUsers();
-            });
-
-            // Status filter
-            document.getElementById('statusFilter').addEventListener('change', function() {
-                filterUsers();
-            });
-
-            function filterUsers() {
-                const searchTerm = document.getElementById('searchUsers').value.toLowerCase();
-                const roleFilter = document.getElementById('roleFilter').value.toLowerCase();
-                const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
-                const userRows = document.querySelectorAll('tbody tr');
-
-                userRows.forEach(row => {
-                    const name = row.querySelector('.user-info strong')?.textContent.toLowerCase() || '';
-                    const email = row.cells[1]?.textContent.toLowerCase() || '';
-                    const role = row.getAttribute('data-role')?.toLowerCase() || '';
-                    const status = row.getAttribute('data-status')?.toLowerCase() || '';
-
-                    const matchesSearch = name.includes(searchTerm) || email.includes(searchTerm);
-                    const matchesRole = !roleFilter || role.includes(roleFilter);
-                    const matchesStatus = !statusFilter || status.includes(statusFilter);
-
-                    if (matchesSearch && matchesRole && matchesStatus) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
-                    }
+        // Dropdown menu functionality
+        document.querySelectorAll('.dropdown-menu').forEach(dropdown => {
+            const button = dropdown.querySelector('button');
+            const content = dropdown.querySelector('.dropdown-content');
+            
+            if (button && content) {
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    // Close other dropdowns
+                    document.querySelectorAll('.dropdown-content').forEach(menu => {
+                        if (menu !== content) {
+                            menu.style.display = 'none';
+                        }
+                    });
+                    // Toggle current dropdown
+                    content.style.display = content.style.display === 'block' ? 'none' : 'block';
                 });
             }
+        });
 
-            // Export users functionality
-            document.getElementById('exportUsersBtn').addEventListener('click', function() {
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.dropdown-menu')) {
+                document.querySelectorAll('.dropdown-content').forEach(menu => {
+                    menu.style.display = 'none';
+                });
+            }
+        });
+
+		// Delegated row action handlers
+		document.querySelector('.table-container')?.addEventListener('click', function(e) {
+			const actionEl = e.target.closest('[data-action]');
+			if (!actionEl) return;
+			e.preventDefault();
+			const action = actionEl.getAttribute('data-action');
+			const userId = parseInt(actionEl.getAttribute('data-user-id') || '0');
+			if (!userId) return;
+			switch (action) {
+				case 'view': return viewUser(userId);
+				case 'edit': return editUser(userId);
+				case 'suspend': return suspendUser(userId);
+				case 'deactivate': return deactivateUser(userId);
+				case 'delete': return deleteUser(userId);
+			}
+		});
+    });
+
+    // User Actions
+    function togglePasswordVisibility(inputId, buttonId) {
+        const input = document.getElementById(inputId);
+        const button = document.getElementById(buttonId);
+        if (!input || !button) return;
+        if (input.type === 'password') {
+            input.type = 'text';
+            button.innerHTML = '<i class="fas fa-eye-slash"></i>';
+        } else {
+            input.type = 'password';
+            button.innerHTML = '<i class="fas fa-eye"></i>';
+        }
+    }
+
+    function viewUser(userId) {
+        Swal.fire({
+            title: 'Loading User Details...',
+            html: '<div style="text-align: center;"><i class="fas fa-spinner fa-spin" style="font-size: 32px; color: var(--primary);"></i><p style="margin-top: 16px;">Fetching user information...</p></div>',
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            width: '600px',
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+        
+        // Fetch user details from API
+        fetch(`@Url.Action("GetUserDetails", "Admin")?userId=${userId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.user) {
+                    const user = data.user;
+                    Swal.fire({
+                        title: 'User Details',
+                        html: `
+                            <div style="text-align: left; padding: 20px;">
+                                <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px solid var(--border-light);">
+                                    <div style="width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, var(--primary) 0%, #FFD700 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; font-weight: 600;">
+                                        ${user.fullName.charAt(0).toUpperCase()}
+                                    </div>
+                                    <div>
+                                        <h3 style="margin: 0; color: var(--text-primary);">${user.fullName}</h3>
+                                        <p style="margin: 4px 0 0 0; color: var(--text-muted); font-size: 14px;">${user.userEmail}</p>
+                                    </div>
+                                </div>
+                                
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                                    <div>
+                                        <label style="font-size: 12px; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Role</label>
+                                        <p style="margin: 4px 0 0 0; font-weight: 500; color: var(--text-primary);">${user.roleName}</p>
+                                    </div>
+                                    <div>
+                                        <label style="font-size: 12px; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Status</label>
+                                        <p style="margin: 4px 0 0 0;">
+                                            <span class="status-badge ${user.status === 'Active' ? 'badge-active' : user.status === 'Suspended' ? 'badge-suspended' : 'badge-deleted'}" style="display: inline-block;">
+                                                ${user.status}
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                                    <div>
+                                        <label style="font-size: 12px; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Created At</label>
+                                        <p style="margin: 4px 0 0 0; font-weight: 500; color: var(--text-primary);">${user.createdAt}</p>
+                                    </div>
+                                    <div>
+                                        <label style="font-size: 12px; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Last Login</label>
+                                        <p style="margin: 4px 0 0 0; font-weight: 500; color: var(--text-primary);">${user.lastLoginAt}</p>
+                                    </div>
+                                </div>
+                                
+                                <div style="margin-bottom: 16px;">
+                                    <label style="font-size: 12px; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Books Created</label>
+                                    <p style="margin: 4px 0 0 0; font-weight: 500; color: var(--text-primary); font-size: 18px;">${user.booksCreated}</p>
+                                </div>
+                                
+                                <div style="margin-bottom: 16px;">
+                                    <label style="font-size: 12px; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Profile Completion</label>
+                                    <div style="margin-top: 8px;">
+                                        <div style="width: 100%; height: 8px; background: var(--warm-gray); border-radius: 4px; overflow: hidden;">
+                                            <div style="width: ${user.profileCompletion}%; height: 100%; background: var(--success); border-radius: 4px; transition: width 0.3s ease;"></div>
+                                        </div>
+                                        <p style="margin: 4px 0 0 0; font-size: 12px; color: var(--text-muted);">${user.profileCompletion}% Complete</p>
+                                    </div>
+                                </div>
+                            </div>
+                        `,
+                        showConfirmButton: true,
+                        confirmButtonText: 'Close',
+                        confirmButtonColor: '#6366F1',
+                        width: '600px'
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: data.message || 'Failed to load user details',
+                        confirmButtonColor: '#6366F1'
+                    });
+                }
+            })
+            .catch(error => {
                 Swal.fire({
-                    title: 'Exporting Users',
-                    text: 'Preparing user data for export...',
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'An error occurred while loading user details',
+                    confirmButtonColor: '#6366F1'
+                });
+            });
+    }
+
+    function editUser(userId) {
+        // Fetch user data first and prefill the form
+        fetch(`@Url.Action("GetUserDetails", "Admin")?userId=${userId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (!data?.success || !data?.user) {
+                    return Swal.fire('Error', data?.message || 'User not found', 'error');
+                }
+                const user = data.user;
+                Swal.fire({
+                    title: 'Edit User',
+                    html: `
+                        <form id="editUserForm" style="text-align: left;">
+                            <div style="margin-bottom: 16px;">
+                                <label style="display: block; margin-bottom: 6px; font-weight: 500;">Full Name</label>
+                                <input type="text" id="editFullName" class="swal2-input" placeholder="Enter full name" required style="width: 100%; padding: 10px; border: 1px solid #E5E5E5; border-radius: 8px;" value="${user.fullName || ''}">
+                            </div>
+                            <div style="margin-bottom: 16px;">
+                                <label style="display: block; margin-bottom: 6px; font-weight: 500;">Email</label>
+                                <input type="email" id="editUserEmail" class="swal2-input" placeholder="Enter email" required style="width: 100%; padding: 10px; border: 1px solid #E5E5E5; border-radius: 8px;" value="${user.userEmail || ''}">
+                            </div>
+                            <div style="margin-bottom: 16px;">
+                                <label style="display: block; margin-bottom: 6px; font-weight: 500;">Role</label>
+                                <select id="editRoleId" class="swal2-input" required style="width: 100%; padding: 10px; border: 1px solid #E5E5E5; border-radius: 8px;">
+                                    <option value="">Select Role</option>
+                                    <option value="1" ${user.roleName === 'Admin' ? 'selected' : ''}>Admin</option>
+                                    <option value="2" ${user.roleName === 'Author' ? 'selected' : ''}>Author</option>
+                                    <option value="3" ${user.roleName === 'Reader' ? 'selected' : ''}>Reader</option>
+                                </select>
+                            </div>
+                            <div style="margin-bottom: 16px;">
+                                <label style="display: block; margin-bottom: 6px; font-weight: 500;">Status</label>
+                                <select id="editStatus" class="swal2-input" required style="width: 100%; padding: 10px; border: 1px solid #E5E5E5; border-radius: 8px;">
+                                    <option value="Active" ${user.status === 'Active' ? 'selected' : ''}>Active</option>
+                                    <option value="Suspended" ${user.status === 'Suspended' ? 'selected' : ''}>Suspended</option>
+                                    <option value="Deactivated" ${user.status === 'Deactivated' ? 'selected' : ''}>Deactivated</option>
+                                </select>
+                            </div>
+                        </form>
+                    `,
+                    showCancelButton: true,
+                    confirmButtonText: 'Save Changes',
+                    confirmButtonColor: '#6366F1',
+                    cancelButtonColor: '#6b7280',
+                    width: '600px',
+                    preConfirm: () => {
+                        const fullName = document.getElementById('editFullName').value.trim();
+                        const userEmail = document.getElementById('editUserEmail').value.trim();
+                        const roleId = document.getElementById('editRoleId').value;
+                        const status = document.getElementById('editStatus').value;
+                        
+                        if (!fullName || !userEmail || !roleId || !status) {
+                            Swal.showValidationMessage('Please fill in all fields');
+                            return false;
+                        }
+                        
+                        return { fullName, userEmail, roleId: parseInt(roleId), status };
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed && result.value) {
+                        Swal.fire({
+                            title: 'Updating User...',
+                            text: 'Please wait',
+                            icon: 'info',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+                        
+                        const formData = new URLSearchParams();
+                        formData.append('userId', userId);
+                        formData.append('fullName', result.value.fullName);
+                        formData.append('userEmail', result.value.userEmail);
+                        formData.append('roleId', String(result.value.roleId));
+                        formData.append('status', result.value.status);
+                        
+                        fetch('@Url.Action("UpdateUser", "Admin")', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                            },
+                            body: formData
+                        })
+                        .then(async (response) => {
+                            let data;
+                            try { data = await response.json(); } catch { data = { success: false, message: 'Invalid server response' }; }
+                            if (!response.ok || !data?.success) {
+                                const msg = data?.message || 'Failed to update user';
+                                if (/unauthorized/i.test(msg)) {
+                                    Swal.fire('Not Authorized', 'Admin privileges are required to perform this action.', 'warning');
+                                } else {
+                                    Swal.fire('Error', msg, 'error');
+                                }
+                                return;
+                            }
+                            Swal.fire('Success!', data.message || 'User updated successfully', 'success').then(() => {
+                                location.reload();
+                            });
+                        })
+                        .catch(() => {
+                            Swal.fire('Error', 'An error occurred while updating the user.', 'error');
+                        });
+                    }
+                });
+            })
+            .catch(() => {
+                Swal.fire('Error', 'Failed to load user details', 'error');
+            });
+    }
+
+    function suspendUser(userId) {
+        Swal.fire({
+            title: 'Suspend User?',
+            text: 'Are you sure you want to suspend this user?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#f59e0b',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Yes, Suspend'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Suspending User...',
+                    text: 'Please wait',
+                    icon: 'info',
                     allowOutsideClick: false,
-                    showConfirmButton: false,
                     didOpen: () => {
                         Swal.showLoading();
                     }
                 });
-
-                setTimeout(() => {
-                    Swal.fire({
-                        title: 'Export Complete!',
-                        text: 'User data has been exported successfully.',
-                        icon: 'success',
-                        confirmButtonColor: '#667eea'
-                    });
-                }, 1500);
-            });
-
-            // Save user functionality
-            document.getElementById('saveUserBtn').addEventListener('click', function() {
-                const userId = document.getElementById('userId').value;
-                const fullName = document.getElementById('fullName').value;
-
-                if (!fullName) {
-                    Swal.fire({
-                        title: 'Name Required',
-                        text: 'Please enter a full name for the user.',
-                        icon: 'warning',
-                        confirmButtonColor: '#667eea'
-                    });
-                    return;
-                }
-
-                const action = userId ? 'Updating' : 'Creating';
-
-                // Show loading state
-                const saveBtn = this;
-                const originalText = saveBtn.innerHTML;
-                saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Saving...';
-                saveBtn.disabled = true;
-
-                // Simulate save process
-                setTimeout(() => {
-                    Swal.fire({
-                        title: 'User ' + (userId ? 'Updated' : 'Created') + '!',
-                        text: 'The user has been ' + (userId ? 'updated' : 'created') + ' successfully.',
-                        icon: 'success',
-                        confirmButtonColor: '#667eea'
-                    });
-
-                    // Close modal
-                    const modal = bootstrap.Modal.getInstance(document.getElementById('userModal'));
-                    modal.hide();
-
-                    // Reset button
-                    saveBtn.innerHTML = originalText;
-                    saveBtn.disabled = false;
-
-                    // Reset form
-                    document.getElementById('userForm').reset();
-                }, 1500);
-            });
-
-            // Edit user buttons
-            const editButtons = document.querySelectorAll('.btn-action:not(.delete)');
-            editButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    document.getElementById('userModalLabel').textContent = 'Edit User';
-                    // In a real app, you would populate the form with user data
-                    document.getElementById('userId').value = '123';
-                    document.getElementById('fullName').value = 'John Doe';
-                    document.getElementById('userEmail').value = 'john.doe@example.com';
-                    document.getElementById('userRole').value = '1';
-                    document.getElementById('userStatus').value = 'Active';
-
-                    new bootstrap.Modal(document.getElementById('userModal')).show();
+                
+                // Call API
+                fetch('@Url.Action("SuspendUser", "Admin")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                    },
+                    body: `userId=${userId}`
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire('Suspended!', data.message, 'success').then(() => {
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire('Error!', data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    Swal.fire('Error!', 'An error occurred while suspending the user.', 'error');
                 });
-            });
+            }
+        });
+    }
 
-            // Delete user buttons
-            const deleteButtons = document.querySelectorAll('.btn-action.delete');
-            deleteButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    Swal.fire({
-                        title: 'Delete User?',
-                        text: 'This action cannot be undone',
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#ff6b6b',
-                        confirmButtonText: 'Delete',
-                        cancelButtonColor: '#6c757d'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            Swal.fire({
-                                title: 'Deleting User',
-                                text: 'Please wait while we delete the user...',
-                                allowOutsideClick: false,
-                                showConfirmButton: false,
-                                didOpen: () => {
-                                    Swal.showLoading();
-                                }
-                            });
+    function deactivateUser(userId) {
+        Swal.fire({
+            title: 'Deactivate User?',
+            text: 'Are you sure you want to deactivate this user?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Yes, Deactivate'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Deactivating User...',
+                    text: 'Please wait',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+                
+                // Call API to deactivate user
+                fetch('@Url.Action("DeactivateUser", "Admin")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                    },
+                    body: `userId=${userId}`
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire('Deactivated!', data.message, 'success').then(() => {
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire('Error!', data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    Swal.fire('Error!', 'An error occurred while deactivating the user.', 'error');
+                });
+            }
+        });
+    }
 
-                            // Simulate delete process
-                            setTimeout(() => {
-                                Swal.fire({
-                                    title: 'User Deleted!',
-                                    text: 'The user has been deleted successfully.',
-                                    icon: 'success',
-                                    confirmButtonColor: '#667eea'
-                                });
-                                // In a real app, you would remove the user from the table
-                            }, 1000);
+    function deleteUser(userId) {
+        Swal.fire({
+            title: 'Delete User?',
+            text: 'This action cannot be undone!',
+            icon: 'error',
+            showCancelButton: true,
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Yes, Delete'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Deleting User...',
+                    text: 'Please wait',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+                
+                // Call API
+                fetch('@Url.Action("DeleteUser", "Admin")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                    },
+                    body: `userId=${userId}`
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire('Deleted!', data.message, 'success').then(() => {
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire('Error!', data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    Swal.fire('Error!', 'An error occurred while deleting the user.', 'error');
+                });
+            }
+        });
+    }
+
+    // Alias for compatibility
+    window.showAddUserModal = function(event) {
+        if (event) event.preventDefault();
+        return window.openAddUserModal(event);
+    };
+    
+    window.openAddUserModal = function(event) {
+        if (event) event.preventDefault();
+        
+        // Fetch roles for dropdown (JSON)
+        fetch('@Url.Action("GetRoles", "Admin")')
+            .then(response => response.json())
+            .then(data => {
+                const roles = Array.isArray(data?.roles) && data.roles.length > 0
+                    ? data.roles.map(r => ({ id: r.roleId, name: r.roleName }))
+                    : [{ id: 1, name: 'Admin' }, { id: 2, name: 'Author' }, { id: 3, name: 'Reader' }];
+                const roleOptions = ['<option value="">-- Select User Role --</option>']
+                    .concat(roles.map(r => `<option value="${r.id}">${r.name}</option>`))
+                    .join('');
+                
+                Swal.fire({
+                    title: '<div style="display: flex; align-items: center; gap: 12px; padding: 8px 0;"><i class="fas fa-user-plus" style="font-size: 28px; color: var(--primary);"></i><span style="font-size: 24px; font-weight: 700; color: var(--text-primary);">Add New User</span></div>',
+                    html: `
+                        <form id="addUserForm" style="text-align: left; padding: 8px;">
+                            <div style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%); padding: 16px; border-radius: 12px; margin-bottom: 20px; border-left: 4px solid var(--primary);">
+                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                                    <i class="fas fa-info-circle" style="color: var(--primary);"></i>
+                                    <span style="font-weight: 600; color: var(--text-primary);">User Information</span>
+                                </div>
+                                <p style="font-size: 13px; color: var(--text-secondary); margin: 0;">Fill in all required fields to create a new user account.</p>
+                            </div>
+                            
+                            <div style="margin-bottom: 20px; position: relative;">
+                                <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-weight: 600; color: var(--text-primary); font-size: 14px;">
+                                    <i class="fas fa-user" style="color: var(--primary); font-size: 14px;"></i>
+                                    Full Name <span style="color: var(--danger);">*</span>
+                                </label>
+                                <input type="text" id="fullName" placeholder="Enter user's full name" required 
+                                       style="width: 100%; padding: 12px 16px; border: 2px solid var(--border-light); border-radius: 10px; font-size: 14px; transition: all 0.3s ease; background: var(--white);"
+                                       onfocus="this.style.borderColor='var(--primary)'; this.style.boxShadow='0 0 0 4px rgba(99, 102, 241, 0.1)'"
+                                       onblur="this.style.borderColor='var(--border-light)'; this.style.boxShadow='none'">
+                                <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
+                                    <i class="fas fa-check-circle" style="color: var(--success); margin-right: 4px;"></i>Required field
+                                </div>
+                            </div>
+                            
+                            <div style="margin-bottom: 20px; position: relative;">
+                                <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-weight: 600; color: var(--text-primary); font-size: 14px;">
+                                    <i class="fas fa-envelope" style="color: var(--primary); font-size: 14px;"></i>
+                                    Email Address <span style="color: var(--danger);">*</span>
+                                </label>
+                                <input type="email" id="userEmail" placeholder="user@example.com" required 
+                                       style="width: 100%; padding: 12px 16px; border: 2px solid var(--border-light); border-radius: 10px; font-size: 14px; transition: all 0.3s ease; background: var(--white);"
+                                       onfocus="this.style.borderColor='var(--primary)'; this.style.boxShadow='0 0 0 4px rgba(99, 102, 241, 0.1)'"
+                                       onblur="this.style.borderColor='var(--border-light)'; this.style.boxShadow='none'">
+                                <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
+                                    <i class="fas fa-shield-alt" style="color: var(--success); margin-right: 4px;"></i>Must be a valid email address
+                                </div>
+                            </div>
+                            
+                            <div style="margin-bottom: 20px; position: relative;">
+                                <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-weight: 600; color: var(--text-primary); font-size: 14px;">
+                                    <i class="fas fa-user-shield" style="color: var(--primary); font-size: 14px;"></i>
+                                    User Role <span style="color: var(--danger);">*</span>
+                                </label>
+                                <select id="roleId" required 
+                                        style="width: 100%; padding: 12px 16px; border: 2px solid var(--border-light); border-radius: 10px; font-size: 14px; transition: all 0.3s ease; background: var(--white); cursor: pointer; appearance: none; background-image: url('data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'12\\' height=\\'12\\' viewBox=\\'0 0 12 12\\'><path fill=\\'%23666\\' d=\\'M6 9L1 4h10z\\'/></svg>'); background-repeat: no-repeat; background-position: right 12px center; padding-right: 40px;"
+                                        onfocus="this.style.borderColor='var(--primary)'; this.style.boxShadow='0 0 0 4px rgba(99, 102, 241, 0.1)'"
+                                        onblur="this.style.borderColor='var(--border-light)'; this.style.boxShadow='none'">
+                                    ${roleOptions}
+                                </select>
+                                <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
+                                    <i class="fas fa-key" style="color: var(--warning); margin-right: 4px;"></i>Determines user permissions
+                                </div>
+                            </div>
+                            
+                            <div style="margin-bottom: 20px; position: relative;">
+                                <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-weight: 600; color: var(--text-primary); font-size: 14px;">
+                                    <i class="fas fa-lock" style="color: var(--primary); font-size: 14px;"></i>
+                                    Password <span style="color: var(--danger);">*</span>
+                                </label>
+                                <div style="position: relative;">
+                                    <input type="password" id="password" placeholder="Enter secure password" required 
+                                           style="width: 100%; padding: 12px 16px; padding-right: 45px; border: 2px solid var(--border-light); border-radius: 10px; font-size: 14px; transition: all 0.3s ease; background: var(--white);"
+                                           onfocus="this.style.borderColor='var(--primary)'; this.style.boxShadow='0 0 0 4px rgba(99, 102, 241, 0.1)'"
+                                           onblur="this.style.borderColor='var(--border-light)'; this.style.boxShadow='none'">
+                                    <button type="button" id="togglePassword" onclick="togglePasswordVisibility('password', 'togglePassword')" 
+                                            style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 16px; padding: 4px;">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                                <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
+                                    <i class="fas fa-info-circle" style="color: var(--warning); margin-right: 4px;"></i>Minimum 6 characters recommended
+                                </div>
+                            </div>
+                            
+                            <div style="background: var(--light-gray); padding: 12px; border-radius: 8px; margin-top: 20px; border-left: 3px solid var(--success);">
+                                <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-secondary);">
+                                    <i class="fas fa-check-circle" style="color: var(--success);"></i>
+                                    <span>All fields marked with <span style="color: var(--danger);">*</span> are required</span>
+                                </div>
+                            </div>
+                        </form>
+                    `,
+                    showCancelButton: true,
+                    confirmButtonText: '<i class="fas fa-user-plus"></i> Create User',
+                    cancelButtonText: '<i class="fas fa-times"></i> Cancel',
+                    confirmButtonColor: '#6366F1',
+                    cancelButtonColor: '#6b7280',
+                    width: '650px',
+                    customClass: {
+                        popup: 'swal2-popup-custom',
+                        title: 'swal2-title-custom'
+                    },
+                    preConfirm: () => {
+                        const form = document.getElementById('addUserForm');
+                        if (!form) return false;
+                        const fullName = document.getElementById('fullName').value.trim();
+                        const userEmail = document.getElementById('userEmail').value.trim();
+                        const roleId = document.getElementById('roleId').value;
+                        const password = document.getElementById('password').value.trim();
+                        
+                        if (!fullName || !userEmail || !roleId || !password) {
+                            Swal.showValidationMessage('Please fill in all fields');
+                            return false;
                         }
-                    });
+                        
+                        return { fullName, userEmail, roleId: parseInt(roleId), password };
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed && result.value) {
+                        
+
+                        Swal.fire({
+                            title: 'Creating User...',
+                            text: 'Please wait',
+                            icon: 'info',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+                        
+                        // Call API
+                        const formData = new URLSearchParams();
+                        formData.append('fullName', result.value.fullName);
+                        formData.append('userEmail', result.value.userEmail);
+                        formData.append('roleId', String(result.value.roleId));
+                        formData.append('password', result.value.password);
+                        
+                        fetch('@Url.Action("CreateUser", "Admin")', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                            },
+                            body: formData
+                        })
+                        .then(async (response) => {
+                            let data;
+                            try {
+                                data = await response.json();
+                            } catch {
+                                const txt = await response.text();
+                                throw new Error(txt || 'Unexpected server response.');
+                            }
+
+                            if (!response.ok) {
+                                throw new Error(data?.message || 'Request failed');
+                            }
+
+                            if (data?.success) {
+                                Swal.fire('Success!', data.message || 'User created successfully', 'success').then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                const msg = data?.message || 'Failed to create user';
+                                if (/unauthorized/i.test(msg)) {
+                                    Swal.fire('Not Authorized', 'Admin privileges are required to perform this action.', 'warning');
+                                } else {
+                                    Swal.fire('Error', msg, 'error');
+                                }
+                            }
+                        })
+                        .catch((error) => {
+                            const message = (error && error.message) ? error.message : 'An error occurred while creating the user.';
+                            Swal.fire('Error', message, 'error');
+                        });
+                    }
                 });
+            })
+            .catch(() => {
+                // Fallback if roles fetch fails
+                Swal.fire('Error', 'Could not load roles. Please try again.', 'error');
             });
+    }
+
+    function exportUsers(format = 'csv') {
+        Swal.fire({
+            title: 'Export Users',
+            html: `
+                <div style="text-align: left; padding: 10px;">
+                    <p style="margin-bottom: 12px;">Choose export format:</p>
+                    <button id="exportCsv" class="btn btn-primary" style="width: 100%; margin-bottom: 8px;">
+                        <i class="fas fa-file-csv"></i> Export as CSV
+                    </button>
+                    <button id="exportExcel" class="btn btn-success" style="width: 100%; background: var(--success);">
+                        <i class="fas fa-file-excel"></i> Export as Excel
+                    </button>
+                </div>
+            `,
+            showConfirmButton: false,
+            showCancelButton: true,
+            cancelButtonText: 'Cancel',
+            width: '400px',
+            didOpen: () => {
+                document.getElementById('exportCsv').addEventListener('click', () => {
+                    Swal.close();
+                    performExport('csv');
+                });
+                document.getElementById('exportExcel').addEventListener('click', () => {
+                    Swal.close();
+                    performExport('excel');
+                });
+            }
+        });
+    }
+    
+    function performExport(format) {
+        Swal.fire({
+            title: 'Exporting...',
+            html: `<div style="text-align: center;"><i class="fas fa-spinner fa-spin" style="font-size: 32px; color: var(--primary); margin-bottom: 12px;"></i><p>Preparing ${format.toUpperCase()} file...</p></div>`,
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+        
+        // Get current filters
+        const roleFilter = document.querySelector('select[name="roleFilter"]')?.value || '';
+        const statusFilter = document.querySelector('select[name="statusFilter"]')?.value || '';
+        
+        // Build export URL
+        const exportUrl = '@Url.Action("ExportUsers", "Admin")' + 
+            `?format=${format}` +
+            (roleFilter ? `&roleFilter=${encodeURIComponent(roleFilter)}` : '') +
+            (statusFilter ? `&statusFilter=${encodeURIComponent(statusFilter)}` : '');
+        
+        // Create a temporary link to trigger download
+        const link = document.createElement('a');
+        link.href = exportUrl;
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        // Show success after a delay
+        setTimeout(() => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Export Complete!',
+                html: `<div style="text-align: center;"><i class="fas fa-check-circle" style="font-size: 48px; color: var(--success); margin-bottom: 12px;"></i><p>Users exported successfully as <strong>${format.toUpperCase()}</strong></p><p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">Check your downloads folder</p></div>`
+                timer: 3000,
+                showConfirmButton: false,
+                timerProgressBar: true
+            });
+        }, 1500);
+    }
+    
+    // Attach event listeners instead of inline onclick
+    document.addEventListener('DOMContentLoaded', function() {
+        const addUserBtn = document.getElementById('addUserBtn');
+        if (addUserBtn) {
+            addUserBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (typeof window.openAddUserModal === 'function') {
+                    window.openAddUserModal(e);
+                } else if (typeof window.showAddUserModal === 'function') {
+                    window.showAddUserModal(e);
+                } else {
+                    console.error('openAddUserModal function not found');
+                }
+            });
+        }
+    });
+</script>
+
+@section Scripts {
+    <script>
+        // Wait for AdminLayout scripts to load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Functions should be available from AdminLayout
+            // If not, they'll be defined above as fallbacks
         });
     </script>
 }

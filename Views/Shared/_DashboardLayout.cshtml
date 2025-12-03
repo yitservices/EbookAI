@@ -1,12 +1,45 @@
 
+@using Microsoft.EntityFrameworkCore
+@using System.Security.Claims
+@inject EBookDashboard.Models.ApplicationDbContext DbContext
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    var userEmail = User.FindFirst(ClaimTypes.Email)?.Value ?? "";
+    var sidebarProfilePicturePath = "";
+    var sidebarUserName = User.Identity?.Name ?? "Reader";
+    var sidebarUserRole = "Reader";
+    
+    if (!string.IsNullOrEmpty(userEmail))
+    {
+        try
+        {
+            var user = DbContext.Users
+                .Include(u => u.Role)
+                .FirstOrDefault(u => u.UserEmail == userEmail);
+            
+            if (user != null)
+            {
+                sidebarProfilePicturePath = user.ProfilePicturePath ?? "";
+                sidebarUserName = user.FullName;
+                sidebarUserRole = user.Role?.RoleName ?? "Reader";
+            }
+        }
+        catch
+        {
+            // If database error, use defaults
+        }
+    }
+}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewData["Title"] - eBook Publisher</title>
+    <title>@ViewData["Title"] eBook Ai</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         /* All your CSS styles remain exactly the same */
@@ -40,7 +73,7 @@
             min-height: 100vh;
         }
 
-        /* Enhanced Sidebar Styles */
+        /* Enhanced Sidebar Styles - Fixed Position */
         .sidebar {
             width: 250px;
             background: linear-gradient(135deg, #1e2a4a, #2c3e50);
@@ -49,9 +82,12 @@
             display: flex;
             flex-direction: column;
             position: fixed;
+            left: 0;
+            top: 0;
             height: 100vh;
             overflow-y: auto;
-            z-index: 100;
+            overflow-x: hidden;
+            z-index: 1000;
             box-shadow: 3px 0 15px rgba(0, 0, 0, 0.1);
         }
 
@@ -337,8 +373,8 @@
         }
 
         .user-avatar {
-            width: 60px;
-            height: 60px;
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
             background: linear-gradient(135deg, #4a6cf7, #667eea);
             display: flex;
@@ -349,6 +385,63 @@
             color: white;
             font-weight: 600;
             box-shadow: 0 4px 15px rgba(74, 108, 247, 0.3);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+        }
+
+            .user-avatar:hover {
+                transform: scale(1.05);
+                box-shadow: 0 6px 20px rgba(74, 108, 247, 0.4);
+                border-color: rgba(255, 255, 255, 0.4);
+            }
+
+        .sidebar-profile-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .sidebar-avatar-initial {
+            font-size: 1.8rem;
+            font-weight: 700;
+            z-index: 1;
+        }
+
+        .sidebar-avatar-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 2;
+        }
+
+        .user-avatar:hover .sidebar-avatar-overlay {
+            opacity: 1;
+        }
+
+        .sidebar-avatar-overlay i {
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .user-profile-section a {
+            transition: all 0.3s ease;
+        }
+
+        .user-profile-section a:hover {
+            transform: translateY(-2px);
         }
 
         .user-info h4 {
@@ -370,6 +463,18 @@
             background: rgba(74, 108, 247, 0.2);
             color: #4a6cf7;
             border: 1px solid rgba(74, 108, 247, 0.3);
+        }
+
+        .author-role {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .admin-role {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
         }
 
         .logout-btn {
@@ -2799,28 +2904,37 @@
         <!-- Sidebar -->
         <nav class="sidebar" id="sidebar">
             <div class="sidebar-header">
-                <h2><i class="fas fa-book"></i> eBook Publisher</h2>
+                <h2><i class="fas fa-book"></i> eBook Ai</h2>
             </div>
 
             <!-- User Profile Section -->
             <div class="user-profile-section">
-                <div class="user-avatar">
-                    @{
-                        var userName = User.Identity?.Name ?? "Reader";
-                        var firstLetter = userName.Substring(0, 1).ToUpper();
-                    }
-                    @firstLetter
-                </div>
-                <div class="user-info">
-                    <h4>@userName</h4>
-                    <span class="user-role reader-role">
-                        <i class="fas fa-book-reader"></i> Reader
-                    </span>
-                </div>
+                <a href="/Dashboard/Profile" style="text-decoration: none; color: inherit; display: block;">
+                    <div class="user-avatar" id="sidebarUserAvatar">
+                        @if (!string.IsNullOrEmpty(sidebarProfilePicturePath))
+                        {
+                            <img src="@sidebarProfilePicturePath" alt="@sidebarUserName" class="sidebar-profile-img" id="sidebarProfileImg">
+                            <div class="sidebar-avatar-overlay">
+                                <i class="fas fa-camera"></i>
+                            </div>
+                        }
+                        else
+                        {
+                            var firstLetter = sidebarUserName.Substring(0, 1).ToUpper();
+                            <span class="sidebar-avatar-initial">@firstLetter</span>
+                        }
+                    </div>
+                    <div class="user-info">
+                        <h4>@sidebarUserName</h4>
+                        <span class="user-role @(sidebarUserRole.ToLower())-role">
+                            <i class="fas fa-book-reader"></i> @sidebarUserRole
+                        </span>
+                    </div>
+                </a>
             </div>
 
             <!-- Author Current Book Display -->
-            <div class="author-current-book" id="authorCurrentBook" style="display: none;">
+            @* <div class="author-current-book" id="authorCurrentBook" style="display: none;">
                 <div class="current-book-header">
                     <h4><i class="fas fa-book"></i> Current Book</h4>
                 </div>
@@ -2828,24 +2942,150 @@
                     <div class="book-name" id="currentBookName">Loading...</div>
                     <div class="book-id" id="currentBookId">ID: ...</div>
                 </div>
-            </div>
-
+            </div> *@
             <ul class="sidebar-menu">
-                <li><a href="/Dashboard" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Index" ? "active" : "")"><i class="fas fa-home"></i> Dashboard</a></li>
-                @* <li><a href="/Dashboard/EnhancedDashboard" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "EnhancedDashboard" ? "active" : "")"><i class="fas fa-rocket"></i> Enhanced Dashboard</a></li> *@
-                <li><a href="/Dashboard/Profile" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Profile" ? "active" : "")"><i class="fas fa-user"></i> Profile</a></li>
-                <li><a href="/Dashboard/EBook" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "EBook" ? "active" : "")"><i class="fas fa-book-open"></i> EBook </a></li>
-                <li><a href="/Dashboard/CoverDesign" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "CoverDesign" ? "active" : "")"><i class="fas fa-palette"></i> Cover Design</a></li>
-                <li><a href="/Dashboard/AudioBook" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "AudioBook" ? "active" : "")"><i class="fas fa-microphone"></i> Audio Book</a></li>
-                <li><a href="/Dashboard/EditingFormatting" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "EditingFormatting" ? "active" : "")"><i class="fas fa-edit"></i> Editing & Formatting</a></li>
-                <li><a href="/Dashboard/AdvancedEditing" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "AdvancedEditing" ? "active" : "")"><i class="fas fa-tools"></i> Advanced Editing</a></li>
-                <li><a href="/Dashboard/Proofreading" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Proofreading" ? "active" : "")"><i class="fas fa-spell-check"></i> Proofreading</a></li>
-                <li><a href="/Dashboard/Publishing" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Publishing" ? "active" : "")"><i class="fas fa-upload"></i> Publishing</a></li>
-                <li><a href="/Dashboard/Marketing" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Marketing" ? "active" : "")"><i class="fas fa-bullhorn"></i> Marketing</a></li>
-                <li><a href="/Dashboard/Royalties" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Royalties" ? "active" : "")"><i class="fas fa-chart-line"></i> Royalties</a></li>
-                <li><a href="/Dashboard/OrderAuthorCopy" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "OrderAuthorCopy" ? "active" : "")"><i class="fas fa-shopping-cart"></i> Order Author Copy</a></li>
-                <li><a href="/Dashboard/Copyright" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Copyright" ? "active" : "")"><i class="fas fa-copyright"></i> Copyright</a></li>
+                <!-- ✅ Main Navigation - All Screens -->
+                <li>
+                    <a href="/Dashboard" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Index" || ViewContext.RouteData.Values["Controller"]?.ToString() == "Dashboard" && ViewContext.RouteData.Values["Action"]?.ToString() == null ? "active" : "")">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/Books/AIGenerateBook2" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "AIGenerateBook2" ? "active" : "")">
+                        <i class="fas fa-edit"></i> AI Writer
+                    </a>
+                </li>
+                
+                @* <li>
+                    <a href="/Dashboard/BookCreation" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "BookCreation" ? "active" : "")">
+                        <i class="fas fa-journal-whills"></i> Book Creation
+                    </a>
+                </li> *@
+
+               @*  <li>
+                    <a href="/Dashboard/Styling" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Styling" ? "active" : "")">
+                        <i class="fas fa-paint-brush"></i> Styling
+                    </a>
+                </li> *@
+
+               @*  <li>
+                    <a href="/Dashboard/Preview" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Preview" ? "active" : "")">
+                        <i class="fas fa-eye"></i> Preview
+                    </a>
+                </li> *@
+
+               @*  <li>
+                    <a href="/Dashboard/GenerateFormat" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "GenerateFormat" ? "active" : "")">
+                        <i class="fas fa-file-export"></i> Generate Format
+                    </a>
+                </li> *@
+
+                <li>
+                    <a href="/Dashboard/MyBooks" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "MyBooks" ? "active" : "")">
+                        <i class="fas fa-book"></i> My Books
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/Dashboard/Subscriptions" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Subscriptions" ? "active" : "")">
+                        <i class="fas fa-credit-card"></i> Subscriptions
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/Dashboard/Profile" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Profile" ? "active" : "")">
+                        <i class="fas fa-user"></i> Profile
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/Dashboard/Settings" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Settings" ? "active" : "")">
+                        <i class="fas fa-cog"></i> Settings
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/Dashboard/Support" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Support" ? "active" : "")">
+                        <i class="fas fa-life-ring"></i> Support & Resources
+                    </a>
+                </li>
+
+                <!-- 🔒 Premium/Locked Features -->
+                <li><a href="javascript:void(0);" class="locked-feature"><i class="fas fa-book-open"></i> EBook Hub <i class="fas fa-lock lock-icon"></i></a></li>
+                <li><a href="javascript:void(0);" class="locked-feature"><i class="fas fa-palette"></i> Cover Design <i class="fas fa-lock lock-icon"></i></a></li>
+                <li><a href="javascript:void(0);" class="locked-feature"><i class="fas fa-microphone"></i> Audio Book <i class="fas fa-lock lock-icon"></i></a></li>
+                <li><a href="javascript:void(0);" class="locked-feature"><i class="fas fa-spell-check"></i> Proofreading <i class="fas fa-lock lock-icon"></i></a></li>
             </ul>
+
+            <!-- ✅ SweetAlert Script -->
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    const lockedLinks = document.querySelectorAll(".locked-feature");
+
+                    lockedLinks.forEach(link => {
+                        link.addEventListener("click", function () {
+                            Swal.fire({
+                                title: "Upgrade Required 🚀",
+                                html: "<b>This feature is available only for premium users.</b><br><br>Please upgrade your plan to access it.",
+                                icon: "info",
+                                confirmButtonText: "Upgrade Now",
+                                confirmButtonColor: "#007bff",
+                                showCancelButton: true,
+                                cancelButtonText: "Maybe Later",
+                                cancelButtonColor: "#6c757d",
+                                backdrop: `rgba(0,0,0,0.4)`
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    if (typeof showPricingPlans === 'function') {
+                                        showPricingPlans();
+                                    } else if (typeof showPricingPlansInline === 'function') {
+                                        showPricingPlansInline();
+                                    }
+                                }
+                            });
+                        });
+                    });
+                });
+            </script>
+
+            <script>
+                async function showPricingPlansInline() {
+                    try {
+                        const res = await fetch('/Plans/GetPlans');
+                        if (!res.ok) throw new Error('Failed to load plans');
+                        const plans = await res.json();
+                        let html = `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;">`;
+                        (plans || []).forEach(p => {
+                            html += `
+                                <div style=\"border:1px solid #e5e7eb;border-radius:14px;padding:16px;background:#fff;box-shadow:0 6px 18px rgba(0,0,0,.06)\"> 
+                                    <div style=\"font-weight:800;color:#111827;margin-bottom:6px\">${p.planName}</div>
+                                    <div style=\"font-size:1.6rem;font-weight:800\">$${p.planRate}</div>
+                                    <div style=\"color:#6b7280;font-size:.9rem;margin-bottom:8px\">${p.planDays} days · Max ${p.maxEBooks} eBooks</div>
+                                    <div style=\"color:#4b5563;font-size:.9rem;min-height:38px\">${p.planDescription ?? ''}</div>
+                                    <div style=\"margin-top:10px;display:flex;justify-content:flex-end\">
+                                        <button class=\"btn btn-primary btn-sm\" onclick=\"(function(id){ Swal.close(); window.location.href = '/Payments/Checkout?planId=' + id;})(${p.planId})\">Select</button>
+                                    </div>
+                                </div>`;
+                        });
+                        html += `</div>`;
+                        Swal.fire({ title: 'Choose Your Plan', html, showConfirmButton: false, showCloseButton: true, width: '900px' });
+                    } catch (e) {
+                        Swal.fire('Error', e.message || 'Could not load plans.', 'error');
+                    }
+                }
+            </script>
+
+            <!-- 💄 Just small inline styling for lock spacing -->
+            <style>
+                .lock-icon {
+                    margin-left: 8px; /* thoda gap text ke baad */
+                    color: #999; /* halka grey look for lock */
+                    font-size: 0.9em; /* thoda chhota lock */
+                }
+            </style>
+
 
             <div class="sidebar-footer">
                 <a href="/Account/Logout" class="logout-btn">
@@ -2887,6 +3127,127 @@
             @RenderBody()
         </main>
     </div>
+
+    <script>
+        // Global cart manager for consistent UX
+        window.CartManager = (function(){
+            function resolveUserId(){
+                try {
+                    const el1 = document.getElementById('UserId');
+                    if (el1 && el1.value) return parseInt(el1.value);
+                    const el2 = document.getElementById('userId');
+                    if (el2 && el2.value) return parseInt(el2.value);
+                    const ls = localStorage.getItem('UserId') || localStorage.getItem('userId');
+                    if (ls) return parseInt(ls);
+                    const ss = sessionStorage.getItem('UserId') || sessionStorage.getItem('userId');
+                    if (ss) return parseInt(ss);
+                } catch {}
+                return null;
+            }
+            async function createBillFromFeatures(featureIds){
+                const ids = (featureIds||[]).map(x=> parseInt(x)).filter(x=> Number.isFinite(x));
+                if (ids.length===0) throw new Error('No features to checkout');
+                let userId = resolveUserId();
+                if (!Number.isFinite(userId)) userId = 1;
+                const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value
+                    || document.querySelector('meta[name="RequestVerificationToken"]')?.getAttribute('content');
+                async function callApi(body){
+                    const res = await fetch('/api/AuthorPlanFeatures/save-features', {
+                        method:'POST',
+                        headers: { 'Content-Type':'application/json', ...(token?{ 'RequestVerificationToken': token }: {}) },
+                        credentials: 'same-origin',
+                        body: JSON.stringify(body)
+                    });
+                    const text = await res.text().catch(()=> '');
+                    let jsonResp = null; try { jsonResp = text ? JSON.parse(text) : null; } catch {}
+                    if(!res.ok){
+                        const msg = jsonResp?.message || text || `HTTP ${res.status}`;
+                        throw new Error(msg);
+                    }
+                    return jsonResp;
+                }
+                // Try without wrapper first (most common)
+                try {
+                    const json = await callApi({ authorId: userId, userId: userId, featureIds: ids });
+                    if (json && json.success && json.billId) return json.billId;
+                    throw new Error(json?.message || 'Failed to create bill');
+                } catch (e1) {
+                    // Fallback: try with { request: { ... } } wrapper if API expects it
+                    try {
+                        const json2 = await callApi({ request: { authorId: userId, userId: userId, featureIds: ids } });
+                        if (json2 && json2.success && json2.billId) return json2.billId;
+                        throw new Error(json2?.message || e1.message || 'Failed to create bill');
+                    } catch (e2) {
+                        throw e2;
+                    }
+                }
+            }
+            function getCart(){ try { return JSON.parse(localStorage.getItem('cart') || '{"items":[]}'); } catch { return { items: [] }; } }
+            function setCart(cart){ localStorage.setItem('cart', JSON.stringify(cart)); updateUI(); }
+            function updateUI(){
+                const cart = getCart();
+                const badge = document.getElementById('cartBadge');
+                const icon = document.getElementById('floatingCartIcon');
+                const drawerItems = document.getElementById('cartItems');
+                const totalEl = document.getElementById('cartTotal');
+                const count = cart.items.length;
+                const total = cart.items.reduce((s, it) => s + (Number(it.price) || 0), 0);
+                if (badge) badge.textContent = String(count);
+                if (icon) icon.style.display = count > 0 ? 'block' : 'none';
+                if (totalEl) totalEl.textContent = `$${total.toFixed(2)}`;
+                if (drawerItems) {
+                    drawerItems.innerHTML = count === 0 ? '<div class="empty-cart-message">Your cart is empty</div>' : cart.items.map(it => `
+                        <div class=\"cart-item\" style=\"display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #eee\">
+                            <div>
+                                <div style=\"font-weight:600\">${it.name}</div>
+                                <div style=\"color:#6b7280;font-size:.85rem\">$${Number(it.price).toFixed(2)}</div>
+                            </div>
+                            <button class=\"btn btn-sm btn-outline-secondary\" onclick=\"CartManager.remove(${it.id})\">Remove</button>
+                        </div>`).join('');
+                }
+            }
+            function addItems(items){
+                const cart = getCart();
+                items.forEach(it => { if(!cart.items.some(x => x.id === it.id)) cart.items.push(it); });
+                setCart(cart);
+            }
+            function remove(id){ const cart=getCart(); cart.items = cart.items.filter(x => x.id !== id); setCart(cart); }
+            function open(){ const d=document.getElementById('cartDrawer'); if(d) d.classList.add('open'); }
+            function close(){ const d=document.getElementById('cartDrawer'); if(d) d.classList.remove('open'); }
+            async function goToSummary(){
+                const cart = getCart();
+                const featureIds = cart.items.filter(x => x.type==='feature').map(x => x.id);
+                if (featureIds.length === 0) { if (typeof Swal!=='undefined') Swal.fire('Cart Empty','Please add features to cart first.','info'); return; }
+                try {
+                    if (typeof Swal!=='undefined') Swal.fire({title:'Creating bill...', didOpen:()=>Swal.showLoading(), allowOutsideClick:false, allowEscapeKey:false, showConfirmButton:false});
+                    const billId = await createBillFromFeatures(featureIds);
+                    if (typeof Swal!=='undefined') Swal.close();
+                    window.location.href = `/Payments/PaymentSummary?billId=${billId}`;
+                } catch(e){
+                    if (typeof Swal!=='undefined') Swal.close();
+                    // Fallback: create bill server-side from featureIds param
+                    window.location.href = `/Payments/PaymentSummaryFromFeatures?featureIds=${featureIds.join(',')}`;
+                }
+            }
+            return { getCart, setCart, updateUI, addItems, remove, open, close, goToSummary, createBillFromFeatures };
+        })();
+
+        // Wire cart UI
+        document.addEventListener('DOMContentLoaded', function(){
+            CartManager.updateUI();
+            const icon = document.getElementById('floatingCartIcon');
+            const closeBtn = document.getElementById('closeCart');
+            const checkoutBtn = document.getElementById('checkoutBtn');
+            if (icon) icon.addEventListener('click', CartManager.open);
+            if (closeBtn) closeBtn.addEventListener('click', CartManager.close);
+            if (checkoutBtn) checkoutBtn.addEventListener('click', function(){ CartManager.goToSummary(); });
+        });
+
+        // Expose helpers globally for other pages
+        window.getCart = CartManager.getCart;
+        window.setCart = CartManager.setCart;
+        window.updateCartUI = CartManager.updateUI;
+    </script>
 
     <!-- Live Chat Modal -->
     <div id="liveChatModal" class="modal">
@@ -3082,7 +3443,21 @@
             }
 
             // Load cart from localStorage
-            function loadCart() {
+            async function loadCart() {
+                try {
+                    // Load server-side temp cart for authenticated users
+                    const res = await fetch('/Features/CartPreview');
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data.success) {
+                            items = (data.items || []).map(i => ({ id: i.id, name: i.name, type: i.type || 'Feature', price: i.price || 0, quantity: 1 }));
+                            updateCartUI();
+                            return;
+                        }
+                    }
+                } catch (e) {}
+
+                // Fallback to client cart storage
                 const savedCart = localStorage.getItem('cartItems');
                 if (savedCart) {
                     items = JSON.parse(savedCart);
@@ -3213,7 +3588,7 @@
             }
 
             // Checkout
-            function checkout() {
+            async function checkout() {
                 if (items.length === 0) {
                     Swal.fire({
                         title: 'Empty Cart',
@@ -3224,20 +3599,20 @@
                     return;
                 }
 
-                Swal.fire({
-                    title: 'Checkout',
-                    text: 'Proceeding to checkout...',
-                    icon: 'success',
-                    timer: 2000,
-                    timerProgressBar: true,
-                    showConfirmButton: false
-                }).then(() => {
-                    // Clear cart after successful checkout
-                    items = [];
-                    saveCart();
-                    updateCartUI();
-                    closeCart();
-                });
+                try {
+                    // Ask server for suggested plan and redirect
+                    const res = await fetch('/Features/CartPreview');
+                    const data = await res.json();
+                    if (data && data.count > 0) {
+                        // Reuse suggested plan logic from features page by hitting AddToCart first or SuggestPlan separately if added later
+                        // For now, if cart not empty, go to Plans suggestion page
+                        window.location.href = '/Dashboard/PlanSuggestion';
+                    } else {
+                        Swal.fire({ title: 'Cart Error', text: 'Unable to proceed. Please try again.', icon: 'error' });
+                    }
+                } catch (err) {
+                    Swal.fire({ title: 'Checkout Failed', text: 'Please try again later.', icon: 'error' });
+                }
             }
 
             // Public API
@@ -3829,6 +4204,62 @@
             if (getComputedStyle(document.documentElement).overflowY !== 'scroll') {
                 document.documentElement.style.overflowY = 'scroll';
             }
+
+            // Update sidebar profile picture when page loads or after upload
+            updateSidebarProfilePicture();
+        });
+
+        // Function to update sidebar profile picture
+        function updateSidebarProfilePicture() {
+            // Check if profile picture was just uploaded (stored in sessionStorage)
+            const newProfilePic = sessionStorage.getItem('newProfilePicture');
+            if (newProfilePic) {
+                const sidebarAvatar = document.getElementById('sidebarUserAvatar');
+                const sidebarImg = document.getElementById('sidebarProfileImg');
+                
+                if (sidebarAvatar && newProfilePic) {
+                    // If image doesn't exist, create it
+                    if (!sidebarImg) {
+                        const img = document.createElement('img');
+                        img.src = newProfilePic + '?t=' + new Date().getTime();
+                        img.alt = '@sidebarUserName';
+                        img.className = 'sidebar-profile-img';
+                        img.id = 'sidebarProfileImg';
+                        
+                        // Remove initial if exists
+                        const initial = sidebarAvatar.querySelector('.sidebar-avatar-initial');
+                        if (initial) {
+                            initial.remove();
+                        }
+                        
+                        sidebarAvatar.appendChild(img);
+                        
+                        // Add overlay
+                        const overlay = document.createElement('div');
+                        overlay.className = 'sidebar-avatar-overlay';
+                        overlay.innerHTML = '<i class="fas fa-camera"></i>';
+                        sidebarAvatar.appendChild(overlay);
+                    } else {
+                        // Update existing image
+                        sidebarImg.src = newProfilePic + '?t=' + new Date().getTime();
+                    }
+                }
+                
+                // Clear sessionStorage
+                sessionStorage.removeItem('newProfilePicture');
+            }
+        }
+
+        // Listen for profile picture updates from Profile page
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'profilePictureUpdated') {
+                updateSidebarProfilePicture();
+            }
+        });
+
+        // Also update on focus (when user comes back to page)
+        window.addEventListener('focus', function() {
+            updateSidebarProfilePicture();
         });
         
         // Welcome message function

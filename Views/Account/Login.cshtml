@@ -214,6 +214,28 @@
             box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
         }
 
+        .btn-google, .btn-facebook {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 2px solid rgba(0,0,0,0.08);
+            background: #fff;
+            color: #111827;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            text-decoration: none;
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+        .btn-google:hover, .btn-facebook:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(0,0,0,.08);
+        }
+        .btn-google i { color: #DB4437; }
+        .btn-facebook i { color: #1877F2; }
+
         .divider {
             text-align: center;
             margin: 30px 0;
@@ -366,12 +388,27 @@
             </div>
         }
 
+        @* Auto-fill Reader Details Section *@
+        @if (ViewBag.ReaderEmail != null)
+        {
+            <div class="alert alert-info" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; border-color: rgba(59, 130, 246, 0.2); margin-bottom: 20px;" data-aos="fade-up">
+                <i class="fas fa-info-circle"></i> 
+                <strong>Reader Account Available:</strong> 
+                <span id="readerInfo">@ViewBag.ReaderName (@ViewBag.ReaderEmail)</span>
+                <button type="button" class="btn-auto-fill" onclick="autoFillReader()" 
+                        style="margin-left: 10px; padding: 5px 15px; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">
+                    <i class="fas fa-magic"></i> Auto Fill
+                </button>
+            </div>
+        }
+
         <form method="post" id="loginForm">
             <div class="form-group" data-aos="fade-up" data-aos-delay="100">
                 <label for="UserEmail">Email Address</label>
                 <div class="input-wrapper">
                     <i class="fas fa-envelope"></i>
                     <input type="email" id="UserEmail" name="UserEmail" class="form-control" 
+                           value="@ViewBag.ReaderEmail"
                            placeholder="Enter your email address" required>
                 </div>
             </div>
@@ -381,6 +418,7 @@
                 <div class="input-wrapper">
                     <i class="fas fa-lock"></i>
                     <input type="password" id="Password" name="Password" class="form-control" 
+                           value="@ViewBag.ReaderPassword"
                            placeholder="Enter your password" required>
                 </div>
             </div>
@@ -404,6 +442,25 @@
         <div class="divider" data-aos="fade-up" data-aos-delay="500">
             <span>Don't have an account?</span>
         </div>
+
+        <div class="divider" data-aos="fade-up" data-aos-delay="520">
+            <span>or continue with</span>
+        </div>
+
+        <div class="form-group" data-aos="fade-up" data-aos-delay="560">
+            <a href="/Account/ExternalLogin?provider=Google" class="btn-google">
+                <i class="fab fa-google"></i> Continue with Google
+            </a>
+        </div>
+        <div class="form-group" data-aos="fade-up" data-aos-delay="600">
+            <a href="/Account/ExternalLogin?provider=Facebook" class="btn-facebook">
+                <i class="fab fa-facebook"></i> Continue with Facebook
+            </a>
+        </div>
+
+        <p class="auth-footer" style="margin-top:12px" data-aos="fade-up" data-aos-delay="620">
+            We never post on your behalf.
+        </p>
 
         <div class="auth-footer" data-aos="fade-up" data-aos-delay="600">
             <a href="/Account/Registration">Create your account</a> and start publishing today!
@@ -495,6 +552,70 @@
             // You can implement custom error display here
             console.log(`Field error: ${message}`);
         }
+
+        // Auto-fill reader details function
+        function autoFillReader() {
+            const readerEmail = '@ViewBag.ReaderEmail';
+            const readerPassword = '@ViewBag.ReaderPassword';
+            
+            if (readerEmail && readerPassword) {
+                document.getElementById('UserEmail').value = readerEmail;
+                document.getElementById('Password').value = readerPassword;
+                
+                // Show success message
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Auto-filled!',
+                    text: 'Reader credentials have been filled automatically.',
+                    timer: 1500,
+                    showConfirmButton: false,
+                    toast: true,
+                    position: 'top-end'
+                });
+            }
+        }
+
+        // Auto-fill on page load if reader details are available
+        @if (ViewBag.ReaderEmail != null && ViewBag.ReaderPassword != null)
+        {
+            <text>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Auto-fill after a short delay for better UX
+                setTimeout(function() {
+                    autoFillReader();
+                }, 500);
+            });
+            </text>
+        }
+
+        // Handle signup prompt from external login flow
+        (function () {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('signupPrompt') === '1') {
+                Swal.fire({
+                    icon: 'info',
+                    title: "You don't have an account yet.",
+                    text: "Please sign up first.",
+                    confirmButtonText: 'Continue',
+                    confirmButtonColor: '#667eea'
+                }).then(() => {
+                    window.location.href = '/Books/AIGenerateBook';
+                });
+            }
+
+            const oauthMissing = params.get('oauthMissing');
+            if (oauthMissing) {
+                const origin = window.location.origin;
+                const path = oauthMissing.toLowerCase() === 'google' ? '/signin-google' : '/signin-facebook';
+                Swal.fire({
+                    icon: 'error',
+                    title: `${oauthMissing} login isn't configured`,
+                    html: `Please set your ${oauthMissing} credentials in appsettings.json and add the redirect URI:<br><code>${origin}${path}</code>`,
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#667eea'
+                });
+            }
+        })();
     </script>
 </body>
 </html>

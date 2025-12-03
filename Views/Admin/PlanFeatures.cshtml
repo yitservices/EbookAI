@@ -1,8 +1,13 @@
-﻿@@{
+﻿@{
+    ViewData["Title"] = "Plan Features";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
-    ViewData["Title"] = "Feature Management";
 }
 <style>
+    /* Outstanding Plan Features UI */
+    .plan-features-page {
+        font-family: 'Inter', 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
     /* Outstanding Role Management Styles */
     .role-management-container {
         animation: fadeIn 0.8s ease-out;
@@ -20,6 +25,9 @@
             transform: translateY(0);
         }
     }
+     
+
+
 
     /* Stats Cards with Outstanding Design */
     .stats-row {
@@ -514,8 +522,17 @@
         background-color: #f9f9f9;
     }
 </style>
-<div id="app" class="p-6 max-w-5xl mx-auto">
-    <h2 class="text-2xl font-bold mb-4">📋 Manage Plan Features</h2>
+<div id="app" class="p-6 max-w-5xl mx-auto plan-features-page">
+    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px; padding: 20px; color: #fff; margin-bottom: 20px; display: flex; align-items: center; gap: 12px;">
+        <i class="fas fa-list-check" style="font-size: 28px;"></i>
+        <div style="flex: 1;">
+            <div style="font-size: 20px; font-weight: 700;">Manage Plan Features</div>
+            <div style="opacity: 0.85;">Create and manage features available in subscription plans</div>
+        </div>
+        <div v-if="features && features.length" style="background: rgba(255,255,255,0.2); padding: 8px 12px; border-radius: 10px; font-weight: 600;">
+            {{ features.length }} total
+        </div>
+    </div>
 
     <!-- Add Feature Form -->
     <form @@submit.prevent="addFeature" class="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded-xl shadow-md mb-6">
@@ -529,7 +546,22 @@
 
     <!-- Features List -->
     <div>
-        <h3 class="text-xl font-semibold mb-2">Existing Features</h3>
+        <div class="text-xl font-semibold mb-2" style="display:flex; align-items:center; gap:12px;">
+            <span>Existing Features</span>
+            <div style="margin-left:auto; display:flex; align-items:center; gap:8px;">
+                <input v-model="searchTerm" placeholder="Search features..." class="border p-2 rounded" style="min-width: 220px;" />
+            </div>
+        </div>
+
+        <div v-if="loading" class="border p-4 rounded-xl shadow-sm mb-3" style="display:flex; align-items:center; gap:10px;">
+            <i class="fas fa-spinner fa-spin"></i>
+            <span>Loading features...</span>
+        </div>
+
+        <div v-if="!loading && filteredFeatures.length === 0" class="border p-4 rounded-xl shadow-sm mb-3" style="display:flex; align-items:center; gap:10px; color:#6b7280;">
+            <i class="fas fa-circle-info"></i>
+            <span>No features found.</span>
+        </div>
         <table class="table-auto w-full border-collapse border border-gray-300 border-collapse shadow-sm">
             <thead class="bg-gray-200">
                 <tr>
@@ -543,15 +575,23 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="f in features" :key="f.FeatureId" class="hover:bg-gray-50">
+                <tr v-for="f in filteredFeatures" :key="f.FeatureId" class="hover:bg-gray-50">
                     <td class="border border-gray-300 px-3 py-2 text-center">{{ f.FeatureId }}</td>
                     <td class="border border-gray-300 px-3 py-2">{{ f.FeatureName }}</td>
                     <td class="border border-gray-300 px-3 py-2">{{ f.Description }}</td>
-                    <td class="border border-gray-300 px-3 py-2 text-right">{{ f.FeatureRate.toFixed(2) }}</td>
-                    <td class="border border-gray-300 px-3 py-2">{{ f.Currency }}</td>
-                    <td class="border border-gray-300 px-3 py-2">{{ f.Status }}</td>
+                    <td class="border border-gray-300 px-3 py-2 text-right">
+                        <span class="badge bg-info">{{ (Number(f.FeatureRate || 0)).toFixed(2) }}</span>
+                    </td>
+                    <td class="border border-gray-300 px-3 py-2">
+                        <span class="badge bg-secondary">{{ f.Currency || 'USD' }}</span>
+                    </td>
+                    <td class="border border-gray-300 px-3 py-2">
+                        <span :class="['badge', (f.Status || '').toLowerCase() === 'active' ? 'bg-success' : 'bg-warning']">
+                            {{ f.Status || 'Inactive' }}
+                        </span>
+                    </td>
                     <td class="border p-2 text-center">
-                        <button @@click="deleteFeature(f.featureId)" class="text-red-600 hover:underline">Delete</button>
+                        <button @@click="deleteFeature(f.FeatureId)" class="text-red-600 hover:underline">Delete</button>
                     </td>
                 </tr>
             </tbody>
@@ -565,7 +605,9 @@
         data() {
             return {
                 features: [],
-                    newFeature: {
+                loading: false,
+                searchTerm: '',
+                newFeature: {
                     FeatureName: '',
                     Description: '',
                     FeatureRate: 0,
@@ -577,14 +619,30 @@
 
             }
         },
+        computed: {
+            filteredFeatures() {
+                const q = (this.searchTerm || '').toLowerCase().trim();
+                if (!q) return this.features;
+                return this.features.filter(f =>
+                    (f.FeatureName || '').toLowerCase().includes(q) ||
+                    (f.Description || '').toLowerCase().includes(q) ||
+                    (f.Currency || '').toLowerCase().includes(q) ||
+                    (String(f.FeatureRate || '')).toLowerCase().includes(q)
+                );
+            }
+        },
         methods: {
             async loadFeatures() {
-                const response = await fetch('/api/planfeatures');
-                if (response.ok) {
-                    this.features = await response.json();
-                    console.log("Loaded features:", this.features);
-                } else {
-                    console.error("Error loading features", response.statusText);
+                try {
+                    this.loading = true;
+                    const response = await fetch('/api/planfeatures');
+                    if (response.ok) {
+                        this.features = await response.json();
+                    } else {
+                        console.error("Error loading features", response.statusText);
+                    }
+                } finally {
+                    this.loading = false;
                 }
             },
                 async addFeature() {
@@ -603,12 +661,45 @@
                     }
                 },
             async deleteFeature(id) {
+                if (typeof Swal !== 'undefined') {
+                    const result = await Swal.fire({
+                        title: 'Delete Feature?',
+                        text: 'This action cannot be undone.',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#ef4444',
+                        cancelButtonColor: '#6b7280',
+                        confirmButtonText: 'Yes, Delete'
+                    });
+                    if (!result.isConfirmed) return;
+                    await this.performDelete(id);
+                    return;
+                }
                 if (!confirm("Are you sure you want to delete this feature?")) return;
-                const response = await fetch(`/api/planfeatures/${id}`, { method: 'DELETE' });
-                if (response.ok) {
-                    this.loadFeatures();
-                } else {
-                    alert("Error deleting feature");
+                await this.performDelete(id);
+            },
+            async performDelete(id) {
+                try {
+                    const response = await fetch(`/api/planfeatures/${id}`, { method: 'DELETE' });
+                    if (response.ok) {
+                        await this.loadFeatures();
+                        if (typeof Swal !== 'undefined') {
+                            Swal.fire('Deleted!', 'Feature deleted successfully.', 'success');
+                        }
+                    } else {
+                        const msg = await response.text();
+                        if (typeof Swal !== 'undefined') {
+                            Swal.fire('Error', msg || 'Error deleting feature', 'error');
+                        } else {
+                            alert("Error deleting feature");
+                        }
+                    }
+                } catch (e) {
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire('Error', e?.message || 'Error deleting feature', 'error');
+                    } else {
+                        alert("Error deleting feature");
+                    }
                 }
             }
         },

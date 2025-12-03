@@ -100,6 +100,10 @@
                         <a href="@Url.Action("Edit", new { id = book.BookId })" class="btn btn-primary btn-sm" title="Edit">
                             <i class="fas fa-edit"></i>
                         </a>
+
+                        <a href="/Books/AIGenerateBook?bookId=@book.BookId" class="btn btn-secondary btn-sm" title="Open Workflow">
+                            <i class="fas fa-magic"></i>
+                        </a>
                         
                         @if (book.Status == "Draft")
                         {

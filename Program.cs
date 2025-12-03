@@ -1,6 +1,8 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿using EBookDashboard.Interfaces;
+﻿﻿using EBookDashboard.Interfaces;
 using EBookDashboard.Models;
 using EBookDashboard.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -8,7 +10,14 @@ using System;
 var builder = WebApplication.CreateBuilder(args);
 
 // ✅ Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+    // Global authorization policy: require authenticated users by default
+    var policy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+    options.Filters.Add(new AuthorizeFilter(policy));
+});
 builder.Services.AddSession();  // ✅ add session support
 
 // ✅ Configure MySQL DbContext
@@ -18,7 +27,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         new MySqlServerVersion(new Version(8, 0, 34)) // adjust version to your MySQL
     ));
 
-// ✅ Enable Authentication with Cookie Scheme
+// ✅ Enable Authentication with Cookie Scheme + External Providers
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
@@ -27,6 +36,22 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.AccessDeniedPath = "/Account/AccessDenied"; // unauthorized
         options.ExpireTimeSpan = TimeSpan.FromMinutes(30);  // session timeout
         options.SlidingExpiration = true;            // extend session if active
+    })
+    .AddGoogle(options =>
+    {
+        options.ClientId = builder.Configuration["Authentication:Google:ClientId"] ?? "";
+        options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"] ?? "";
+        options.CallbackPath = builder.Configuration["Authentication:Google:CallbackPath"] ?? "/signin-google";
+        // Google includes email/profile scopes by default
+    })
+    .AddFacebook(options =>
+    {
+        options.AppId = builder.Configuration["Authentication:Facebook:AppId"] ?? "";
+        options.AppSecret = builder.Configuration["Authentication:Facebook:AppSecret"] ?? "";
+        options.CallbackPath = builder.Configuration["Authentication:Facebook:CallbackPath"] ?? "/signin-facebook";
+        // Ensure email is requested from Facebook
+        options.Scope.Add("email");
+        options.Fields.Add("email");
     });
 
 // ✅ Authorization middleware (roles, policies etc.)
@@ -37,7 +62,7 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 // Add BookService
 builder.Services.AddScoped<IBookService, BookService>();
 // Add PlanService
-builder.Services.AddScoped<IPlanService, PlanService>();
+builder.Services.AddScoped<IPlansService, PlansService>();
 // Add FeatureCartService
 builder.Services.AddScoped<IFeatureCartService, FeatureCartService>();
 // Add CheckoutService
@@ -46,7 +71,15 @@ builder.Services.AddScoped<ICheckoutService, CheckoutService>();
 builder.Services.AddScoped<IPlanFeaturesService, PlanFeaturesService>();
 //
 builder.Services.AddScoped<IAPIRawResponseService, APIRawResponseService>();
+// Add this to your services
+builder.Services.AddScoped<BookProcessingService>();
+builder.Services.AddScoped<IAuthorPlansService, AuthorPlansService>();
+builder.Services.AddScoped<IAuthorBillsService, AuthorBillsService>();
+builder.Services.AddScoped<IAuthorPlansService, AuthorPlansService>();
 
+builder.Services.AddScoped<CommonMethodsService>(); // ✅ Add this line
+builder.Services.AddScoped<IAPIRawResponseService, APIRawResponseService>();
+builder.Services.AddScoped<IBookService, BookService>();
 // Add session services
 builder.Services.AddDistributedMemoryCache();
 //Register HttpClient factory
@@ -71,18 +104,31 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+// ✅ Ensure database exists & apply migrations on startup (creates DB if missing)
+//try
+//{
+//    using var scope = app.Services.CreateScope();
+//    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+//    db.Database.Migrate();
+//}
+//catch (Exception ex)
+//{
+//    // Optional: log to console to help diagnose startup DB issues (e.g., wrong credentials or server down)
+//    Console.WriteLine($"[Startup:Migrate] {ex.GetType().Name}: {ex.Message}");
+//}
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseSession(); // ✅ enable session middleware
+app.UseSession(); // ✅ must be after UseRouting and before UseEndpoints
 
 
 // ✅ Authentication + Authorization
 app.UseAuthentication();
 app.UseAuthorization();
-
+//app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Account}/{action=Login}/{id?}");
@@ -117,5 +163,12 @@ app.MapControllerRoute(
     name: "checkout",
     pattern: "Checkout/{action}/{id?}",
     defaults: new { controller = "Checkout", action = "GetPublishableKey" });
+
+// Fix accidental /Dashboard/undefined by redirecting to Login
+app.MapGet("/Dashboard/undefined", (Microsoft.AspNetCore.Http.HttpContext context) =>
+{
+    context.Response.Redirect("/Account/Login");
+    return System.Threading.Tasks.Task.CompletedTask;
+});
 
 app.Run();

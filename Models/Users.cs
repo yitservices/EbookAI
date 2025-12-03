@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 
 namespace EBookDashboard.Models
 {
+    [Table("users")]
     public class Users
     {
         [Required]
@@ -15,10 +17,11 @@ namespace EBookDashboard.Models
         public string SecretQuestion {  get; set; } = string.Empty;
         public string SecretQuestionAnswer { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime LastLoginAt { get; set; }
+        public DateTime LastLoginAt { get; set; } = new DateTime(1980, 1, 1);
         public int RoleId { get; set; }
         public string Status { get; set; } = string.Empty;
+        public string? ProfilePicturePath { get; set; } // Path to profile picture file
         public Roles Role { get; set; } // navigation property
-
+        public string AuthorCode { get; set; } = string.Empty;
     }
 }

@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EBookDashboard.Models
 {
+    [Table("features")]
     public class Features
     {
         [Required]
