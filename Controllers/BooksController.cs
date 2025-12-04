@@ -991,9 +991,9 @@ namespace EBookDashboard.Controllers
             // Transform to the expected format with formatted date
             var result = savedBooks.Select(b => new
             {
-                // Make sure this matches JS expectation
-                //ResponseId=b.ResponseId,
-                chapterNo = b.ChapterNumber,
+               // Make sure this matches JS expectation
+               //ResponseId=b.ResponseId,
+               chapterNo = b.ChapterNumber,
                chapterTitle= b.Title,
                content= b.Content,
                chapterStatus=b.StatusCode,
