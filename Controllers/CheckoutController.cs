@@ -1,9 +1,7 @@
 ﻿using EBookDashboard.Interfaces;
-using EBookDashboard.Models;
 using Microsoft.AspNetCore.Mvc;
 using Stripe;
 using Stripe.Checkout;
-using System.Security.Claims;
 
 namespace EBookDashboard.Controllers
 {
@@ -12,15 +10,14 @@ namespace EBookDashboard.Controllers
     {
         private readonly ICheckoutService _checkoutService;
         private readonly IConfiguration _config;
-        private readonly ApplicationDbContext _context;
-        private readonly IFeatureCartService _featureCartService;
+        private readonly IAuthorBillsService _authorBillsService;
+       // private readonly IPlansService _plansService;
+      //  private readonly IAuthorPlansService _authorPlansService;
 
-        public CheckoutController(ICheckoutService checkoutService, IConfiguration config, ApplicationDbContext context, IFeatureCartService featureCartService)
+        public CheckoutController(ICheckoutService checkoutService, IConfiguration config)
         {
             _checkoutService = checkoutService;
             _config = config;
-            _context = context;
-            _featureCartService = featureCartService;
         }
 
         // FIXED: Changed route to match what JavaScript is calling
@@ -35,7 +32,7 @@ namespace EBookDashboard.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateSession([FromBody] CheckoutRequest request)
+        public IActionResult CreateSession([FromBody] CheckoutRequest request)
         {
             try
             {
@@ -94,16 +91,8 @@ namespace EBookDashboard.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Success(string session_id)
+        public IActionResult Success(string session_id)
         {
-            // If this is a feature cart payment, clear the cart
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (!string.IsNullOrEmpty(userId))
-            {
-                var sessionId = HttpContext.Session.Id;
-                await _featureCartService.ClearTempAsync(sessionId, userId);
-            }
-            
             ViewBag.SessionId = session_id;
             return View();
         }
@@ -124,3 +113,4 @@ namespace EBookDashboard.Controllers
         public int? AuthorPlanId { get; set; }
     }
 }
+

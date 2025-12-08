@@ -22,6 +22,278 @@ namespace EBookDashboard.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
+            modelBuilder.Entity("AuthorBillsAuthorPlans", b =>
+                {
+                    b.Property<int>("AuthorBillsBillId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AuthorPlansAuthorPlanId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AuthorBillsBillId", "AuthorPlansAuthorPlanId");
+
+                    b.HasIndex("AuthorPlansAuthorPlanId");
+
+                    b.ToTable("AuthorBillsAuthorPlans");
+                });
+
+            modelBuilder.Entity("EBookDashboard.Models.APIRawResponse", b =>
+                {
+                    b.Property<int>("ResponseId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("ResponseId"));
+
+                    b.Property<int?>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Chapter")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Endpoint")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ErrorMessage")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ParsedBookId")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("RequestData")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ResponseData")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("StatusCode")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ResponseId");
+
+                    b.ToTable("apirawresponse");
+                });
+
+            modelBuilder.Entity("EBookDashboard.Models.AuditLog", b =>
+                {
+                    b.Property<int>("AuditLogId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("AuditLogId"));
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<int?>("EntityId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EntityType")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("IpAddress")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("UserAgent")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AuditLogId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AuditLogs");
+                });
+
+            modelBuilder.Entity("EBookDashboard.Models.AuthorBills", b =>
+                {
+                    b.Property<int>("BillId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("BillId"));
+
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("int")
+                        .HasColumnName("AuthorId");
+
+                    b.Property<string>("CancellationReason")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("CancelledAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("ClosingDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Currency")
+                        .HasMaxLength(12)
+                        .HasColumnType("varchar(12)")
+                        .HasColumnName("Currency");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<decimal>("Discount")
+                        .HasColumnType("decimal(10,2)")
+                        .HasColumnName("Discount");
+
+                    b.Property<int>("IsActive")
+                        .HasColumnType("int")
+                        .HasColumnName("isActive");
+
+                    b.Property<string>("PaymentReference")
+                        .HasMaxLength(245)
+                        .HasColumnType("varchar(245)")
+                        .HasColumnName("PaymentReference");
+
+                    b.Property<string>("Status")
+                        .HasMaxLength(12)
+                        .HasColumnType("varchar(12)")
+                        .HasColumnName("Status");
+
+                    b.Property<decimal>("TaxAmount")
+                        .HasColumnType("decimal(10,2)")
+                        .HasColumnName("TaxAmount");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(10,2)")
+                        .HasColumnName("TotalAmount");
+
+                    b.Property<string>("UserEmail")
+                        .HasMaxLength(145)
+                        .HasColumnType("varchar(145)")
+                        .HasColumnName("UserEmail");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("UserId");
+
+                    b.HasKey("BillId");
+
+                    b.ToTable("AuthorBills");
+                });
+
+            modelBuilder.Entity("EBookDashboard.Models.AuthorPlanFeatures", b =>
+                {
+                    b.Property<int>("AuthorFeaturesId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("AuthorFeaturesId");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("AuthorFeaturesId"));
+
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("int")
+                        .HasColumnName("AuthorId");
+
+                    b.Property<int?>("BillId")
+                        .HasColumnType("int")
+                        .HasColumnName("BillId");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("CreatedAt");
+
+                    b.Property<string>("Currency")
+                        .HasMaxLength(12)
+                        .HasColumnType("varchar(12)")
+                        .HasColumnName("Currency");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(245)
+                        .HasColumnType("varchar(245)")
+                        .HasColumnName("Description");
+
+                    b.Property<DateTime?>("ExpiryDate")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("ExpiryDate");
+
+                    b.Property<int?>("FeatureId")
+                        .HasColumnType("int")
+                        .HasColumnName("FeatureId");
+
+                    b.Property<string>("FeatureName")
+                        .HasMaxLength(45)
+                        .HasColumnType("varchar(45)")
+                        .HasColumnName("FeatureName");
+
+                    b.Property<decimal>("FeatureRate")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("decimal(10,2)")
+                        .HasColumnName("FeatureRate");
+
+                    b.Property<int?>("IsActive")
+                        .HasColumnType("int")
+                        .HasColumnName("isActive");
+
+                    b.Property<int?>("PlanId")
+                        .HasColumnType("int")
+                        .HasColumnName("PlanId");
+
+                    b.Property<string>("Status")
+                        .HasMaxLength(12)
+                        .HasColumnType("varchar(12)")
+                        .HasColumnName("Status");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("decimal(10,2)")
+                        .HasColumnName("TotalAmount");
+
+                    b.Property<string>("UserEmail")
+                        .HasMaxLength(145)
+                        .HasColumnType("varchar(145)")
+                        .HasColumnName("UserEmail");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("UserId");
+
+                    b.HasKey("AuthorFeaturesId");
+
+                    b.HasIndex("BillId");
+
+                    b.HasIndex("FeatureId");
+
+                    b.ToTable("AuthorPlanFeatures");
+                });
+
             modelBuilder.Entity("EBookDashboard.Models.AuthorPlans", b =>
                 {
                     b.Property<int>("AuthorPlanId")
@@ -33,6 +305,10 @@ namespace EBookDashboard.Migrations
                     b.Property<int>("AuthorId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("BillId")
+                        .HasColumnType("int")
+                        .HasColumnName("BillId");
+
                     b.Property<string>("CancellationReason")
                         .HasMaxLength(500)
                         .HasColumnType("varchar(500)");
@@ -43,18 +319,43 @@ namespace EBookDashboard.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("tinyint(1)");
+                    b.Property<int>("IsActive")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaxEBooks")
+                        .HasColumnType("int");
 
                     b.Property<string>("PaymentReference")
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
+                    b.Property<int>("PlanDays")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PlanDescription")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<int>("PlanHours")
+                        .HasColumnType("int");
+
                     b.Property<int>("PlanId")
                         .HasColumnType("int");
+
+                    b.Property<string>("PlanName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<decimal>("PlanRate")
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime(6)");
@@ -62,7 +363,12 @@ namespace EBookDashboard.Migrations
                     b.Property<bool>("TrialUsed")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("AuthorPlanId");
+
+                    b.HasIndex("AuthorId");
 
                     b.HasIndex("PlanId");
 
@@ -88,9 +394,6 @@ namespace EBookDashboard.Migrations
                     b.Property<string>("AuthorEmail")
                         .IsRequired()
                         .HasColumnType("longtext");
-
-                    b.Property<int?>("AuthorPlansAuthorPlanId")
-                        .HasColumnType("int");
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
@@ -153,8 +456,6 @@ namespace EBookDashboard.Migrations
 
                     b.HasIndex("AuthorCode")
                         .IsUnique();
-
-                    b.HasIndex("AuthorPlansAuthorPlanId");
 
                     b.ToTable("Authors");
                 });
@@ -265,9 +566,6 @@ namespace EBookDashboard.Migrations
                     b.Property<int>("AuthorId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("CategoriesCategoryId")
-                        .HasColumnType("int");
-
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
@@ -278,11 +576,23 @@ namespace EBookDashboard.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("Dedication")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Description")
                         .HasMaxLength(500)
                         .HasColumnType("varchar(500)");
 
+                    b.Property<string>("Epigraph")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Genre")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Ghostwriting")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -290,7 +600,6 @@ namespace EBookDashboard.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ManuscriptPath")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Status")
@@ -308,14 +617,15 @@ namespace EBookDashboard.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.Property<int>("WordCount")
                         .HasColumnType("int");
 
                     b.HasKey("BookId");
 
                     b.HasIndex("AuthorId");
-
-                    b.HasIndex("CategoriesCategoryId");
 
                     b.ToTable("Books");
                 });
@@ -352,6 +662,9 @@ namespace EBookDashboard.Migrations
                     b.Property<int>("BookId")
                         .HasColumnType("int");
 
+                    b.Property<int>("ChapterNumber")
+                        .HasColumnType("int");
+
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -366,6 +679,9 @@ namespace EBookDashboard.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("OrderIndex")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SrNo")
                         .HasColumnType("int");
 
                     b.Property<string>("Status")
@@ -427,7 +743,6 @@ namespace EBookDashboard.Migrations
                         .HasColumnType("varchar(100)");
 
                     b.Property<decimal>("Price")
-                        .HasPrecision(10, 2)
                         .HasColumnType("decimal(10,2)");
 
                     b.Property<string>("Type")
@@ -438,74 +753,6 @@ namespace EBookDashboard.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Features");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Create and format professional eBooks with our easy-to-use editor.",
-                            IsActive = true,
-                            Key = "ebook_creation",
-                            Name = "EBook Creation",
-                            Price = 0.00m,
-                            Type = "Basic"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Design stunning book covers with our AI-powered tool.",
-                            IsActive = true,
-                            Key = "cover_design",
-                            Name = "Cover Design",
-                            Price = 19.99m,
-                            Type = "Premium"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Convert your book into a professional audiobook.",
-                            IsActive = true,
-                            Key = "audio_book",
-                            Name = "Audio Book",
-                            Price = 49.99m,
-                            Type = "Premium"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Professional proofreading and editing services.",
-                            IsActive = true,
-                            Key = "proofreading",
-                            Name = "Proofreading",
-                            Price = 29.99m,
-                            Type = "Premium"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Track your sales and reader engagement with detailed analytics.",
-                            IsActive = true,
-                            Key = "analytics",
-                            Name = "Analytics",
-                            Price = 14.99m,
-                            Type = "Premium"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CreatedAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Promote your book with our integrated marketing suite.",
-                            IsActive = true,
-                            Key = "marketing_tools",
-                            Name = "Marketing Tools",
-                            Price = 24.99m,
-                            Type = "Marketing"
-                        });
                 });
 
             modelBuilder.Entity("EBookDashboard.Models.Language", b =>
@@ -540,6 +787,150 @@ namespace EBookDashboard.Migrations
                     b.ToTable("Languages");
                 });
 
+            modelBuilder.Entity("EBookDashboard.Models.Notification", b =>
+                {
+                    b.Property<int>("NotificationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("NotificationId"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Link")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)");
+
+                    b.Property<DateTime?>("ReadAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("NotificationId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Notifications");
+                });
+
+            modelBuilder.Entity("EBookDashboard.Models.PasswordReset", b =>
+                {
+                    b.Property<int>("ResetId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("ResetId"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("OTP")
+                        .IsRequired()
+                        .HasMaxLength(6)
+                        .HasColumnType("varchar(6)");
+
+                    b.Property<string>("Token")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("ResetId");
+
+                    b.HasIndex("Email", "OTP", "IsUsed");
+
+                    b.ToTable("PasswordResets");
+                });
+
+            modelBuilder.Entity("EBookDashboard.Models.PlanFeatures", b =>
+                {
+                    b.Property<int>("FeatureId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("FeatureId");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("FeatureId"));
+
+                    b.Property<string>("Currency")
+                        .HasMaxLength(12)
+                        .HasColumnType("varchar(12)")
+                        .HasColumnName("Currency");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(245)
+                        .HasColumnType("varchar(245)")
+                        .HasColumnName("Description");
+
+                    b.Property<string>("FeatureName")
+                        .HasMaxLength(45)
+                        .HasColumnType("varchar(45)")
+                        .HasColumnName("FeatureName");
+
+                    b.Property<decimal>("FeatureRate")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("decimal(10,2)")
+                        .HasColumnName("FeatureRate");
+
+                    b.Property<string>("FeatureType")
+                        .HasMaxLength(12)
+                        .HasColumnType("varchar(12)")
+                        .HasColumnName("FeatureType");
+
+                    b.Property<int>("IsActive")
+                        .HasColumnType("int")
+                        .HasColumnName("isActive");
+
+                    b.Property<bool>("IsUnlimited")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("IsUnlimited");
+
+                    b.Property<int?>("PlanId")
+                        .HasColumnType("int")
+                        .HasColumnName("PlanId");
+
+                    b.Property<string>("Status")
+                        .HasMaxLength(12)
+                        .HasColumnType("varchar(12)")
+                        .HasColumnName("Status");
+
+                    b.Property<string>("UsageLimit")
+                        .HasMaxLength(245)
+                        .HasColumnType("varchar(245)")
+                        .HasColumnName("UsageLimit");
+
+                    b.HasKey("FeatureId");
+
+                    b.ToTable("planfeatures");
+                });
+
             modelBuilder.Entity("EBookDashboard.Models.Plans", b =>
                 {
                     b.Property<int>("PlanId")
@@ -563,8 +954,12 @@ namespace EBookDashboard.Migrations
                     b.Property<DateTime>("CreateddAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("tinyint(1)");
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("IsActive")
+                        .HasColumnType("int");
 
                     b.Property<int>("MaxChapters")
                         .HasColumnType("int");
@@ -605,8 +1000,9 @@ namespace EBookDashboard.Migrations
                             AllowDownloads = false,
                             AllowFullDashboard = false,
                             AllowPublishing = false,
-                            CreateddAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsActive = false,
+                            CreateddAt = new DateTime(2025, 11, 18, 12, 44, 41, 820, DateTimeKind.Utc).AddTicks(3957),
+                            Currency = "usd",
+                            IsActive = 1,
                             MaxChapters = 0,
                             MaxEBooks = 0,
                             MaxPages = 0,
@@ -623,8 +1019,9 @@ namespace EBookDashboard.Migrations
                             AllowDownloads = false,
                             AllowFullDashboard = false,
                             AllowPublishing = false,
-                            CreateddAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsActive = false,
+                            CreateddAt = new DateTime(2025, 11, 18, 12, 44, 41, 820, DateTimeKind.Utc).AddTicks(6609),
+                            Currency = "usd",
+                            IsActive = 1,
                             MaxChapters = 0,
                             MaxEBooks = 0,
                             MaxPages = 0,
@@ -641,8 +1038,9 @@ namespace EBookDashboard.Migrations
                             AllowDownloads = false,
                             AllowFullDashboard = false,
                             AllowPublishing = false,
-                            CreateddAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsActive = false,
+                            CreateddAt = new DateTime(2025, 11, 18, 12, 44, 41, 820, DateTimeKind.Utc).AddTicks(6754),
+                            Currency = "usd",
+                            IsActive = 1,
                             MaxChapters = 0,
                             MaxEBooks = 0,
                             MaxPages = 0,
@@ -651,24 +1049,6 @@ namespace EBookDashboard.Migrations
                             PlanHours = 0,
                             PlanName = "Pro Plan",
                             PlanRate = 99.99m
-                        },
-                        new
-                        {
-                            PlanId = 4,
-                            AllowAnalytics = false,
-                            AllowDownloads = false,
-                            AllowFullDashboard = false,
-                            AllowPublishing = false,
-                            CreateddAt = new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsActive = false,
-                            MaxChapters = 0,
-                            MaxEBooks = 0,
-                            MaxPages = 0,
-                            PlanDays = 365,
-                            PlanDescription = "Premium yearly subscription with all features",
-                            PlanHours = 0,
-                            PlanName = "Premium Plan",
-                            PlanRate = 199.99m
                         });
                 });
 
@@ -825,33 +1205,44 @@ namespace EBookDashboard.Migrations
                         });
                 });
 
-            modelBuilder.Entity("EBookDashboard.Models.TemporaryFeatures", b =>
+            modelBuilder.Entity("EBookDashboard.Models.Settings", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("SettingId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("SettingId"));
 
-                    b.Property<DateTime>("AddedAt")
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("FeatureId")
-                        .HasColumnType("int");
+                    b.Property<string>("Description")
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
 
-                    b.Property<string>("SessionId")
+                    b.Property<string>("Key")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
 
-                    b.HasKey("Id");
+                    b.Property<string>("Value")
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)");
 
-                    b.HasIndex("FeatureId");
+                    b.HasKey("SettingId");
 
-                    b.ToTable("TemporaryFeatures");
+                    b.HasIndex("Key")
+                        .IsUnique();
+
+                    b.ToTable("Settings");
                 });
 
             modelBuilder.Entity("EBookDashboard.Models.UserFeatures", b =>
@@ -884,6 +1275,39 @@ namespace EBookDashboard.Migrations
                     b.ToTable("UserFeatures");
                 });
 
+            modelBuilder.Entity("EBookDashboard.Models.UserPreference", b =>
+                {
+                    b.Property<int>("PreferenceId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("PreferenceId"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Value")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.HasKey("PreferenceId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserPreferences");
+                });
+
             modelBuilder.Entity("EBookDashboard.Models.Users", b =>
                 {
                     b.Property<int>("UserId")
@@ -908,6 +1332,9 @@ namespace EBookDashboard.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ProfilePicturePath")
                         .HasColumnType("longtext");
 
                     b.Property<int>("RoleId")
@@ -936,22 +1363,102 @@ namespace EBookDashboard.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("EBookDashboard.Models.ViewModels.OtpVerification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("OtpCode")
+                        .IsRequired()
+                        .HasMaxLength(6)
+                        .HasColumnType("varchar(6)");
+
+                    b.Property<string>("Purpose")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OtpVerifications");
+                });
+
+            modelBuilder.Entity("AuthorBillsAuthorPlans", b =>
+                {
+                    b.HasOne("EBookDashboard.Models.AuthorBills", null)
+                        .WithMany()
+                        .HasForeignKey("AuthorBillsBillId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EBookDashboard.Models.AuthorPlans", null)
+                        .WithMany()
+                        .HasForeignKey("AuthorPlansAuthorPlanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EBookDashboard.Models.AuditLog", b =>
+                {
+                    b.HasOne("EBookDashboard.Models.Users", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("EBookDashboard.Models.AuthorPlanFeatures", b =>
+                {
+                    b.HasOne("EBookDashboard.Models.AuthorBills", "AuthorBill")
+                        .WithMany("AuthorPlanFeatures")
+                        .HasForeignKey("BillId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("EBookDashboard.Models.PlanFeatures", "PlanFeature")
+                        .WithMany()
+                        .HasForeignKey("FeatureId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("AuthorBill");
+
+                    b.Navigation("PlanFeature");
+                });
+
             modelBuilder.Entity("EBookDashboard.Models.AuthorPlans", b =>
                 {
+                    b.HasOne("EBookDashboard.Models.Authors", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("EBookDashboard.Models.Plans", "Plan")
                         .WithMany("AuthorPlans")
                         .HasForeignKey("PlanId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Plan");
-                });
+                    b.Navigation("Author");
 
-            modelBuilder.Entity("EBookDashboard.Models.Authors", b =>
-                {
-                    b.HasOne("EBookDashboard.Models.AuthorPlans", null)
-                        .WithMany("Authors")
-                        .HasForeignKey("AuthorPlansAuthorPlanId");
+                    b.Navigation("Plan");
                 });
 
             modelBuilder.Entity("EBookDashboard.Models.BookPrice", b =>
@@ -969,9 +1476,7 @@ namespace EBookDashboard.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EBookDashboard.Models.Categories", null)
-                        .WithMany("Books")
-                        .HasForeignKey("CategoriesCategoryId");
+                    
                 });
 
             modelBuilder.Entity("EBookDashboard.Models.Chapters", b =>
@@ -983,23 +1488,22 @@ namespace EBookDashboard.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("EBookDashboard.Models.TemporaryFeatures", b =>
+            modelBuilder.Entity("EBookDashboard.Models.Notification", b =>
                 {
-                    b.HasOne("EBookDashboard.Models.Features", "Feature")
+                    b.HasOne("EBookDashboard.Models.Users", "User")
                         .WithMany()
-                        .HasForeignKey("FeatureId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
-                    b.Navigation("Feature");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("EBookDashboard.Models.UserFeatures", b =>
                 {
                     b.HasOne("EBookDashboard.Models.AuthorPlans", "AuthorPlan")
                         .WithMany()
-                        .HasForeignKey("AuthorPlanId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("AuthorPlanId");
 
                     b.HasOne("EBookDashboard.Models.Features", "Feature")
                         .WithMany("UserFeatures")
@@ -1010,6 +1514,17 @@ namespace EBookDashboard.Migrations
                     b.Navigation("AuthorPlan");
 
                     b.Navigation("Feature");
+                });
+
+            modelBuilder.Entity("EBookDashboard.Models.UserPreference", b =>
+                {
+                    b.HasOne("EBookDashboard.Models.Users", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("EBookDashboard.Models.Users", b =>
@@ -1023,9 +1538,9 @@ namespace EBookDashboard.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("EBookDashboard.Models.AuthorPlans", b =>
+            modelBuilder.Entity("EBookDashboard.Models.AuthorBills", b =>
                 {
-                    b.Navigation("Authors");
+                    b.Navigation("AuthorPlanFeatures");
                 });
 
             modelBuilder.Entity("EBookDashboard.Models.Authors", b =>
