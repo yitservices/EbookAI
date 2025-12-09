@@ -1,7 +1,9 @@
 ﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EBookDashboard.Models
 {
+    [Table("apieditchapterrequest")]
     public class APIEditChapterRequest
     {
         // Keep same naming style as external API expects if you forward body directly

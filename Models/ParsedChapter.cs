@@ -1,5 +1,8 @@
-﻿namespace EBookDashboard.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace EBookDashboard.Models
 {
+    [Table("parsedchapter")]
     public class ParsedChapter
     {
         // This is just a TEMPORARY helper class - NOT a database table!

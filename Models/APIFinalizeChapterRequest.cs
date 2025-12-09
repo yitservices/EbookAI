@@ -1,7 +1,9 @@
 ﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EBookDashboard.Models
 {
+    [Table("apifinalizechapterrequest")]
     public class APIFinalizeChapterRequest
     {
         [JsonProperty("user_id")]

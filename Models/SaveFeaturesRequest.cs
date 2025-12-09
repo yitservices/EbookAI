@@ -1,5 +1,8 @@
-﻿namespace EBookDashboard.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace EBookDashboard.Models
 {
+    [Table("savefeaturesrequest")]
     public class SaveFeaturesRequest
     {
         public int AuthorId { get; set; }
