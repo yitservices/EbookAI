@@ -1,8 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace EBookDashboard.Models
+﻿namespace EBookDashboard.Models
 {
-    [Table("apisavebookrequest")]
     public class APISaveBookRequest
     {
         public string? UserId { get; set; }

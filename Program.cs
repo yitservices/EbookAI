@@ -1,52 +1,33 @@
-﻿using EBookDashboard.Interfaces;
+﻿﻿using EBookDashboard.Interfaces;
 using EBookDashboard.Models;
 using EBookDashboard.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // ✅ Add services to the container.
-builder.Services.AddControllersWithViews();
-// Session is configured later with options, don't add it twice
-
-// ✅ Add CORS services (for API calls, if needed)
-builder.Services.AddCors(options =>
+builder.Services.AddControllersWithViews(options =>
 {
-    options.AddPolicy("AllowLocalhost5282",
-        policy =>
-        {
-            // Allow all localhost ports for development
-            policy.SetIsOriginAllowed(origin => 
-                origin.StartsWith("http://localhost") || 
-                origin.StartsWith("https://localhost") ||
-                origin.StartsWith("http://127.0.0.1") ||
-                origin.StartsWith("https://127.0.0.1"))
-                  .AllowAnyHeader()
-                  .AllowAnyMethod()
-                  .AllowCredentials(); // Allow credentials for cookie-based auth
-        });
+    // Global authorization policy: require authenticated users by default
+    var policy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+    options.Filters.Add(new AuthorizeFilter(policy));
 });
+builder.Services.AddSession();  // ✅ add session support
 
 // ✅ Configure MySQL DbContext
-// Enable retry on failure for database connections
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(
         builder.Configuration.GetConnectionString("DefaultConnection"),
-        new MySqlServerVersion(new Version(8, 0, 34)), // adjust version to your MySQL
-        mysqlOptions =>
-        {
-            mysqlOptions.EnableRetryOnFailure(
-                maxRetryCount: 3,
-                maxRetryDelay: TimeSpan.FromSeconds(5),
-                errorNumbersToAdd: null);
-        }
+        new MySqlServerVersion(new Version(8, 0, 34)) // adjust version to your MySQL
     ));
 
-// ✅ Enable Authentication with Cookie Scheme
+// ✅ Enable Authentication with Cookie Scheme + External Providers
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
@@ -55,38 +36,22 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.AccessDeniedPath = "/Account/AccessDenied"; // unauthorized
         options.ExpireTimeSpan = TimeSpan.FromMinutes(30);  // session timeout
         options.SlidingExpiration = true;            // extend session if active
-        options.Cookie.SameSite = SameSiteMode.Lax;  // Allow cookies for same-site requests
-        options.Cookie.HttpOnly = true;              // Prevent XSS attacks
-        options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest; // Use HTTPS in production
-        
-        // Handle AJAX requests - return 401 instead of redirect
-        options.Events.OnRedirectToLogin = context =>
-        {
-            var contentType = context.Request.Headers["Content-Type"].ToString();
-            if (context.Request.Headers["X-Requested-With"] == "XMLHttpRequest" ||
-                !string.IsNullOrEmpty(contentType) && contentType.Contains("application/json"))
-            {
-                context.Response.StatusCode = 401;
-                context.Response.ContentType = "application/json";
-                return context.Response.WriteAsync("{\"error\":\"Unauthorized\",\"message\":\"Please login to continue\"}");
-            }
-            context.Response.Redirect(context.RedirectUri);
-            return Task.CompletedTask;
-        };
-        
-        options.Events.OnRedirectToAccessDenied = context =>
-        {
-            var contentType = context.Request.Headers["Content-Type"].ToString();
-            if (context.Request.Headers["X-Requested-With"] == "XMLHttpRequest" ||
-                !string.IsNullOrEmpty(contentType) && contentType.Contains("application/json"))
-            {
-                context.Response.StatusCode = 403;
-                context.Response.ContentType = "application/json";
-                return context.Response.WriteAsync("{\"error\":\"Forbidden\",\"message\":\"Access denied\"}");
-            }
-            context.Response.Redirect(context.RedirectUri);
-            return Task.CompletedTask;
-        };
+    })
+    .AddGoogle(options =>
+    {
+        options.ClientId = builder.Configuration["Authentication:Google:ClientId"] ?? "";
+        options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"] ?? "";
+        options.CallbackPath = builder.Configuration["Authentication:Google:CallbackPath"] ?? "/signin-google";
+        // Google includes email/profile scopes by default
+    })
+    .AddFacebook(options =>
+    {
+        options.AppId = builder.Configuration["Authentication:Facebook:AppId"] ?? "";
+        options.AppSecret = builder.Configuration["Authentication:Facebook:AppSecret"] ?? "";
+        options.CallbackPath = builder.Configuration["Authentication:Facebook:CallbackPath"] ?? "/signin-facebook";
+        // Ensure email is requested from Facebook
+        options.Scope.Add("email");
+        options.Fields.Add("email");
     });
 
 // ✅ Authorization middleware (roles, policies etc.)
@@ -97,7 +62,7 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 // Add BookService
 builder.Services.AddScoped<IBookService, BookService>();
 // Add PlanService
-builder.Services.AddScoped<IPlanService, PlanService>();
+builder.Services.AddScoped<IPlansService, PlansService>();
 // Add FeatureCartService
 builder.Services.AddScoped<IFeatureCartService, FeatureCartService>();
 // Add CheckoutService
@@ -106,12 +71,15 @@ builder.Services.AddScoped<ICheckoutService, CheckoutService>();
 builder.Services.AddScoped<IPlanFeaturesService, PlanFeaturesService>();
 //
 builder.Services.AddScoped<IAPIRawResponseService, APIRawResponseService>();
-builder.Services.AddScoped<ICartService, CartService>();
 // Add this to your services
 builder.Services.AddScoped<BookProcessingService>();
-// Add FeatureAccessService for paid feature checks
-builder.Services.AddScoped<FeatureAccessService>();
+builder.Services.AddScoped<IAuthorPlansService, AuthorPlansService>();
+builder.Services.AddScoped<IAuthorBillsService, AuthorBillsService>();
+builder.Services.AddScoped<IAuthorPlansService, AuthorPlansService>();
 
+builder.Services.AddScoped<CommonMethodsService>(); // ✅ Add this line
+builder.Services.AddScoped<IAPIRawResponseService, APIRawResponseService>();
+builder.Services.AddScoped<IBookService, BookService>();
 // Add session services
 builder.Services.AddDistributedMemoryCache();
 //Register HttpClient factory
@@ -130,31 +98,37 @@ builder.Services.AddHttpContextAccessor();
 var app = builder.Build();
 
 // ✅ Middleware pipeline
-// Enable detailed error pages in development for better debugging
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-}
-else
+if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+
+// ✅ Ensure database exists & apply migrations on startup (creates DB if missing)
+//try
+//{
+//    using var scope = app.Services.CreateScope();
+//    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+//    db.Database.Migrate();
+//}
+//catch (Exception ex)
+//{
+//    // Optional: log to console to help diagnose startup DB issues (e.g., wrong credentials or server down)
+//    Console.WriteLine($"[Startup:Migrate] {ex.GetType().Name}: {ex.Message}");
+//}
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseSession(); // ✅ enable session middleware - MUST be before authentication
+app.UseSession(); // ✅ must be after UseRouting and before UseEndpoints
 
-// ✅ Enable CORS - MUST be after UseRouting but before UseEndpoints
-app.UseCors("AllowLocalhost5282");
 
-// ✅ Authentication + Authorization - MUST be in this order
+// ✅ Authentication + Authorization
 app.UseAuthentication();
 app.UseAuthorization();
-
+//app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Account}/{action=Login}/{id?}");
@@ -186,13 +160,15 @@ app.MapControllerRoute(
     defaults: new { controller = "Features" });
 
 app.MapControllerRoute(
-    name: "payments",
-    pattern: "Payments/{action=Index}/{id?}",
-    defaults: new { controller = "Payments" });
-
-app.MapControllerRoute(
     name: "checkout",
     pattern: "Checkout/{action}/{id?}",
     defaults: new { controller = "Checkout", action = "GetPublishableKey" });
+
+// Fix accidental /Dashboard/undefined by redirecting to Login
+app.MapGet("/Dashboard/undefined", (Microsoft.AspNetCore.Http.HttpContext context) =>
+{
+    context.Response.Redirect("/Account/Login");
+    return System.Threading.Tasks.Task.CompletedTask;
+});
 
 app.Run();

@@ -16,7 +16,7 @@ namespace EBookDashboard.Services
         public async Task<IEnumerable<PlanFeatures>> GetAllFeaturesAsync()
         {
             return await _context.PlanFeatures
-                .Where(f => f.IsActive == true)
+                .Where(f => f.IsActive == 1)
                 .OrderBy(f => f.FeatureName)
                 .ToListAsync();
         }
@@ -27,8 +27,8 @@ namespace EBookDashboard.Services
             int userIdInt = 0;
             int.TryParse(userId, out userIdInt);
             
-            // Don't use Include to avoid join table issues - we already have FeatureId
             return await _context.AuthorPlanFeaturesSet
+                .Include(tf => tf.PlanFeature)
                 .Where(tf => tf.UserId == userIdInt || tf.AuthorId == userIdInt)
                 .ToListAsync();
         }
@@ -37,39 +37,30 @@ namespace EBookDashboard.Services
         {
             try
             {
-                if (featureId <= 0)
-                {
-                    Console.WriteLine($"Invalid featureId: {featureId}");
-                    return false;
-                }
-
                 int userIdInt = 0;
-                if (!int.TryParse(userId, out userIdInt) || userIdInt <= 0)
-                {
-                    Console.WriteLine($"Invalid userId: {userId}");
-                    return false;
-                }
+                int.TryParse(userId, out userIdInt);
                 
                 // Check if feature already exists in temp cart for this user
                 var existingTempFeature = await _context.AuthorPlanFeaturesSet
-                    .Where(tf => (tf.UserId == userIdInt || tf.AuthorId == userIdInt) && tf.FeatureId == featureId && tf.Status == "temp")
+                    .Where(tf => (tf.UserId == userIdInt || tf.AuthorId == userIdInt) && tf.FeatureId == featureId)
                     .FirstOrDefaultAsync();
 
                 if (existingTempFeature != null)
                 {
                     // Feature already in cart, don't add duplicate
-                    Console.WriteLine($"Feature {featureId} already in cart for user {userIdInt}");
                     return true;
                 }
 
+                // Check if user already has this feature confirmed
+                // For now, we'll skip this check since we don't have a UserFeatures table that matches this model
+
                 // Get the feature details
                 var feature = await _context.PlanFeatures
-                    .Where(f => f.FeatureId == featureId && f.IsActive == true)
+                    .Where(f => f.FeatureId == featureId)
                     .FirstOrDefaultAsync();
                     
                 if (feature == null)
                 {
-                    Console.WriteLine($"Feature {featureId} not found or is inactive");
                     return false;
                 }
 
@@ -79,30 +70,22 @@ namespace EBookDashboard.Services
                     UserId = userIdInt,
                     AuthorId = userIdInt,
                     FeatureId = featureId,
-                    FeatureName = feature.FeatureName ?? "Unknown Feature",
+                    FeatureName = feature.FeatureName,
                     Description = feature.Description,
                     FeatureRate = feature.FeatureRate,
-                    Currency = feature.Currency ?? "USD",
+                    Currency = feature.Currency,
                     Status = "temp",
                     IsActive = 1,
                     CreatedAt = DateTime.UtcNow
                 };
 
                 _context.AuthorPlanFeaturesSet.Add(tempFeature);
-                var saveResult = await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
 
-                Console.WriteLine($"Feature {featureId} added to cart successfully. Save result: {saveResult}");
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                // Log the exception for debugging
-                Console.WriteLine($"Error adding feature to cart: {ex.Message}");
-                Console.WriteLine($"Stack trace: {ex.StackTrace}");
-                if (ex.InnerException != null)
-                {
-                    Console.WriteLine($"Inner exception: {ex.InnerException.Message}");
-                }
                 return false;
             }
         }
@@ -126,10 +109,8 @@ namespace EBookDashboard.Services
 
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                // Log the exception for debugging
-                Console.WriteLine($"Error removing feature from cart: {ex.Message}");
                 return false;
             }
         }
@@ -140,6 +121,7 @@ namespace EBookDashboard.Services
             int.TryParse(userId, out userIdInt);
             
             var tempFeatures = await _context.AuthorPlanFeaturesSet
+                .Include(tf => tf.PlanFeature)
                 .Where(tf => tf.UserId == userIdInt || tf.AuthorId == userIdInt)
                 .ToListAsync();
 
@@ -199,7 +181,7 @@ namespace EBookDashboard.Services
                     PlanId = planId,
                     StartDate = DateTime.UtcNow,
                     EndDate = DateTime.UtcNow.AddDays(plan.PlanDays),
-                    IsActive = true,
+                    IsActive = 1,
                     TrialUsed = true, // Mark trial as used since they're selecting a paid plan
                     CreatedAt = DateTime.UtcNow
                 };
@@ -225,10 +207,8 @@ namespace EBookDashboard.Services
 
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                // Log the exception for debugging
-                Console.WriteLine($"Error confirming plan: {ex.Message}");
                 await transaction.RollbackAsync();
                 return false;
             }
@@ -241,25 +221,17 @@ namespace EBookDashboard.Services
                 int userIdInt = 0;
                 int.TryParse(userId, out userIdInt);
                 
-                // Only remove temp features (status = "temp"), not confirmed ones
                 var tempFeatures = await _context.AuthorPlanFeaturesSet
-                    .Where(tf => (tf.UserId == userIdInt || tf.AuthorId == userIdInt) && tf.Status == "temp")
+                    .Where(tf => tf.UserId == userIdInt || tf.AuthorId == userIdInt)
                     .ToListAsync();
 
-                if (tempFeatures.Any())
-                {
-                    _context.AuthorPlanFeaturesSet.RemoveRange(tempFeatures);
-                    await _context.SaveChangesAsync();
-                    Console.WriteLine($"Cleared {tempFeatures.Count} temp features for user {userIdInt}");
-                }
+                _context.AuthorPlanFeaturesSet.RemoveRange(tempFeatures);
+                await _context.SaveChangesAsync();
 
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                // Log the exception for debugging
-                Console.WriteLine($"Error clearing temp features: {ex.Message}");
-                Console.WriteLine($"Stack trace: {ex.StackTrace}");
                 return false;
             }
         }
@@ -272,7 +244,7 @@ namespace EBookDashboard.Services
             int.TryParse(userId, out userIdInt);
             
             var activePlan = await _context.AuthorPlans
-                .Where(ap => ap.AuthorId == userIdInt && ap.IsActive && ap.EndDate > DateTime.UtcNow)
+                .Where(ap => ap.AuthorId == userIdInt && ap.IsActive==1 && ap.EndDate > DateTime.UtcNow)
                 .FirstOrDefaultAsync();
 
             return activePlan != null;
@@ -283,8 +255,8 @@ namespace EBookDashboard.Services
             int userIdInt = 0;
             int.TryParse(userId, out userIdInt);
             
-            // Don't use Include to avoid join table issues - we already have FeatureId
             return await _context.AuthorPlanFeaturesSet
+                .Include(uf => uf.PlanFeature)
                 .Where(uf => (uf.UserId == userIdInt || uf.AuthorId == userIdInt) && uf.Status == "confirmed")
                 .ToListAsync();
         }
@@ -299,7 +271,5 @@ namespace EBookDashboard.Services
                 { "Premium Plan", 4 }
             };
         }
-
-
     }
 }
