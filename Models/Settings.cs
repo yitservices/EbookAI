@@ -1,9 +1,7 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EBookDashboard.Models
 {
-    [Table("settings")]
     public class Settings
     {
         [Key]

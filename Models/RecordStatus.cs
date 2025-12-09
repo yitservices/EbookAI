@@ -1,9 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EBookDashboard.Models
 {
-    [Table("recordstatus")]
     public class RecordStatus
     {
         [Required]
